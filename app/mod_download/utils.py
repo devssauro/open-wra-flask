@@ -93,14 +93,14 @@ def get_picks_bans_view_fields(request: Request):
     }
 
     columns = [
-        Tournament.name.label("tournament"),
+        Tournament.name.label("tournament"),  # type: ignore
         PicksBansPrioView.matchup_id,
         PicksBansPrioView.map_id,
         PicksBansPrioView.map_number,
         PicksBansPrioView.patch,
         Matchup.phase,
-        Team.name.label("team_name"),
-        Team.tag.label("team_tag"),
+        Team.name.label("team_name"),  # type: ignore
+        Team.tag.label("team_tag"),  # type: ignore
         winner_loser.get(
             request.args.get("winner_loser"),
             case((PicksBansPrioView.winner, "true"), else_="false").label("winner"),
@@ -120,7 +120,7 @@ def get_picks_bans_view_fields(request: Request):
             case((PicksBansPrioView.is_blind, "true"), else_="false").label("is_blind"),
         ),
         PicksBansPrioView.role,
-        Player.nickname.label("player"),
+        Player.nickname.label("player"),  # type: ignore
         PicksBansPrioView.kills,
         PicksBansPrioView.deaths,
         PicksBansPrioView.assists,
@@ -358,9 +358,9 @@ def get_single_view_fields(request: Request):
     ]
 
     columns = [
-        Tournament.name.label("tournament"),
-        Team.name.label("team_name"),
-        Team.tag.label("team_tag"),
+        Tournament.name.label("tournament"),  # type: ignore
+        Team.name.label("team_name"),  # type: ignore
+        Team.tag.label("team_tag"),  # type: ignore
         Matchup.phase,
         SingleView.patch,
         SingleView.matchup_id,
@@ -646,7 +646,7 @@ def get_full_map_fields(request: Request):
     ]
 
     columns = [
-        Tournament.name.label("tournament"),
+        Tournament.name.label("tournament"),  # type: ignore
         team1.name.label("blue_side_team"),
         team1.tag.label("blue_side_tag"),
         team2.name.label("red_side_team"),
@@ -824,7 +824,7 @@ def get_objective_fields(request: Request):
     ]
 
     columns = [
-        Tournament.name.label("tournament"),
+        Tournament.name.label("tournament"),  # type: ignore
         team_taker.name.label("team_name"),
         team_taker.tag.label("team_tag"),
         Matchup.phase,

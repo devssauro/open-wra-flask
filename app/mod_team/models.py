@@ -24,10 +24,10 @@ class Team(Base, SerializerMixin):
         self.flag = flag
         self.phase = phase
 
-    name = Column(String)
-    tag = Column(String)
-    flag = Column(String)
-    phase = Column(String)
+    name: str | Column = Column(String)
+    tag: str | Column = Column(String)
+    flag: str | Column = Column(String)
+    phase: str | Column = Column(String)
 
 
 class Player(Base, SerializerMixin):
@@ -39,8 +39,8 @@ class Player(Base, SerializerMixin):
         self.flag = flag
         self.role = role
 
-    nickname = Column(String)
-    team_id = Column(Integer, ForeignKey("team.id"))
+    nickname: str | Column = Column(String)
+    team_id: int | Column = Column(Integer, ForeignKey("team.id"))
     # team = relationship('Team', back_populates='players')
-    flag = Column(String)
-    role = Column(Enum(Role))
+    flag: str | Column = Column(String)
+    role: Role | Column = Column(Enum(Role))

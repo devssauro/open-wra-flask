@@ -5,7 +5,7 @@ from flask_cors import CORS
 from db_config import db, migrate
 from jwt_config import jwt
 from mail_config import mail
-from security_config import csrf, security, user_datastore
+from security_config import ExtendedRegisterForm, csrf, security, user_datastore
 
 from . import config
 
@@ -21,11 +21,7 @@ def create_app(test_config=None):
     db.init_app(app)
     migrate.init_app(app, db)
     csrf.init_app(app)
-    security.init_app(
-        app,
-        user_datastore,
-        # register_form=ExtendedRegisterForm
-    )
+    security.init_app(app, user_datastore, register_form=ExtendedRegisterForm)
     jwt.init_app(app)
 
     app.config.update(

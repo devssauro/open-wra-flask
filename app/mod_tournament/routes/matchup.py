@@ -82,7 +82,7 @@ def get_matchup_teams(matchup_id: int):
             (Matchup, Matchup.tournament_id == Tournament.id),
         ).filter(
             Matchup.id == matchup_id,
-            TournamentTeam.team_id.in_([Matchup.team1_id, Matchup.team2_id]),
+            TournamentTeam.team_id.in_([Matchup.team1_id, Matchup.team2_id]),  # type: ignore
         )
     )
     teams = Team.query.filter(Team.id.in_([t.team_id for t in matchup]))
