@@ -244,7 +244,6 @@ def get_all_matches(player_id: int, champion_id: int):
 
 
 @bp.get("/<int:player_id>/top3")
-@bp.deprecate("")
 def get_top_3(player_id: int):
     if "role" not in request.args:
         return {"msg": "Selecione a role a ser analisada"}
