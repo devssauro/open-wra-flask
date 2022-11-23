@@ -1,0 +1,75 @@
+==Partcipants==
+<big>In this tournament teams are required to use their surname or first name as In-game name. As a result, names in here will be displayed in their real name.</big><br>
+{{TeamCardToggleButton}}
+{{box|start|padding=2em}}
+{{TeamCardMix
+|team=Vietnam
+|image=Flag of Vietnam.svg
+|p1flag=vn|pos1=|p1=Tiumah|p1team=VGaming Ladies
+|p2flag=vn|pos2=|p2=Như Ý|p2team=VGaming Ladies
+|p3flag=vn|pos3=|p3=Ennis|p3team=VGaming Ladies
+|p4flag=vn|pos4=|p4=Mirah|p4team=VGaming Ladies
+|p5flag=vn|pos5=|p5=Teamie|p5team=VGaming Ladies
+|t2p1flag=vn|t2pos1=mid|t2p1=Louis|t2p1team=VGaming Ladies
+|t2p2flag=vn|t2pos2=baron|t2p2=Mie|t2p2team=MDH Fantasy Girls
+|t3p1flag=vn|t3pos1=coach|t3p1=Rabbit|t3p1team=VGaming Ladies
+|qualifier=[[/Vietnam Qualifier|Vietnam Qualifier]]
+}}
+{{box|break|padding=2em}}
+{{TeamCardMix
+|team=Thailand
+|image=Flag of Thailand.svg
+|p1flag=th|pos1=|p1=Knoxkins|p1team=
+|p2flag=th|pos2=|p2=Andy|p2link=Andy (Thai player)|p2team=Space Gamer KALLYX
+|p3flag=th|pos3=|p3=Gamblingx|p3team=Space Gamer KALLYX
+|p4flag=th|pos4=|p4=Elizent|p4team=
+|p5flag=th|pos5=|p5=Warlock|p5team=Space Gamer KALLYX
+|t2p1flag=th|t2pos1=|t2p1=Rangzong|t2p1team=Space Gamer KALLYX
+|t2p2flag=th|t2pos2=adc|t2p2=Minaka|t2p2team=
+|t3p1=KingSauce|t3p1flag=th|t3pos1=coach|t3p1team=INVATE Esports
+|t3p2=Tomairu|t3p2flag=th|t3pos2=coach
+|qualifier=Thailand Selection
+}}
+{{box|break|padding=2em}}
+{{TeamCardMix
+|team=Singapore
+|image=Flag of Singapore.svg
+|p1flag=sg|pos1=|p1=Shashalala|p1team=Team OK
+|p2flag=sg|pos2=|p2=Vainie|p2team=Team OK
+|p3flag=sg|pos3=|p3=Candyburn|p3team=Team OK
+|p4flag=sg|pos4=|p4=Aya|p4team=Team OK
+|p5flag=sg|pos5=|p5=Claria|p5team=Team OK
+|t2p1flag=sg|t2pos1=mid|t2p1=MINUET|t2p1team=Team OK
+|t3p1flag=sg|t3pos1=manager|t3p1=Lustreless|t3p1team=Team OK
+|qualifier=[[/Singapore Qualifier|Singapore Qualifier]]
+}}
+{{box|break|padding=2em}}
+{{TeamCardMix
+|team=Philippines
+|image=Flag of the Philippines.svg
+|p1flag=ph|p1=Hell Girl|p1team=Grind Sky Eris
+|p2flag=ph|p2=Aeae|p2team=Grind Sky Eris
+|p3flag=ph|p3=Rayray|p3team=Grind Sky Eris
+|p4flag=ph|p4=Yugen|p4team=Grind Sky Eris
+|p5flag=ph|p5=Jeeya|p5team=Grind Sky Eris
+
+|t2title=Substitute
+|t3title=Coach
+|t2p1flag=ph|t2p1=Angelailaila|t2pos1=jungle|t2p1team=Grind Sky Eris|t2p1result=true
+|t3p1flag=ph|t3p1=Recmeister|t3pos1=coach|t3p1team=Grind Sky Eris
+|qualifier=[[/Philippines Qualifier|Philippines Qualifier]]
+}}
+{{box|break|padding=2em}}
+{{TeamCardMix
+|team=Laos
+|p1=Cookiez|p1flag=la|p1team=Team EVO
+|p2=Violet|p2flag=la|p2team=Team EVO
+|p3=Namiji|p3flag=la|p3team=Team EVO
+|p4=Potat|p4flag=la|p4team=Team EVO
+|p5=Juviana|p5flag=la|p5team=Team EVO
+
+|t2title=Staff
+|t2p1flag=la|t2pos1=coach|t2p1=|t2p1team=Team EVO
+|qualifier=[[/Laos Qualifier|Laos Qualifier]]
+}}
+{{box|end}}

@@ -1,0 +1,229 @@
+===Play-in Teams===
+{{box|start|padding=2em|max-width=1000px}}
+{{TeamCard
+|team=JD Gaming|flag=cn
+|inotes={{NoteBig
+|n1=[[Timeless1]] cannot attend the tournament due to Visa issues, [[Chi]] loaned from [[Team Weibo]] and [[Mor]] moved from coach to sub for this tournament. <ref name="jdg">{{cite web |url=https://weibo.com/7598831057/LuF0ltJZk|title=JDG出征ICONS人员变动公告|author='''JDG''' |publisher=Weibo|language={{flag/cn}} Chinese}}</ref>
+}}
+|p1=Lemon
+|p2=Xingdou
+|p3=Jiujiu
+|p4=Chi|p4flag=cn|p4team=weibo
+|p5=Doki
+|t2p1=Mor|t2p1flag=cn|t2pos1=sup
+|t3p1=Chen|t3p1flag=cn|t3pos1=coach
+|qualifier=[[WRL/2022/Season 1|WRL]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|flag=cn|team=Nova Esports
+|link=Nova Esports/China
+|inotes={{NoteBig
+|n1=[[GuoGuo]] cannot attend the tournament due to Visa issues, [[Nian]] moved up to starter and [[ScarL]] joined as sub for this tournament. <ref name="nova">{{cite web |url=https://weibo.com/7595088351/LuF9Xanaz|title=NOVA出征ICONS人员变动公告|author='''Nova Esporst''' |publisher=Weibo|language={{flag/cn}} Chinese}}</ref>
+}}
+|p1=Y1ze
+|p2=Long
+|p3=Nian|p3flag=cn
+|p4=Remake
+|p5=Yami
+
+|t2p1=ScarL|t2p1flag=cn|t2pos1=mid
+|t3p1=Ahao|t3p1flag=cn|t3pos1=coach
+|qualifier=[[WRL/2022/Season 1/Icons LCQ|WRL LCQ]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|flag=cn|team=J Team
+|inotes={{NoteBig
+|n1=[[Oh My God]] withdrew due to Visa issues, replaced by [[J Team]]. <ref name="jt">{{cite web |url=https://weibo.com/7608261624/LuCBYtJii |title=2022英雄联盟手游全球冠军杯WRL赛区出征队伍变更公告|author='''WRL''' |publisher=Weibo|language={{flag/cn}} Chinese}}</ref>
+}}
+|p1=Dawn128|p1flag=cn
+|p2=Cherry|p2flag=cn
+|p3=pan|p3flag=cn
+|p4=Berry|p4flag=cn
+|p5=dy|p5flag=cn
+|t2p1=MaleFic|t2p1flag=cn|t2pos1=jungle
+|qualifier=[[WRL/2022/Season 1/Icons LCQ|WRL LCQ]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Donuts USG |flag=jp
+|image=
+|p1=Lark
+|p2=Mai
+|p3=tatuki217
+|p4=Threez
+|p5=Khaz
+|t2p1=apaMEN|t2p1flag=jp|t2pos1=head coach
+|t2p2=FitchMan|t2p2flag=jp|t2pos2=coach
+|t2title=Staff
+|qualifier=[[Japan Cup/2022/Season 1|Japan Cup]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|flag=tw|team=Flash Wolves
+|p1=Ysera
+|p2=Cookie
+|p3=Bruce
+|p4=Lock1ng
+|p5=Eason
+
+|t2p1=Demon|t2p1flag=tw|t2pos1=Dragon
+|t2p2=Calf|t2p2flag=tw|t2pos2=Dragon
+
+|t3p1=MadWolf|t3p1flag=tw|t3pos1=Coach
+|qualifier=[[Champions Southeast Asia/2022/Finals|Champions SEA]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|flag=ph|team=Rex Regum Qeon
+|image=
+|p1=DevilJ
+|p2=Chaazz
+|p3=Helios
+|p4=Marky
+|p5=Exosen
+
+|t2p1=Maze|t2p1flag=ph|t2pos1=support|t2p1result=true
+|t3p1=Kaigu|t3p1flag=ph|t3pos1=head coach
+|t3p2=3finger|t3p2flag=ph|t3pos2=coach
+|qualifier=[[Champions Southeast Asia/2022/Finals|Champions SEA]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|flag=th|team=Buriram United Esports
+|p1=NoeL
+|p2=Coldenfeet
+|p3=Archeny
+|p4=Bank
+|p5=Whatthejes
+
+|t2p1=Shiba|t2p1flag=th|t2pos1=jg|t2p1link=Shiba (Thai player)
+|qualifier=[[Champions Southeast Asia/2022/Finals|Champions SEA]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Sentinels|flag=us
+|p1=MTS
+|p2=Sheesh
+|p3=mali
+|p4=Rest
+|p5=Beginnings
+
+|t2title=Staff
+|t2p1=ThePierceJ|t2pos1=coach
+|qualifier=[[North America Series/2022/Season 1|North America Series]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Rix.GG|flag=europe
+|p1=Random
+|p2=Doom
+|p3=Snitch
+|p4=Se7
+|p5=Clue
+
+|t2title=Staff
+|t2p1=M0ZILLA|t2p1flag=de|t2pos1=head coach
+|t2p2=Dooms|t2p2flag=be|t2pos2= coach
+|qualifier=[[EMEA Championship/2022/Season 1|EMEA Championship]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Game-Lord|flag=eu
+|p1=Lonely Kid
+|p2=Zefta
+|p3=Ruiz
+|p4=REDemption
+|p5=Heste
+
+|t2title=Staff
+|t2p1=Kerxx|t2p1flag=de|t2pos1=coach
+|qualifier=[[EMEA Championship/2022/Season 1|EMEA Championship]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Freecs|flag=kr
+|p1=Maru
+|p2=Zeki
+|p3=ChoiR
+|p4=Acrobat
+|p5=Noth
+
+|t2p1=Dani|t2p1link=Dani (Korean player)|t2p1flag=kr|t2pos1=top
+
+|t3p1=Tseron|t3p1flag=kr|t3pos1=head coach
+|t3p2=YK|t3p2flag=kr|t3pos2=coach
+|qualifier=[[WCK/2022/Season_1|WCK]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=T1|flag=kr
+|p1=JJong
+|p2=JY
+|p3=Core |p3link=Core (Korean Player)
+|p4=BDG
+|p5=PenGuin
+
+|t2p1=Jun|t2p1flag=kr|t2pos1=coach
+|t2title=Staff
+|qualifier=[[WCK/2022/Season_1|WCK]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Furious Gaming|flag=latin america
+|p1=Libra
+|p2=Ek0
+|p3=Prusher
+|p4=Sarther
+|p5=Capoxzseba
+
+|t2title=Staff
+|t2p1=Tostado|t2p1flag=ar|t2pos1=head coach
+|qualifier=[[Open Latinoamerica/2022/Season 1|Open Latinoamerica]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=STMN Esports|flag=latin america
+|p1=WithDeath
+|p2=LéZing
+|p3=Serious
+|p4=Cold
+|p5=Arvoinen
+
+|t2p1=HitmanGM|t2p1flag=|t2pos1=baron
+|t2p2=Gomelo|t2p2flag=co|t2pos2=dragon
+
+|t3p1=Kristian|t3p1flag=|t3pos1=head coach
+|qualifier=[[Open Latinoamerica/2022/Season 1|Open Latinoamerica]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Keyd Stars|flag=br
+|p1=Odyceuz
+|p2=LorD
+|p3=Katrina
+|p4=NoMercy
+|p5=Maynah
+
+|t2p1=SrMusTer|t2p1flag=uy|t2pos1=jungle
+|t2p2=Slash|t2p2flag=br|t2pos2=jungle
+
+|t3p1=bielz|t3p1flag=br|t3pos1=coach
+|qualifier=[[Wild Tour/2022/Season 1|Wild Tour]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Liberty|flag=br
+|p1=Freaks
+|p2=Kinzin
+|p3=Kona
+|p4=Boss|p4link=Boss (Brazilian player)|p4flag=br
+|p5=ManoFrizer
+
+|t2title=Staff
+|t2p1=Higuree|t2p1flag=br|t2pos1=coach
+|t2p2=Julião|t2p2flag=br|t2pos2=coach
+|qualifier=[[Wild Tour/2022/Season 1|Wild Tour]]
+}}
+{{box|end}}

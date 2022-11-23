@@ -1,0 +1,110 @@
+===Group Stage Teams===
+{{box|start|padding=2em|max-width=1000px}}
+{{TeamCard
+|flag=cn|team=FunPlus Phoenix
+|p1=Fadou|p1flag=cn
+|p2=0711|p2flag=cn
+|p3=Yezi|p3flag=cn
+|p4=Xiaoma|p4flag=cn
+|p5=Ley|p5flag=cn
+|t2p1=Chao|t2p1flag=cn|t2pos1=sup
+|t3p1=Butter|t3p1flag=cn|t3pos1=coach
+|t3p2=Meek|t3p2flag=cn|t3pos2=assistant coach
+|qualifier=[[WRL/2022/Season 1|WRL]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|flag=vn|team=Team Flash
+|p1=Shy |p1flag=vn
+|p2=Zysu |p2flag=vn
+|p3=Coyote |p3flag=vn
+|p4=Elly |p4flag=vn
+|p5=Empty |p5flag=vn
+|t2p1=Joyce |t2p1flag=vn|t2pos1=jungle
+|t3p1=Alex |t3p1flag=vn|t3pos1=head coach
+|qualifier=[[Champions Southeast Asia/2022/Finals|Champions SEA]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=KT Rolster |flag=kr
+|p1=Ratel
+|p2=Do
+|p3=XerO
+|p4=Luna
+|p5=Salem
+|t2p1=NomeL|t2p1flag=kr|t2pos1=mid
+|t2p2=|t2p2flag=kr|t2pos2=sub
+
+|t3p1=NOLJA|t3p1flag=kr|t3pos1=coach
+|t3p2=BBT|t3p2flag=kr|t3pos2=coach
+|qualifier=[[WCK/2022/Season_1|WCK]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Sengoku Gaming |flag=jp
+|image=
+|p1=Kai|p1flag=
+|p2=Rush|p2flag=
+|p3=HAK|p3flag=
+|p4=WAN|p4flag=
+|p5=Ouki|p5flag=jp
+
+|t2p1=mochi|t2p1flag=jp|t2pos1=support
+
+|t3p1=YSDS|t3p1flag=jp|t3pos1=coach
+|qualifier=[[Japan Cup/2022/Season 1|Japan Cup]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Omegha E-sports|flag=br
+|image=Omegha Esports.png
+|p1=Huya|p1flag=br
+|p2=Benignus|p2flag=br
+|p3=suitS|p3flag=br
+|p4=Aomine|p4flag=br
+|p5=Seelinah|p5flag=br
+
+|t2p1=Feex|t2p1flag=br|t2pos1=sup
+
+|t3p1=Wonder|t3p1flag=br|t3pos1=head coach
+|qualifier=[[Wild Tour/2022/Season 1|Wild Tour]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Leviatán|flag=latin america
+|p1=Androck
+|p2=Andy
+|p3=Lumesh
+|p4=Kite
+|p5=Billy
+
+|t2p1=Eunha|t2p1flag=ar|t2pos1=jungle
+
+|t3p1=NewCosmo|t3p1flag=ar|t3pos1= head coach
+|qualifier=[[Open Latinoamerica/2022/Season 1|Open Latinoamerica]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Immortals|flag=north america
+|p1=IraqiZorro
+|p2=Lebmont
+|p3=Hoon
+|p4=Gume
+|p5=Charm
+|t2title=Staff
+|t2p1=PYU|t2pos1=coach
+|qualifier=[[North America Series/2022/Season 1|North America Series]]
+}}
+{{box|break|padding=2em}}
+{{TeamCard
+|team=Team Queso|flag=europe
+|p1=Acolyte
+|p2=Andreszed
+|p3=Vejos
+|p4=Joeyscags
+|p5=Methanaute
+|t2title=Staff
+|t2p1=Eelke|t2p1flag=ar|t2pos1=coach
+|qualifier=[[EMEA Championship/2022/Season 1|EMEA Championship]]
+}}
+{{box|end}}
