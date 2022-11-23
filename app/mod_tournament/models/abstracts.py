@@ -1,97 +1,107 @@
 from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
 from sqlalchemy.orm import declared_attr
 
-from app.exceptions import DraftIntegrityError
+from app.exceptions import DraftIntegrityError, LineupIntegrityError
 from app.mod_team.models import Role
+
+SIDES = ("blue", "red")
+ROLES = ("baron", "jungle", "mid", "dragon", "sup")
 
 
 class PicksBans:
     """All picks and bans from a matchup"""
 
-    __abstract__ = True
+    _ALL_PICKS_BANS = (
+        f"{side}_{p_b}_{position}"
+        for position in range(1, 6)
+        for side in SIDES
+        for p_b in ("pick", "ban")
+    )
 
     @declared_attr
-    def blue_ban_1(cls) -> int | Column:
+    def blue_ban_1(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_ban_1(cls) -> int | Column:
+    def red_ban_1(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_ban_2(cls) -> int | Column:
+    def blue_ban_2(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_ban_2(cls) -> int | Column:
+    def red_ban_2(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_ban_3(cls) -> int | Column:
+    def blue_ban_3(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_ban_3(cls) -> int | Column:
+    def red_ban_3(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_pick_1(cls) -> int | Column:
+    def blue_pick_1(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_pick_1(cls) -> int | Column:
+    def red_pick_1(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_pick_2(cls) -> int | Column:
+    def red_pick_2(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_pick_2(cls) -> int | Column:
+    def blue_pick_2(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_pick_3(cls) -> int | Column:
+    def blue_pick_3(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_pick_3(cls) -> int | Column:
+    def red_pick_3(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_ban_4(cls) -> int | Column:
+    def red_ban_4(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_ban_4(cls) -> int | Column:
+    def blue_ban_4(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_ban_5(cls) -> int | Column:
+    def red_ban_5(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_ban_5(cls) -> int | Column:
+    def blue_ban_5(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_pick_4(cls) -> int | Column:
+    def red_pick_4(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_pick_4(cls) -> int | Column:
+    def blue_pick_4(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def blue_pick_5(cls) -> int | Column:
+    def blue_pick_5(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     @declared_attr
-    def red_pick_5(cls) -> int | Column:
+    def red_pick_5(self) -> int | Column:
         return Column(Integer, ForeignKey("champion.id"))
 
     def from_payload(self, **kwargs):
-        _all_picks_bans = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        _all_picks_bans = [
+            kwargs.get(key) for key in self._ALL_PICKS_BANS if kwargs.get(key) is not None
+        ]
         if len(_all_picks_bans) != len(set(_all_picks_bans)):
             raise DraftIntegrityError("Cannot have redundant picks/bans")
 
@@ -117,48 +127,138 @@ class PicksBans:
         self.red_pick_5 = kwargs.get("red_pick_5")
 
 
+class Draft(PicksBans):
+
+    _ALL_PICKS = (f"{side}_{role}_pick" for role in ROLES for side in SIDES)
+    _BLUE_DRAFT = (f"{side}_{role}_pick" for role in ROLES for side in SIDES)
+    _RED_DRAFT = (f"{side}_{role}_pick" for role in ROLES for side in SIDES)
+    _ALL_BLUE_PICKS = (
+        f"{side}_pick_{position}" for role in ROLES for side in SIDES for position in range(1, 6)
+    )
+    _ALL_RED_PICKS = (
+        f"{side}_pick_{position}" for role in ROLES for side in SIDES for position in range(1, 6)
+    )
+
+    @declared_attr
+    def blue_baron_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def blue_jungle_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def blue_mid_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def blue_dragon_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def blue_sup_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def red_baron_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def red_mid_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def red_jungle_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def red_dragon_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    @declared_attr
+    def red_sup_pick(self) -> int | Column:
+        return Column(Integer, ForeignKey("champion.id"))
+
+    def from_payload(self, **kwargs):
+        super(PicksBans).from_payload(**kwargs)
+
+        all_picks = [kwargs.get(key) for key in self._ALL_PICKS if kwargs.get(key) is not None]
+        blue_picks = [
+            kwargs.get(key) for key in self._ALL_BLUE_PICKS if kwargs.get(key) is not None
+        ]
+        red_picks = [kwargs.get(key) for key in self._ALL_RED_PICKS if kwargs.get(key) is not None]
+        if len(all_picks) != len(set(all_picks)):
+            raise DraftIntegrityError("A champion can't stay in two positions at the same time")
+
+        for pick in self._BLUE_DRAFT:
+            if kwargs.get(pick) not in blue_picks:
+                raise DraftIntegrityError(
+                    "An unselected champion from blue side cannot be used to be played"
+                )
+
+        for pick in self._RED_DRAFT:
+            if kwargs.get(pick) not in red_picks:
+                raise DraftIntegrityError(
+                    "An unselected champion from red side cannot be used to be played"
+                )
+
+        self.blue_baron_pick = kwargs.get("blue_baron_pick")
+        self.blue_jungle_pick = kwargs.get("blue_jungle_pick")
+        self.blue_mid_pick = kwargs.get("blue_mid_pick")
+        self.blue_dragon_pick = kwargs.get("blue_dragon_pick")
+        self.blue_sup_pick = kwargs.get("blue_sup_pick")
+        self.red_baron_pick = kwargs.get("red_baron_pick")
+        self.red_jungle_pick = kwargs.get("red_jungle_pick")
+        self.red_mid_pick = kwargs.get("red_mid_pick")
+        self.red_dragon_pick = kwargs.get("red_dragon_pick")
+        self.red_sup_pick = kwargs.get("red_sup_pick")
+
+
 class Players:
     @declared_attr
-    def blue_baron_player(cls) -> int | Column:
+    def blue_baron_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def blue_jungle_player(cls) -> int | Column:
+    def blue_jungle_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def blue_mid_player(cls) -> int | Column:
+    def blue_mid_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def blue_dragon_player(cls) -> int | Column:
+    def blue_dragon_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def blue_sup_player(cls) -> int | Column:
+    def blue_sup_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def red_baron_player(cls) -> int | Column:
+    def red_baron_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def red_mid_player(cls) -> int | Column:
+    def red_mid_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def red_jungle_player(cls) -> int | Column:
+    def red_jungle_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def red_dragon_player(cls) -> int | Column:
+    def red_dragon_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def red_sup_player(cls) -> int | Column:
+    def red_sup_player(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     def from_payload(self, **kwargs):
+        _all_players = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+        if len(_all_players) != len(set(_all_players)):
+            raise LineupIntegrityError("A player can't stay in two positions at the same time")
         self.blue_baron_player = kwargs.get("blue_baron_player")
         self.blue_jungle_player = kwargs.get("blue_jungle_player")
         self.blue_mid_player = kwargs.get("blue_mid_player")
@@ -313,15 +413,15 @@ class TotalGold:
 
 class FirstBlood:
     @declared_attr
-    def team_first_blood(cls) -> int | Column:
+    def team_first_blood(self) -> int | Column:
         return Column(Integer, ForeignKey("team.id"))
 
     @declared_attr
-    def player_first_blood(cls) -> int | Column:
+    def player_first_blood(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     @declared_attr
-    def player_first_death(cls) -> int | Column:
+    def player_first_death(self) -> int | Column:
         return Column(Integer, ForeignKey("player.id"))
 
     place_first_blood = Column(String)
@@ -335,7 +435,7 @@ class FirstBlood:
 
 class FirstTower:
     @declared_attr
-    def team_first_tower(cls):
+    def team_first_tower(self):
         return Column(Integer, ForeignKey("team.id"))
 
     first_tower_route = Column(Enum(Role))
@@ -357,7 +457,7 @@ class FirstHerald:
     """
 
     @declared_attr
-    def team_first_herald(cls) -> int | Column:
+    def team_first_herald(self) -> int | Column:
         return Column(Integer, ForeignKey("team.id"))
 
     first_herald_teamfight = Column(Boolean, default=False)
@@ -381,7 +481,7 @@ class SecondHerald:
     """
 
     @declared_attr
-    def team_second_herald(cls):
+    def team_second_herald(self):
         return Column(Integer, ForeignKey("team.id"))
 
     second_herald_teamfight = Column(Boolean, default=False)
@@ -405,7 +505,7 @@ class FirstDrake:
     """
 
     @declared_attr
-    def team_first_drake(cls) -> int | Column:
+    def team_first_drake(self) -> int | Column:
         return Column(Integer, ForeignKey("team.id"))
 
     first_drake_teamfight = Column(Boolean, default=False)
@@ -429,7 +529,7 @@ class SecondDrake:
     """
 
     @declared_attr
-    def team_second_drake(cls) -> int | Column:
+    def team_second_drake(self) -> int | Column:
         return Column(Integer, ForeignKey("team.id"))
 
     second_drake_teamfight = Column(Boolean, default=False)
@@ -453,7 +553,7 @@ class ThirdDrake:
     """
 
     @declared_attr
-    def team_third_drake(cls) -> int | Column:
+    def team_third_drake(self) -> int | Column:
         return Column(Integer, ForeignKey("team.id"))
 
     third_drake_teamfight = Column(Boolean, default=False)

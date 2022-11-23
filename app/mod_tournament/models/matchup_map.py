@@ -6,10 +6,10 @@ from app.mod_tournament.models.abstracts import (
     KDA,
     DamageDealt,
     DamageTaken,
+    Draft,
     FirstDrake,
     FirstHerald,
     FirstTower,
-    PicksBans,
     Players,
     SecondDrake,
     SecondHerald,
@@ -21,10 +21,10 @@ from db_config import Base
 
 class MatchupMap(
     Base,
+    Draft,
     FirstDrake,
     FirstHerald,
     FirstTower,
-    PicksBans,
     Players,
     DamageTaken,
     DamageDealt,
@@ -51,15 +51,21 @@ class MatchupMap(
     length = Column(String)
     winner = Column(Integer, ForeignKey("team.id"))
     winner_side = Column(String)
-    blue_baron_pick = Column(Integer, ForeignKey("champion.id"))
-    blue_jungle_pick = Column(Integer, ForeignKey("champion.id"))
-    blue_mid_pick = Column(Integer, ForeignKey("champion.id"))
-    blue_dragon_pick = Column(Integer, ForeignKey("champion.id"))
-    blue_sup_pick = Column(Integer, ForeignKey("champion.id"))
-    red_baron_pick = Column(Integer, ForeignKey("champion.id"))
-    red_jungle_pick = Column(Integer, ForeignKey("champion.id"))
-    red_mid_pick = Column(Integer, ForeignKey("champion.id"))
-    red_dragon_pick = Column(Integer, ForeignKey("champion.id"))
-    red_sup_pick = Column(Integer, ForeignKey("champion.id"))
     blue_turrets_destroyed = Column(Integer, default=0)
     red_turrets_destroyed = Column(Integer, default=0)
+
+    @staticmethod
+    def from_payload(**kwargs) -> "MatchupMap":
+        map = MatchupMap()
+
+        map.matchup_id = kwargs.get("matchup_id")
+        map.tournament_id = kwargs.get("tournament_id")
+        map.vod_link = kwargs.get("vod_link")
+        map.patch = kwargs.get("patch")
+        map.blue_side = kwargs.get("blue_side")
+        map.red_side = kwargs.get("red_side")
+        map.length = kwargs.get("length")
+        map.winner = kwargs.get("winner")
+        map.winner_side = kwargs.get("winner_side")
+
+        return map
