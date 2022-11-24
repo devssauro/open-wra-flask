@@ -42,7 +42,7 @@ class TestDraft:
             Draft.from_payload(None, **sample_wrong_red_draft_payload)
 
 
-class TestPlayes:
+class TestPlayers:
     """Tests made to ensure the integrity check on Players positions"""
 
     @staticmethod
