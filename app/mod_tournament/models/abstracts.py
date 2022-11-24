@@ -1,276 +1,225 @@
-from sqlalchemy import Boolean, Column, Enum, ForeignKey, Integer, String
-from sqlalchemy.orm import declared_attr
+from sqlalchemy import Boolean, Column, Enum, ForeignKeyConstraint, Integer, String
+from sqlalchemy.orm import declarative_mixin
 
 from app.exceptions import DraftIntegrityError, LineupIntegrityError
 from app.mod_team.models import Role
 
 SIDES = ("blue", "red")
 ROLES = ("baron", "jungle", "mid", "dragon", "sup")
+ALL_PICKS_BANS = tuple(
+    f"{side}_{p_b}_{position}"
+    for position in range(1, 6)
+    for side in SIDES
+    for p_b in ("pick", "ban")
+)
+ALL_PICKS = tuple(f"{side}_{role}_pick" for role in ROLES for side in SIDES)
+ALL_PLAYERS = tuple(f"{side}_{role}_player" for role in ROLES for side in SIDES)
+BLUE_DRAFT = tuple(f"blue_{role}_pick" for role in ROLES)
+RED_DRAFT = tuple(f"red_{role}_pick" for role in ROLES)
+ALL_BLUE_PICKS = tuple(f"blue_pick_{position}" for position in range(1, 6))
+ALL_RED_PICKS = tuple(f"red_pick_{position}" for position in range(1, 6))
 
 
+@declarative_mixin
 class PicksBans:
     """All picks and bans from a matchup"""
 
-    _ALL_PICKS_BANS = (
-        f"{side}_{p_b}_{position}"
-        for position in range(1, 6)
-        for side in SIDES
-        for p_b in ("pick", "ban")
+    def __init__(
+        self,
+        blue_ban_1=None,
+        red_ban_1=None,
+        blue_ban_2=None,
+        red_ban_2=None,
+        blue_ban_3=None,
+        red_ban_3=None,
+        blue_pick_1=None,
+        red_pick_1=None,
+        red_pick_2=None,
+        blue_pick_2=None,
+        blue_pick_3=None,
+        red_pick_3=None,
+        red_ban_4=None,
+        blue_ban_4=None,
+        red_ban_5=None,
+        blue_ban_5=None,
+        red_pick_4=None,
+        blue_pick_4=None,
+        blue_pick_5=None,
+        red_pick_5=None,
+    ):
+        self._blue_ban_1 = blue_ban_1
+        self._red_ban_1 = red_ban_1
+        self._blue_ban_2 = blue_ban_2
+        self._red_ban_2 = red_ban_2
+        self._blue_ban_3 = blue_ban_3
+        self._red_ban_3 = red_ban_3
+        self._blue_pick_1 = blue_pick_1
+        self._red_pick_1 = red_pick_1
+        self._red_pick_2 = red_pick_2
+        self._blue_pick_2 = blue_pick_2
+        self._blue_pick_3 = blue_pick_3
+        self._red_pick_2 = red_pick_3
+        self._red_pick_3 = red_ban_4
+        self._blue_ban_4 = blue_ban_4
+        self._red_ban_4 = red_ban_5
+        self._blue_ban_5 = blue_ban_5
+        self._red_ban_5 = red_ban_5
+        self._red_pick_4 = red_pick_4
+        self._blue_pick_4 = blue_pick_4
+        self._blue_pick_5 = blue_pick_5
+        self._red_pick_5 = red_pick_5
+
+    __table_args__ = tuple(
+        ForeignKeyConstraint(ALL_PICKS_BANS, ["champion.id" for i in range(20)])
     )
 
-    @declared_attr
-    def blue_ban_1(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
+    blue_ban_1 = Column("blue_ban_1", Integer)
+    red_ban_1 = Column("red_ban_1", Integer)
+    blue_ban_2 = Column("blue_ban_2", Integer)
+    red_ban_2 = Column("red_ban_2", Integer)
+    blue_ban_3 = Column("blue_ban_3", Integer)
+    red_ban_3 = Column("red_ban_3", Integer)
+    blue_pick_1 = Column("blue_pick_1", Integer)
+    red_pick_1 = Column("red_pick_1", Integer)
+    red_pick_2 = Column("red_pick_2", Integer)
+    blue_pick_2 = Column("blue_pick_2", Integer)
+    blue_pick_3 = Column("blue_pick_3", Integer)
+    red_pick_3 = Column("red_pick_3", Integer)
+    red_ban_4 = Column("red_ban_4", Integer)
+    blue_ban_4 = Column("blue_ban_4", Integer)
+    red_ban_5 = Column("red_ban_5", Integer)
+    blue_ban_5 = Column("blue_ban_5", Integer)
+    red_pick_4 = Column("red_pick_4", Integer)
+    blue_pick_4 = Column("blue_pick_4", Integer)
+    blue_pick_5 = Column("blue_pick_5", Integer)
+    red_pick_5 = Column("red_pick_5", Integer)
 
-    @declared_attr
-    def red_ban_1(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_ban_2(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_ban_2(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_ban_3(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_ban_3(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_pick_1(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_pick_1(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_pick_2(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_pick_2(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_pick_3(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_pick_3(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_ban_4(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_ban_4(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_ban_5(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_ban_5(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_pick_4(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_pick_4(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_pick_5(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_pick_5(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    def from_payload(self, **kwargs):
+    @staticmethod
+    def from_payload(obj=None, **kwargs):
+        if obj is None:
+            obj = PicksBans()
         _all_picks_bans = [
-            kwargs.get(key) for key in self._ALL_PICKS_BANS if kwargs.get(key) is not None
+            kwargs.get(key) for key in ALL_PICKS_BANS if kwargs.get(key) is not None
         ]
         if len(_all_picks_bans) != len(set(_all_picks_bans)):
             raise DraftIntegrityError("Cannot have redundant picks/bans")
 
-        self.blue_ban_1 = kwargs.get("blue_ban_1")
-        self.red_ban_1 = kwargs.get("red_ban_1")
-        self.blue_ban_2 = kwargs.get("blue_ban_2")
-        self.red_ban_2 = kwargs.get("red_ban_2")
-        self.blue_ban_3 = kwargs.get("blue_ban_3")
-        self.red_ban_3 = kwargs.get("red_ban_3")
-        self.blue_pick_1 = kwargs.get("blue_pick_1")
-        self.red_pick_1 = kwargs.get("red_pick_1")
-        self.red_pick_2 = kwargs.get("red_pick_2")
-        self.blue_pick_2 = kwargs.get("blue_pick_2")
-        self.blue_pick_3 = kwargs.get("blue_pick_3")
-        self.red_pick_3 = kwargs.get("red_pick_3")
-        self.red_ban_4 = kwargs.get("red_ban_4")
-        self.blue_ban_4 = kwargs.get("blue_ban_4")
-        self.red_ban_5 = kwargs.get("red_ban_5")
-        self.blue_ban_5 = kwargs.get("blue_ban_5")
-        self.red_pick_4 = kwargs.get("red_pick_4")
-        self.blue_pick_4 = kwargs.get("blue_pick_4")
-        self.blue_pick_5 = kwargs.get("blue_pick_5")
-        self.red_pick_5 = kwargs.get("red_pick_5")
+        obj.blue_ban_1 = kwargs.get("blue_ban_1")
+        obj.red_ban_1 = kwargs.get("red_ban_1")
+        obj.blue_ban_2 = kwargs.get("blue_ban_2")
+        obj.red_ban_2 = kwargs.get("red_ban_2")
+        obj.blue_ban_3 = kwargs.get("blue_ban_3")
+        obj.red_ban_3 = kwargs.get("red_ban_3")
+        obj.blue_pick_1 = kwargs.get("blue_pick_1")
+        obj.red_pick_1 = kwargs.get("red_pick_1")
+        obj.red_pick_2 = kwargs.get("red_pick_2")
+        obj.blue_pick_2 = kwargs.get("blue_pick_2")
+        obj.blue_pick_3 = kwargs.get("blue_pick_3")
+        obj.red_pick_3 = kwargs.get("red_pick_3")
+        obj.red_ban_4 = kwargs.get("red_ban_4")
+        obj.blue_ban_4 = kwargs.get("blue_ban_4")
+        obj.red_ban_5 = kwargs.get("red_ban_5")
+        obj.blue_ban_5 = kwargs.get("blue_ban_5")
+        obj.red_pick_4 = kwargs.get("red_pick_4")
+        obj.blue_pick_4 = kwargs.get("blue_pick_4")
+        obj.blue_pick_5 = kwargs.get("blue_pick_5")
+        obj.red_pick_5 = kwargs.get("red_pick_5")
+
+        return obj
 
 
+@declarative_mixin
 class Draft(PicksBans):
 
-    _ALL_PICKS = (f"{side}_{role}_pick" for role in ROLES for side in SIDES)
-    _BLUE_DRAFT = (f"{side}_{role}_pick" for role in ROLES for side in SIDES)
-    _RED_DRAFT = (f"{side}_{role}_pick" for role in ROLES for side in SIDES)
-    _ALL_BLUE_PICKS = (
-        f"{side}_pick_{position}" for role in ROLES for side in SIDES for position in range(1, 6)
-    )
-    _ALL_RED_PICKS = (
-        f"{side}_pick_{position}" for role in ROLES for side in SIDES for position in range(1, 6)
-    )
+    __table_args__ = tuple(ForeignKeyConstraint(ALL_PICKS, ["champion.id" for i in range(10)]))
 
-    @declared_attr
-    def blue_baron_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
+    blue_baron_pick = Column(Integer)
+    blue_jungle_pick = Column(Integer)
+    blue_mid_pick = Column(Integer)
+    blue_dragon_pick = Column(Integer)
+    blue_sup_pick = Column(Integer)
+    red_baron_pick = Column(Integer)
+    red_mid_pick = Column(Integer)
+    red_jungle_pick = Column(Integer)
+    red_dragon_pick = Column(Integer)
+    red_sup_pick = Column(Integer)
 
-    @declared_attr
-    def blue_jungle_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
+    @staticmethod
+    def from_payload(obj=None, **kwargs):
+        if obj is None:
+            obj = Draft()
+        PicksBans.from_payload(obj, **kwargs)
 
-    @declared_attr
-    def blue_mid_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_dragon_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def blue_sup_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_baron_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_mid_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_jungle_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_dragon_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    @declared_attr
-    def red_sup_pick(self) -> int | Column:
-        return Column(Integer, ForeignKey("champion.id"))
-
-    def from_payload(self, **kwargs):
-        super(PicksBans).from_payload(**kwargs)
-
-        all_picks = [kwargs.get(key) for key in self._ALL_PICKS if kwargs.get(key) is not None]
-        blue_picks = [
-            kwargs.get(key) for key in self._ALL_BLUE_PICKS if kwargs.get(key) is not None
-        ]
-        red_picks = [kwargs.get(key) for key in self._ALL_RED_PICKS if kwargs.get(key) is not None]
+        all_picks = [kwargs.get(key) for key in ALL_PICKS if kwargs.get(key) is not None]
+        blue_picks = [kwargs.get(key) for key in ALL_BLUE_PICKS if kwargs.get(key) is not None]
+        red_picks = [kwargs.get(key) for key in ALL_RED_PICKS if kwargs.get(key) is not None]
         if len(all_picks) != len(set(all_picks)):
             raise DraftIntegrityError("A champion can't stay in two positions at the same time")
 
-        for pick in self._BLUE_DRAFT:
+        for pick in BLUE_DRAFT:
             if kwargs.get(pick) not in blue_picks:
                 raise DraftIntegrityError(
                     "An unselected champion from blue side cannot be used to be played"
                 )
 
-        for pick in self._RED_DRAFT:
+        for pick in RED_DRAFT:
             if kwargs.get(pick) not in red_picks:
                 raise DraftIntegrityError(
                     "An unselected champion from red side cannot be used to be played"
                 )
 
-        self.blue_baron_pick = kwargs.get("blue_baron_pick")
-        self.blue_jungle_pick = kwargs.get("blue_jungle_pick")
-        self.blue_mid_pick = kwargs.get("blue_mid_pick")
-        self.blue_dragon_pick = kwargs.get("blue_dragon_pick")
-        self.blue_sup_pick = kwargs.get("blue_sup_pick")
-        self.red_baron_pick = kwargs.get("red_baron_pick")
-        self.red_jungle_pick = kwargs.get("red_jungle_pick")
-        self.red_mid_pick = kwargs.get("red_mid_pick")
-        self.red_dragon_pick = kwargs.get("red_dragon_pick")
-        self.red_sup_pick = kwargs.get("red_sup_pick")
+        obj.blue_baron_pick = kwargs.get("blue_baron_pick")
+        obj.blue_jungle_pick = kwargs.get("blue_jungle_pick")
+        obj.blue_mid_pick = kwargs.get("blue_mid_pick")
+        obj.blue_dragon_pick = kwargs.get("blue_dragon_pick")
+        obj.blue_sup_pick = kwargs.get("blue_sup_pick")
+        obj.red_baron_pick = kwargs.get("red_baron_pick")
+        obj.red_jungle_pick = kwargs.get("red_jungle_pick")
+        obj.red_mid_pick = kwargs.get("red_mid_pick")
+        obj.red_dragon_pick = kwargs.get("red_dragon_pick")
+        obj.red_sup_pick = kwargs.get("red_sup_pick")
+
+        return obj
 
 
+@declarative_mixin
 class Players:
-    @declared_attr
-    def blue_baron_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
 
-    @declared_attr
-    def blue_jungle_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
+    __table_args__ = tuple(ForeignKeyConstraint(ALL_PLAYERS, ["player.id" for i in range(10)]))
 
-    @declared_attr
-    def blue_mid_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
+    blue_baron_player = Column(Integer)
+    blue_jungle_player = Column(Integer)
+    blue_mid_player = Column(Integer)
+    blue_dragon_player = Column(Integer)
+    blue_sup_player = Column(Integer)
+    red_baron_player = Column(Integer)
+    red_mid_player = Column(Integer)
+    red_jungle_player = Column(Integer)
+    red_dragon_player = Column(Integer)
+    red_sup_player = Column(Integer)
 
-    @declared_attr
-    def blue_dragon_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    @declared_attr
-    def blue_sup_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    @declared_attr
-    def red_baron_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    @declared_attr
-    def red_mid_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    @declared_attr
-    def red_jungle_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    @declared_attr
-    def red_dragon_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    @declared_attr
-    def red_sup_player(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
-    def from_payload(self, **kwargs):
-        _all_players = [kwargs[key] for key in kwargs if kwargs[key] is not None]
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = Players()
+        _all_players = [kwargs.get(key) for key in ALL_PLAYERS if kwargs.get(key) is not None]
         if len(_all_players) != len(set(_all_players)):
             raise LineupIntegrityError("A player can't stay in two positions at the same time")
-        self.blue_baron_player = kwargs.get("blue_baron_player")
-        self.blue_jungle_player = kwargs.get("blue_jungle_player")
-        self.blue_mid_player = kwargs.get("blue_mid_player")
-        self.blue_dragon_player = kwargs.get("blue_dragon_player")
-        self.blue_sup_player = kwargs.get("blue_sup_player")
-        self.red_baron_player = kwargs.get("red_baron_player")
-        self.red_jungle_player = kwargs.get("red_jungle_player")
-        self.red_mid_player = kwargs.get("red_mid_player")
-        self.red_dragon_player = kwargs.get("red_dragon_player")
-        self.red_sup_player = kwargs.get("red_sup_player")
+        obj.blue_baron_player = kwargs.get("blue_baron_player")
+        obj.blue_jungle_player = kwargs.get("blue_jungle_player")
+        obj.blue_mid_player = kwargs.get("blue_mid_player")
+        obj.blue_dragon_player = kwargs.get("blue_dragon_player")
+        obj.blue_sup_player = kwargs.get("blue_sup_player")
+        obj.red_baron_player = kwargs.get("red_baron_player")
+        obj.red_jungle_player = kwargs.get("red_jungle_player")
+        obj.red_mid_player = kwargs.get("red_mid_player")
+        obj.red_dragon_player = kwargs.get("red_dragon_player")
+        obj.red_sup_player = kwargs.get("red_sup_player")
+
+        return obj
 
 
+@declarative_mixin
 class KDA:
     blue_baron_kills = Column(Integer, default=0)
     blue_jungle_kills = Column(Integer, default=0)
@@ -336,6 +285,7 @@ class KDA:
         self.red_sup_assists = kwargs.get("red_sup_assists")
 
 
+@declarative_mixin
 class DamageTaken:
     blue_baron_dmg_taken = Column(Integer, default=0)
     blue_jungle_dmg_taken = Column(Integer, default=0)
@@ -361,6 +311,7 @@ class DamageTaken:
         self.red_sup_dmg_taken = kwargs.get("red_sup_dmg_taken")
 
 
+@declarative_mixin
 class DamageDealt:
     blue_baron_dmg_dealt = Column(Integer, default=0)
     blue_jungle_dmg_dealt = Column(Integer, default=0)
@@ -386,6 +337,7 @@ class DamageDealt:
         self.red_sup_dmg_dealt = kwargs.get("red_sup_dmg_dealt")
 
 
+@declarative_mixin
 class TotalGold:
     blue_baron_total_gold = Column(Integer, default=0)
     blue_jungle_total_gold = Column(Integer, default=0)
@@ -411,19 +363,19 @@ class TotalGold:
         self.red_sup_total_gold = kwargs.get("red_sup_total_gold")
 
 
+@declarative_mixin
 class FirstBlood:
-    @declared_attr
-    def team_first_blood(self) -> int | Column:
-        return Column(Integer, ForeignKey("team.id"))
 
-    @declared_attr
-    def player_first_blood(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            ("team_first_blood", "player_first_blood", "player_first_death"),
+            ("team.id", "player.id", "player.id"),
+        )
+    )
 
-    @declared_attr
-    def player_first_death(self) -> int | Column:
-        return Column(Integer, ForeignKey("player.id"))
-
+    team_first_blood = Column(Integer)
+    player_first_blood = Column(Integer)
+    player_first_death = Column(Integer)
     place_first_blood = Column(String)
 
     def from_payload(self, **kwargs):
@@ -433,11 +385,17 @@ class FirstBlood:
         self.place_first_blood = kwargs.get("place_first_blood")
 
 
+@declarative_mixin
 class FirstTower:
-    @declared_attr
-    def team_first_tower(self):
-        return Column(Integer, ForeignKey("team.id"))
 
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_first_tower"]),
+            tuple(["team.id"]),
+        )
+    )
+
+    team_first_tower = Column(Integer)
     first_tower_route = Column(Enum(Role))
     first_tower_herald = Column(Boolean, default=False)
 
@@ -447,6 +405,7 @@ class FirstTower:
         self.first_tower_herald = kwargs.get("first_tower_herald")
 
 
+@declarative_mixin
 class FirstHerald:
     """Fields that refers the first herald for a match
 
@@ -456,10 +415,14 @@ class FirstHerald:
         first_herald_stealed (bool): If the herald was stealed
     """
 
-    @declared_attr
-    def team_first_herald(self) -> int | Column:
-        return Column(Integer, ForeignKey("team.id"))
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_first_herald"]),
+            tuple(["team.id"]),
+        )
+    )
 
+    team_first_herald = Column(Integer)
     first_herald_teamfight = Column(Boolean, default=False)
     first_herald_stealed = Column(Boolean, default=False)
     first_herald_route = Column(String)
@@ -471,6 +434,7 @@ class FirstHerald:
         self.first_herald_route = kwargs.get("first_herald_route")
 
 
+@declarative_mixin
 class SecondHerald:
     """Fields that refers the second herald for a match
 
@@ -480,10 +444,14 @@ class SecondHerald:
         second_herald_stealed (bool): If the herald was stealed
     """
 
-    @declared_attr
-    def team_second_herald(self):
-        return Column(Integer, ForeignKey("team.id"))
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_second_herald"]),
+            tuple(["team.id"]),
+        )
+    )
 
+    team_second_herald = Column(Integer)
     second_herald_teamfight = Column(Boolean, default=False)
     second_herald_stealed = Column(Boolean, default=False)
     second_herald_route = Column(String)
@@ -495,6 +463,7 @@ class SecondHerald:
         self.second_herald_route = kwargs.get("second_herald_route")
 
 
+@declarative_mixin
 class FirstDrake:
     """Fields that refers the first drake for a match
 
@@ -504,10 +473,14 @@ class FirstDrake:
         first_drake_stealed (bool): If the drake was stealed
     """
 
-    @declared_attr
-    def team_first_drake(self) -> int | Column:
-        return Column(Integer, ForeignKey("team.id"))
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_first_drake"]),
+            tuple(["team.id"]),
+        )
+    )
 
+    team_first_drake = Column(Integer)
     first_drake_teamfight = Column(Boolean, default=False)
     first_drake_stealed = Column(Boolean, default=False)
     first_drake_type = Column(String)
@@ -519,6 +492,7 @@ class FirstDrake:
         self.first_drake_type = kwargs.get("first_drake_type")
 
 
+@declarative_mixin
 class SecondDrake:
     """Fields that refers the second drake for a match
 
@@ -528,10 +502,14 @@ class SecondDrake:
         second_drake_stealed (bool): If the drake was stealed
     """
 
-    @declared_attr
-    def team_second_drake(self) -> int | Column:
-        return Column(Integer, ForeignKey("team.id"))
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_second_drake"]),
+            tuple(["team.id"]),
+        )
+    )
 
+    team_second_drake = Column(Integer)
     second_drake_teamfight = Column(Boolean, default=False)
     second_drake_stealed = Column(Boolean, default=False)
     second_drake_type = Column(String)
@@ -543,6 +521,7 @@ class SecondDrake:
         self.second_drake_type = kwargs.get("second_drake_type")
 
 
+@declarative_mixin
 class ThirdDrake:
     """Fields that refers the third drake for a match
 
@@ -552,10 +531,14 @@ class ThirdDrake:
         third_drake_stealed (bool): If the drake was stealed
     """
 
-    @declared_attr
-    def team_third_drake(self) -> int | Column:
-        return Column(Integer, ForeignKey("team.id"))
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_third_drake"]),
+            tuple(["team.id"]),
+        )
+    )
 
+    team_third_drake = Column(Integer)
     third_drake_teamfight = Column(Boolean, default=False)
     third_drake_stealed = Column(Boolean, default=False)
     third_drake_type = Column(String)
