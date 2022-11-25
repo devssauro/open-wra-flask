@@ -148,6 +148,7 @@ class Draft(PicksBans):
     def from_payload(obj=None, **kwargs):
         if obj is None:
             obj = Draft()
+
         PicksBans.from_payload(obj, **kwargs)
 
         all_picks = [kwargs.get(key) for key in ALL_PICKS if kwargs.get(key) is not None]
@@ -252,37 +253,41 @@ class KDA:
     red_dragon_assists = Column(Integer, default=0)
     red_sup_assists = Column(Integer, default=0)
 
-    def from_payload(self, **kwargs):
-        self.blue_baron_kills = kwargs.get("blue_baron_kills")
-        self.blue_jungle_kills = kwargs.get("blue_jungle_kills")
-        self.blue_mid_kills = kwargs.get("blue_mid_kills")
-        self.blue_dragon_kills = kwargs.get("blue_dragon_kills")
-        self.blue_sup_kills = kwargs.get("blue_sup_kills")
-        self.red_baron_kills = kwargs.get("red_baron_kills")
-        self.red_jungle_kills = kwargs.get("red_jungle_kills")
-        self.red_mid_kills = kwargs.get("red_mid_kills")
-        self.red_dragon_kills = kwargs.get("red_dragon_kills")
-        self.red_sup_kills = kwargs.get("red_sup_kills")
-        self.blue_baron_deaths = kwargs.get("blue_baron_deaths")
-        self.blue_jungle_deaths = kwargs.get("blue_jungle_deaths")
-        self.blue_mid_deaths = kwargs.get("blue_mid_deaths")
-        self.blue_dragon_deaths = kwargs.get("blue_dragon_deaths")
-        self.blue_sup_deaths = kwargs.get("blue_sup_deaths")
-        self.red_baron_deaths = kwargs.get("red_baron_deaths")
-        self.red_jungle_deaths = kwargs.get("red_jungle_deaths")
-        self.red_mid_deaths = kwargs.get("red_mid_deaths")
-        self.red_dragon_deaths = kwargs.get("red_dragon_deaths")
-        self.red_sup_deaths = kwargs.get("red_sup_deaths")
-        self.blue_baron_assists = kwargs.get("blue_baron_assists")
-        self.blue_jungle_assists = kwargs.get("blue_jungle_assists")
-        self.blue_mid_assists = kwargs.get("blue_mid_assists")
-        self.blue_dragon_assists = kwargs.get("blue_dragon_assists")
-        self.blue_sup_assists = kwargs.get("blue_sup_assists")
-        self.red_baron_assists = kwargs.get("red_baron_assists")
-        self.red_jungle_assists = kwargs.get("red_jungle_assists")
-        self.red_mid_assists = kwargs.get("red_mid_assists")
-        self.red_dragon_assists = kwargs.get("red_dragon_assists")
-        self.red_sup_assists = kwargs.get("red_sup_assists")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = KDA()
+
+        obj.blue_baron_kills = kwargs.get("blue_baron_kills")
+        obj.blue_jungle_kills = kwargs.get("blue_jungle_kills")
+        obj.blue_mid_kills = kwargs.get("blue_mid_kills")
+        obj.blue_dragon_kills = kwargs.get("blue_dragon_kills")
+        obj.blue_sup_kills = kwargs.get("blue_sup_kills")
+        obj.red_baron_kills = kwargs.get("red_baron_kills")
+        obj.red_jungle_kills = kwargs.get("red_jungle_kills")
+        obj.red_mid_kills = kwargs.get("red_mid_kills")
+        obj.red_dragon_kills = kwargs.get("red_dragon_kills")
+        obj.red_sup_kills = kwargs.get("red_sup_kills")
+        obj.blue_baron_deaths = kwargs.get("blue_baron_deaths")
+        obj.blue_jungle_deaths = kwargs.get("blue_jungle_deaths")
+        obj.blue_mid_deaths = kwargs.get("blue_mid_deaths")
+        obj.blue_dragon_deaths = kwargs.get("blue_dragon_deaths")
+        obj.blue_sup_deaths = kwargs.get("blue_sup_deaths")
+        obj.red_baron_deaths = kwargs.get("red_baron_deaths")
+        obj.red_jungle_deaths = kwargs.get("red_jungle_deaths")
+        obj.red_mid_deaths = kwargs.get("red_mid_deaths")
+        obj.red_dragon_deaths = kwargs.get("red_dragon_deaths")
+        obj.red_sup_deaths = kwargs.get("red_sup_deaths")
+        obj.blue_baron_assists = kwargs.get("blue_baron_assists")
+        obj.blue_jungle_assists = kwargs.get("blue_jungle_assists")
+        obj.blue_mid_assists = kwargs.get("blue_mid_assists")
+        obj.blue_dragon_assists = kwargs.get("blue_dragon_assists")
+        obj.blue_sup_assists = kwargs.get("blue_sup_assists")
+        obj.red_baron_assists = kwargs.get("red_baron_assists")
+        obj.red_jungle_assists = kwargs.get("red_jungle_assists")
+        obj.red_mid_assists = kwargs.get("red_mid_assists")
+        obj.red_dragon_assists = kwargs.get("red_dragon_assists")
+        obj.red_sup_assists = kwargs.get("red_sup_assists")
 
 
 @declarative_mixin
@@ -298,17 +303,20 @@ class DamageTaken:
     red_dragon_dmg_taken = Column(Integer, default=0)
     red_sup_dmg_taken = Column(Integer, default=0)
 
-    def from_payload(self, **kwargs):
-        self.blue_baron_dmg_taken = kwargs.get("blue_baron_dmg_taken")
-        self.blue_jungle_dmg_taken = kwargs.get("blue_jungle_dmg_taken")
-        self.blue_mid_dmg_taken = kwargs.get("blue_mid_dmg_taken")
-        self.blue_dragon_dmg_taken = kwargs.get("blue_dragon_dmg_taken")
-        self.blue_sup_dmg_taken = kwargs.get("blue_sup_dmg_taken")
-        self.red_baron_dmg_taken = kwargs.get("red_baron_dmg_taken")
-        self.red_jungle_dmg_taken = kwargs.get("red_jungle_dmg_taken")
-        self.red_mid_dmg_taken = kwargs.get("red_mid_dmg_taken")
-        self.red_dragon_dmg_taken = kwargs.get("red_dragon_dmg_taken")
-        self.red_sup_dmg_taken = kwargs.get("red_sup_dmg_taken")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = DamageTaken()
+        obj.blue_baron_dmg_taken = kwargs.get("blue_baron_dmg_taken")
+        obj.blue_jungle_dmg_taken = kwargs.get("blue_jungle_dmg_taken")
+        obj.blue_mid_dmg_taken = kwargs.get("blue_mid_dmg_taken")
+        obj.blue_dragon_dmg_taken = kwargs.get("blue_dragon_dmg_taken")
+        obj.blue_sup_dmg_taken = kwargs.get("blue_sup_dmg_taken")
+        obj.red_baron_dmg_taken = kwargs.get("red_baron_dmg_taken")
+        obj.red_jungle_dmg_taken = kwargs.get("red_jungle_dmg_taken")
+        obj.red_mid_dmg_taken = kwargs.get("red_mid_dmg_taken")
+        obj.red_dragon_dmg_taken = kwargs.get("red_dragon_dmg_taken")
+        obj.red_sup_dmg_taken = kwargs.get("red_sup_dmg_taken")
 
 
 @declarative_mixin
@@ -324,17 +332,20 @@ class DamageDealt:
     red_dragon_dmg_dealt = Column(Integer, default=0)
     red_sup_dmg_dealt = Column(Integer, default=0)
 
-    def from_payload(self, **kwargs):
-        self.blue_baron_dmg_dealt = kwargs.get("blue_baron_dmg_dealt")
-        self.blue_jungle_dmg_dealt = kwargs.get("blue_jungle_dmg_dealt")
-        self.blue_mid_dmg_dealt = kwargs.get("blue_mid_dmg_dealt")
-        self.blue_dragon_dmg_dealt = kwargs.get("blue_dragon_dmg_dealt")
-        self.blue_sup_dmg_dealt = kwargs.get("blue_sup_dmg_dealt")
-        self.red_baron_dmg_dealt = kwargs.get("red_baron_dmg_dealt")
-        self.red_jungle_dmg_dealt = kwargs.get("red_jungle_dmg_dealt")
-        self.red_mid_dmg_dealt = kwargs.get("red_mid_dmg_dealt")
-        self.red_dragon_dmg_dealt = kwargs.get("red_dragon_dmg_dealt")
-        self.red_sup_dmg_dealt = kwargs.get("red_sup_dmg_dealt")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = DamageDealt()
+        obj.blue_baron_dmg_dealt = kwargs.get("blue_baron_dmg_dealt")
+        obj.blue_jungle_dmg_dealt = kwargs.get("blue_jungle_dmg_dealt")
+        obj.blue_mid_dmg_dealt = kwargs.get("blue_mid_dmg_dealt")
+        obj.blue_dragon_dmg_dealt = kwargs.get("blue_dragon_dmg_dealt")
+        obj.blue_sup_dmg_dealt = kwargs.get("blue_sup_dmg_dealt")
+        obj.red_baron_dmg_dealt = kwargs.get("red_baron_dmg_dealt")
+        obj.red_jungle_dmg_dealt = kwargs.get("red_jungle_dmg_dealt")
+        obj.red_mid_dmg_dealt = kwargs.get("red_mid_dmg_dealt")
+        obj.red_dragon_dmg_dealt = kwargs.get("red_dragon_dmg_dealt")
+        obj.red_sup_dmg_dealt = kwargs.get("red_sup_dmg_dealt")
 
 
 @declarative_mixin
@@ -350,17 +361,20 @@ class TotalGold:
     red_dragon_total_gold = Column(Integer, default=0)
     red_sup_total_gold = Column(Integer, default=0)
 
-    def from_payload(self, **kwargs):
-        self.blue_baron_total_gold = kwargs.get("blue_baron_total_gold")
-        self.blue_jungle_total_gold = kwargs.get("blue_jungle_total_gold")
-        self.blue_mid_total_gold = kwargs.get("blue_mid_total_gold")
-        self.blue_dragon_total_gold = kwargs.get("blue_dragon_total_gold")
-        self.blue_sup_total_gold = kwargs.get("blue_sup_total_gold")
-        self.red_baron_total_gold = kwargs.get("red_baron_total_gold")
-        self.red_jungle_total_gold = kwargs.get("red_jungle_total_gold")
-        self.red_mid_total_gold = kwargs.get("red_mid_total_gold")
-        self.red_dragon_total_gold = kwargs.get("red_dragon_total_gold")
-        self.red_sup_total_gold = kwargs.get("red_sup_total_gold")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = TotalGold()
+        obj.blue_baron_total_gold = kwargs.get("blue_baron_total_gold")
+        obj.blue_jungle_total_gold = kwargs.get("blue_jungle_total_gold")
+        obj.blue_mid_total_gold = kwargs.get("blue_mid_total_gold")
+        obj.blue_dragon_total_gold = kwargs.get("blue_dragon_total_gold")
+        obj.blue_sup_total_gold = kwargs.get("blue_sup_total_gold")
+        obj.red_baron_total_gold = kwargs.get("red_baron_total_gold")
+        obj.red_jungle_total_gold = kwargs.get("red_jungle_total_gold")
+        obj.red_mid_total_gold = kwargs.get("red_mid_total_gold")
+        obj.red_dragon_total_gold = kwargs.get("red_dragon_total_gold")
+        obj.red_sup_total_gold = kwargs.get("red_sup_total_gold")
 
 
 @declarative_mixin
@@ -378,11 +392,14 @@ class FirstBlood:
     player_first_death = Column(Integer)
     place_first_blood = Column(String)
 
-    def from_payload(self, **kwargs):
-        self.team_first_blood = kwargs.get("team_first_blood")
-        self.player_first_blood = kwargs.get("player_first_blood")
-        self.player_first_death = kwargs.get("player_first_death")
-        self.place_first_blood = kwargs.get("place_first_blood")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = FirstBlood()
+        obj.team_first_blood = kwargs.get("team_first_blood")
+        obj.player_first_blood = kwargs.get("player_first_blood")
+        obj.player_first_death = kwargs.get("player_first_death")
+        obj.place_first_blood = kwargs.get("place_first_blood")
 
 
 @declarative_mixin
@@ -399,10 +416,13 @@ class FirstTower:
     first_tower_route = Column(Enum(Role))
     first_tower_herald = Column(Boolean, default=False)
 
-    def from_payload(self, **kwargs):
-        self.team_first_tower = kwargs.get("team_first_tower")
-        self.first_tower_route = kwargs.get("first_tower_route")
-        self.first_tower_herald = kwargs.get("first_tower_herald")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = FirstTower()
+        obj.team_first_tower = kwargs.get("team_first_tower")
+        obj.first_tower_route = kwargs.get("first_tower_route")
+        obj.first_tower_herald = kwargs.get("first_tower_herald")
 
 
 @declarative_mixin
@@ -427,11 +447,14 @@ class FirstHerald:
     first_herald_stealed = Column(Boolean, default=False)
     first_herald_route = Column(String)
 
-    def from_payload(self, **kwargs):
-        self.team_first_herald = kwargs.get("team_first_herald")
-        self.first_herald_teamfight = kwargs.get("first_herald_teamfight")
-        self.first_herald_stealed = kwargs.get("first_herald_stealed")
-        self.first_herald_route = kwargs.get("first_herald_route")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = FirstHerald()
+        obj.team_first_herald = kwargs.get("team_first_herald")
+        obj.first_herald_teamfight = kwargs.get("first_herald_teamfight")
+        obj.first_herald_stealed = kwargs.get("first_herald_stealed")
+        obj.first_herald_route = kwargs.get("first_herald_route")
 
 
 @declarative_mixin
@@ -456,11 +479,14 @@ class SecondHerald:
     second_herald_stealed = Column(Boolean, default=False)
     second_herald_route = Column(String)
 
-    def from_payload(self, **kwargs):
-        self.team_second_herald = kwargs.get("team_second_herald")
-        self.second_herald_teamfight = kwargs.get("second_herald_teamfight")
-        self.second_herald_stealed = kwargs.get("second_herald_stealed")
-        self.second_herald_route = kwargs.get("second_herald_route")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = SecondHerald()
+        obj.team_second_herald = kwargs.get("team_second_herald")
+        obj.second_herald_teamfight = kwargs.get("second_herald_teamfight")
+        obj.second_herald_stealed = kwargs.get("second_herald_stealed")
+        obj.second_herald_route = kwargs.get("second_herald_route")
 
 
 @declarative_mixin
@@ -485,11 +511,14 @@ class FirstDrake:
     first_drake_stealed = Column(Boolean, default=False)
     first_drake_type = Column(String)
 
-    def from_payload(self, **kwargs):
-        self.team_first_drake = kwargs.get("team_first_drake")
-        self.first_drake_teamfight = kwargs.get("first_drake_teamfight")
-        self.first_drake_stealed = kwargs.get("first_drake_stealed")
-        self.first_drake_type = kwargs.get("first_drake_type")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = FirstDrake()
+        obj.team_first_drake = kwargs.get("team_first_drake")
+        obj.first_drake_teamfight = kwargs.get("first_drake_teamfight")
+        obj.first_drake_stealed = kwargs.get("first_drake_stealed")
+        obj.first_drake_type = kwargs.get("first_drake_type")
 
 
 @declarative_mixin
@@ -514,11 +543,14 @@ class SecondDrake:
     second_drake_stealed = Column(Boolean, default=False)
     second_drake_type = Column(String)
 
-    def from_payload(self, **kwargs):
-        self.team_second_drake = kwargs.get("team_second_drake")
-        self.second_drake_teamfight = kwargs.get("second_drake_teamfight")
-        self.second_drake_stealed = kwargs.get("second_drake_stealed")
-        self.second_drake_type = kwargs.get("second_drake_type")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = SecondDrake()
+        obj.team_second_drake = kwargs.get("team_second_drake")
+        obj.second_drake_teamfight = kwargs.get("second_drake_teamfight")
+        obj.second_drake_stealed = kwargs.get("second_drake_stealed")
+        obj.second_drake_type = kwargs.get("second_drake_type")
 
 
 @declarative_mixin
@@ -543,8 +575,11 @@ class ThirdDrake:
     third_drake_stealed = Column(Boolean, default=False)
     third_drake_type = Column(String)
 
-    def from_payload(self, **kwargs):
-        self.team_third_drake = kwargs.get("team_third_drake")
-        self.third_drake_teamfight = kwargs.get("third_drake_teamfight")
-        self.third_drake_stealed = kwargs.get("third_drake_stealed")
-        self.third_drake_type = kwargs.get("third_drake_type")
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = ThirdDrake()
+        obj.team_third_drake = kwargs.get("team_third_drake")
+        obj.third_drake_teamfight = kwargs.get("third_drake_teamfight")
+        obj.third_drake_stealed = kwargs.get("third_drake_stealed")
+        obj.third_drake_type = kwargs.get("third_drake_type")

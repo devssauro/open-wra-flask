@@ -7,6 +7,7 @@ from app.mod_tournament.models.abstracts import (  # Players,
     DamageDealt,
     DamageTaken,
     Draft,
+    FirstBlood,
     FirstDrake,
     FirstHerald,
     FirstTower,
@@ -19,21 +20,57 @@ from app.mod_tournament.models.abstracts import (  # Players,
 from db_config import Base
 
 
+class FinalStats(
+    DamageTaken,
+    DamageDealt,
+    KDA,
+    TotalGold,
+):
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = FinalStats()
+
+        DamageTaken.from_payload(obj, **kwargs)
+        DamageDealt.from_payload(obj, **kwargs)
+        KDA.from_payload(obj, **kwargs)
+        TotalGold.from_payload(obj, **kwargs)
+
+        return obj
+
+
+class Objectives(
+    FirstBlood,
+    FirstTower,
+    FirstHerald,
+    SecondHerald,
+    FirstDrake,
+    SecondDrake,
+    ThirdDrake,
+):
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = Objectives()
+
+        FirstBlood.from_payload(obj, **kwargs)
+        FirstTower.from_payload(obj, **kwargs)
+        FirstHerald.from_payload(obj, **kwargs)
+        SecondHerald.from_payload(obj, **kwargs)
+        FirstDrake.from_payload(obj, **kwargs)
+        SecondDrake.from_payload(obj, **kwargs)
+        ThirdDrake.from_payload(obj, **kwargs)
+
+        return obj
+
+
 class MatchupMap(
     Base,
     Draft,
-    FirstDrake,
-    FirstHerald,
-    FirstTower,
     Players,
-    DamageTaken,
-    DamageDealt,
-    SecondDrake,
-    SecondHerald,
-    ThirdDrake,
-    TotalGold,
-    KDA,
     SerializerMixin,
+    FinalStats,
+    Objectives,
 ):
     """Class to represent a map in a matchup"""
 
@@ -86,6 +123,12 @@ class MatchupMap(
     @staticmethod
     def from_payload(**kwargs):
         _map = MatchupMap()
+
+        Draft.from_payload(_map, **kwargs)
+        Players.from_payload(_map, **kwargs)
+        Objectives.from_payload(_map, **kwargs)
+        FinalStats.from_payload(_map, **kwargs)
+
         _map.matchup_id = (kwargs.get("matchup_id"),)
         _map.tournament_id = (kwargs.get("tournament_id"),)
         _map.vod_link = (kwargs.get("vod_link"),)
@@ -98,7 +141,5 @@ class MatchupMap(
         _map.winner_side = (kwargs.get("winner_side"),)
         _map.blue_turrets_destroyed = (kwargs.get("blue_turrets_destroyed"),)
         _map.red_turrets_destroyed = (kwargs.get("red_turrets_destroyed"),)
-
-        super(Draft, _map).from_payload(_map, **kwargs)
 
         return _map
