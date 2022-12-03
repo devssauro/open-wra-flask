@@ -1,7 +1,6 @@
 from enum import IntEnum, unique
 
 from sqlalchemy import Column, Enum, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from db_config import Base
@@ -44,6 +43,6 @@ class Player(Base, SerializerMixin):
 
     nickname: str | Column = Column(String)
     team_id: int | Column = Column(Integer, ForeignKey("team.id"))
-    team = relationship("Team", back_populates="players")
+    # team = relationship("Team", back_populates="players")
     flag: str | Column = Column(String)
     role: Role | Column = Column(Enum(Role))
