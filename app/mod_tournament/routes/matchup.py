@@ -47,7 +47,7 @@ def get_matchups():
             {
                 "id": matchup.id,
                 "phase": matchup.phase,
-                "datetime": matchup.datetime,
+                "datetime": matchup.datetime.isoformat(),
                 "team1": {
                     "id": matchup.team1_id,
                     "tag": matchup.team1_tag,
@@ -85,7 +85,7 @@ def get_matchup_teams(matchup_id: int):
             TournamentTeam.team_id.in_([Matchup.team1_id, Matchup.team2_id]),  # type: ignore
         )
     )
-    teams = Team.query.filter(Team.id.in_([t.team_id for t in matchup]))
+    teams = Team.query.filter(Team.id.in_([t.team_id for t in matchup]))  # type: ignore
 
     return {
         "id": matchup_id,

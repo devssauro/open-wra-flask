@@ -12,6 +12,7 @@ class Champion(Base, SerializerMixin):
     """
 
     __tablename__ = "champion"
+    serialize_only = ("id", "name")
 
     def __int__(self, name):
         self.name = name

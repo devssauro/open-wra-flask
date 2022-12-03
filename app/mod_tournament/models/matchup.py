@@ -8,7 +8,7 @@ from db_config import Base
 class Matchup(Base, SerializerMixin):
     """Class to a matchup in a tournament
 
-    A matchup is a Best of 3/5/7.
+    A matchup is the Best of 3/5/7.
 
     Attributes:
         phase (str): The phase of the tournament where that matchup occurred
@@ -21,6 +21,15 @@ class Matchup(Base, SerializerMixin):
     """
 
     __tablename__ = "matchup"
+    serialize_only = (
+        "id",
+        "datetime",
+        "mvp_id",
+        "tournament_id",
+        "team1_id",
+        "team2_id",
+        "vod_link",
+    )
 
     def __int__(self, datetime, phase, mvp, team1, team2):
         self.datetime = datetime

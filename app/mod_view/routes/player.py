@@ -178,7 +178,7 @@ def get_all_matches(player_id: int, champion_id: int):
     for role in roles:
         q_with.append(
             SingleView.query.with_entities(
-                Champion.id.label("champion_id"),
+                Champion.id.label("champion_id"),  # type: ignore
                 Champion.name.label("champion_name"),  # type: ignore
                 label("role", role),
                 label("team_played", "with"),
@@ -197,7 +197,7 @@ def get_all_matches(player_id: int, champion_id: int):
         )
         q_against.append(
             SingleView.query.with_entities(
-                Champion.id.label("champion_id"),
+                Champion.id.label("champion_id"),  # type: ignore
                 Champion.name.label("champion_name"),  # type: ignore
                 label("role", role),
                 label("team_played", "against"),
@@ -529,7 +529,7 @@ def get_players_info(player_id: int):
 
     all_champions = (
         SingleView.query.with_entities(
-            Champion.id.label("champion_id"),
+            Champion.id.label("champion_id"),  # type: ignore
             Champion.name.label("name"),  # type: ignore
             *role_pick[request.args["role"]]["columns"]
         )

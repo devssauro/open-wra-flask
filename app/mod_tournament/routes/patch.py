@@ -10,7 +10,10 @@ bp = Blueprint("patch", __name__, url_prefix="/")
 def get_patches():
     patches = (
         MatchupMap.query.with_entities(MatchupMap.patch)
-        .filter(*filter_map_data(request, "patch"), MatchupMap.patch.isnot(None))
+        .filter(
+            *filter_map_data(request, "patch"),
+            MatchupMap.patch.isnot(None),
+        )
         .distinct()
         .order_by(MatchupMap.patch)
     )

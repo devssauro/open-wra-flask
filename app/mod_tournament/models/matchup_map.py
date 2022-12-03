@@ -2,7 +2,7 @@ from sqlalchemy import Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
-from app.mod_tournament.models.abstracts import (  # Players,
+from app.mod_tournament.models.abstracts import (
     KDA,
     DamageDealt,
     DamageTaken,

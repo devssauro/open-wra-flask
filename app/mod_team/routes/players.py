@@ -1,9 +1,8 @@
 from flask import Blueprint, request
 from flask_security import roles_accepted
 
-from db_config import db
-
-from ..models import Player
+from app.db_handler import DBHandler
+from app.mod_team.models import Player
 
 bp = Blueprint("player", __name__, url_prefix="player")
 roles = {"1": "baron", "2": "jungle", "3": "mid", "4": "dragon", "5": "sup"}
@@ -12,53 +11,41 @@ roles = {"1": "baron", "2": "jungle", "3": "mid", "4": "dragon", "5": "sup"}
 @bp.get("")
 @roles_accepted("operational", "admin")
 def get_players():
-    args = []
-    players = (
-        Player.query.with_entities(
-            Player.id,
-            Player.nickname,
-            Player.flag,
-            Player.team_id,
-            Player.role,
-        )
-        .filter(*args)
-        .order_by(Player.nickname)
+    args = request.args
+    result = DBHandler.get_players(
+        args.get("nickname"),
+        args.get("region"),
+        args.get("page", 1),
+        args.get("per_page", 10),
     )
-
     return {
-        "players": [
-            dict(
-                id=player.id,
-                nickname=player.nickname,
-                flag=player.flag,
-                role=None if not player.role else player.role.name,
-            )
-            for player in players
-        ]
+        "players": [player.to_dict() for player in result.players],
+        "pages": result.pages,
+        "page": result.page,
     }
 
 
 @bp.post("")
 @roles_accepted("operational", "admin")
 def post_player():
-    player: Player = Player(**request.json)
-    db.session.add(player)
-    db.session.commit()
+    player = Player(**request.json)
+    player = DBHandler.create_update_player(player)
 
     return {"id": player.id}, 201
 
 
-@bp.put("")
+@bp.put("/<int:player_id>")
 @roles_accepted("operational", "admin")
-def put_player():
-    if "id" not in request.json:
-        return {"msg": "id is missing"}
+def put_player(player_id: int):
 
-    player: Player = Player.query.get(request.json["id"])
+    player = DBHandler.get_player_by_id(player_id)
+    if not player:
+        return {"msg": "Player not found"}, 404
+
     player.name = request.json["nickname"]
     player.role = request.json["role"]
     player.flag = request.json["flag"]
-    db.session.add(player)
-    db.session.commit()
+
+    DBHandler.create_update_player(player)
 
     return {"msg": "Player has changed"}

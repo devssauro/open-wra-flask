@@ -24,51 +24,6 @@ ALL_RED_PICKS = tuple(f"red_pick_{position}" for position in range(1, 6))
 class PicksBans:
     """All picks and bans from a matchup"""
 
-    def __init__(
-        self,
-        blue_ban_1=None,
-        red_ban_1=None,
-        blue_ban_2=None,
-        red_ban_2=None,
-        blue_ban_3=None,
-        red_ban_3=None,
-        blue_pick_1=None,
-        red_pick_1=None,
-        red_pick_2=None,
-        blue_pick_2=None,
-        blue_pick_3=None,
-        red_pick_3=None,
-        red_ban_4=None,
-        blue_ban_4=None,
-        red_ban_5=None,
-        blue_ban_5=None,
-        red_pick_4=None,
-        blue_pick_4=None,
-        blue_pick_5=None,
-        red_pick_5=None,
-    ):
-        self._blue_ban_1 = blue_ban_1
-        self._red_ban_1 = red_ban_1
-        self._blue_ban_2 = blue_ban_2
-        self._red_ban_2 = red_ban_2
-        self._blue_ban_3 = blue_ban_3
-        self._red_ban_3 = red_ban_3
-        self._blue_pick_1 = blue_pick_1
-        self._red_pick_1 = red_pick_1
-        self._red_pick_2 = red_pick_2
-        self._blue_pick_2 = blue_pick_2
-        self._blue_pick_3 = blue_pick_3
-        self._red_pick_2 = red_pick_3
-        self._red_pick_3 = red_ban_4
-        self._blue_ban_4 = blue_ban_4
-        self._red_ban_4 = red_ban_5
-        self._blue_ban_5 = blue_ban_5
-        self._red_ban_5 = red_ban_5
-        self._red_pick_4 = red_pick_4
-        self._blue_pick_4 = blue_pick_4
-        self._blue_pick_5 = blue_pick_5
-        self._red_pick_5 = red_pick_5
-
     __table_args__ = tuple(
         ForeignKeyConstraint(ALL_PICKS_BANS, ["champion.id" for i in range(20)])
     )

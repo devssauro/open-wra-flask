@@ -21,6 +21,16 @@ class Tournament(Base, SerializerMixin):
     """
 
     __tablename__ = "tournament"
+    serialize_only = (
+        "id",
+        "name",
+        "tag",
+        "region",
+        "start_date",
+        "end_date",
+        "split",
+        "female_only",
+    )
 
     def __init__(
         self,
