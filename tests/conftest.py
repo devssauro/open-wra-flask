@@ -25,11 +25,13 @@ def app() -> Flask:
 
 @pytest.fixture
 def sample_app(app):
+    """Sample app in test client for automated testing."""
     return app.test_client()
 
 
 @pytest.fixture
 def sample_user(sample_app) -> User:
+    """Sample user to attribute profiles and test permissions."""
     user = User()
     user.email = "cunha.ladm@outlook.com"
     user.password = hash_password("123546")
@@ -41,6 +43,7 @@ def sample_user(sample_app) -> User:
 
 @pytest.fixture
 def sample_admin_profile() -> Role:
+    """Sample admin profile to assert permissions."""
     admin = Role()
     admin.name = "admin"
     admin.description = "Administrador"
@@ -59,6 +62,7 @@ def sample_admin_profile() -> Role:
 
 @pytest.fixture
 def sample_admin_user(sample_user, sample_admin_profile) -> User:
+    """Sample user with admin profile."""
     sample_user.roles = [sample_admin_profile]
     sample_user.id = 1
     return sample_user

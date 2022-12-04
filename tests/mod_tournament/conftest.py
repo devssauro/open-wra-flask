@@ -3,6 +3,7 @@ import pytest
 
 @pytest.fixture
 def sample_picks_bans_payload() -> dict:
+    """Payload for picks and bans in a match."""
     return {
         "blue_ban_1": 1,
         "red_ban_1": 2,
@@ -29,11 +30,13 @@ def sample_picks_bans_payload() -> dict:
 
 @pytest.fixture
 def sample_wrong_picks_bans_payload(sample_picks_bans_payload: dict) -> dict:
+    """Wrong payload with a champion repeated on two parts of picks and bans"""
     return {**sample_picks_bans_payload, "blue_ban_1": 2}
 
 
 @pytest.fixture
 def sample_draft_payload(sample_picks_bans_payload: dict) -> dict:
+    """Draft payload with all champions setted for every player"""
     return {
         **sample_picks_bans_payload,
         "blue_baron_pick": sample_picks_bans_payload["blue_pick_1"],
@@ -51,6 +54,7 @@ def sample_draft_payload(sample_picks_bans_payload: dict) -> dict:
 
 @pytest.fixture
 def sample_wrong_blue_draft_payload(sample_picks_bans_payload: dict) -> dict:
+    """Draft with a mistake on blue team"""
     return {
         **sample_picks_bans_payload,
         "blue_baron_pick": sample_picks_bans_payload["blue_ban_1"],
@@ -68,6 +72,7 @@ def sample_wrong_blue_draft_payload(sample_picks_bans_payload: dict) -> dict:
 
 @pytest.fixture
 def sample_wrong_red_draft_payload(sample_picks_bans_payload: dict) -> dict:
+    """Draft with a mistake on red team"""
     return {
         **sample_picks_bans_payload,
         "blue_baron_pick": sample_picks_bans_payload["blue_pick_1"],
@@ -85,6 +90,7 @@ def sample_wrong_red_draft_payload(sample_picks_bans_payload: dict) -> dict:
 
 @pytest.fixture
 def sample_players_payload() -> dict:
+    """Draft payload with all player for the two teams"""
     return {
         "blue_baron_player": 1,
         "blue_jungle_player": 2,
@@ -101,6 +107,7 @@ def sample_players_payload() -> dict:
 
 @pytest.fixture
 def sample_wrong_players_payload(sample_players_payload: dict) -> dict:
+    """Draft payload with a player setted in two positions"""
     return {
         **sample_players_payload,
         "blue_baron_player": sample_players_payload["blue_jungle_player"],

@@ -13,6 +13,7 @@ def sample_team_payload() -> dict:
 
 @pytest.fixture
 def sample_team_1(sample_team_payload: dict) -> Team:
+    """Team object to be managed from DBHandler"""
     team = Team(**sample_team_payload)
     team.id = 1
     team.active = True
@@ -29,6 +30,7 @@ def sample_player_payload() -> dict:
 
 @pytest.fixture
 def sample_player_1(sample_player_payload: dict) -> Player:
+    """Player object to be managed from DBHandler"""
     player = Player(**sample_player_payload)
     player.id = 1
     player.active = True
