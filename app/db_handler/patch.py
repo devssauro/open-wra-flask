@@ -5,8 +5,11 @@ from app.mod_view.utils import filter_map_data
 
 
 class PatchHandler:
+    """Database handler for Patch operations"""
+
     @staticmethod
     def get_patches(request: Request) -> list[str]:
+        """Returns a list of Patches for the given request"""
         query = (
             MatchupMap.query.with_entities(MatchupMap.patch)
             .filter(

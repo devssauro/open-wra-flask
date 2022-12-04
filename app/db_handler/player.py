@@ -7,14 +7,29 @@ PaginatedPlayers = namedtuple("PaginatedPlayers", ["players", "page", "pages"])
 
 
 class PlayerHandler:
+    """Database handler for Player operations"""
+
     @staticmethod
     def create_update_player(player: Player) -> Player:
+        """Create or update a player
+        Args:
+            player (Player): The player to be created or updated
+        Returns:
+            Player: The newly created or updated player
+        """
         db.session.add(player)
         db.session.commit()
         return player
 
     @staticmethod
     def get_player_by_id(player_id: int) -> Player:
+        """Get a player by id
+        Args:
+            player_id (int): The player's id
+
+        Returns:
+            Player: the player object if it exists, else None
+        """
         player = db.session.get(player_id)
         return player
 
@@ -22,6 +37,17 @@ class PlayerHandler:
     def get_players(
         nickname: str, region: str, page: int = 1, per_page: int = 10
     ) -> PaginatedPlayers:
+        """Get a list of players
+        Args:
+            nickname (str): The player's nickname
+            region (str): The player's region
+            page (int): The page for a pagination query, default is 1
+            per_page (int): The quantity of teams per page, default is 10
+
+        Returns:
+            PaginatedPlayers: The object with all players from that page with the
+                current page and the amount of pages available
+        """
         args = []
         if nickname is not None:
             args.append(Player.nickname.contains(nickname))  # type: ignore
