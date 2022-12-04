@@ -84,7 +84,7 @@ class TeamHandler:
         query = (
             Team.query.filter(*args)
             .order_by(Team.tag if order_by == "tag" else Team.name)
-            .paginate(page, per_page)
+            .paginate(page=page, per_page=per_page)
         )
 
         return PaginatedTeams(query.items, page, query.pages)

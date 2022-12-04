@@ -34,6 +34,17 @@ class PlayerHandler:
         return player
 
     @staticmethod
+    def get_players_by_ids(players_ids: list[int]) -> list[Player]:
+        """Get a list of players by a list of ids
+        Args:
+            players_ids (int): The player's ids
+
+        Returns:
+            list[Player]: the list of players based on ids
+        """
+        return list(Player.query.filter(Player.id.in_(players_ids)))  # type: ignore
+
+    @staticmethod
     def get_players(
         nickname: str, region: str, page: int = 1, per_page: int = 10
     ) -> PaginatedPlayers:
@@ -53,6 +64,10 @@ class PlayerHandler:
             args.append(Player.nickname.contains(nickname))  # type: ignore
         if region is not None:
             args.append(Player.region.contains(region))  # type: ignore
-        query = Player.query.filter(*args).order_by(Player.nickname).paginate(page, per_page)
+        query = (
+            Player.query.filter(*args)
+            .order_by(Player.nickname)
+            .paginate(page=page, per_page=per_page)
+        )
 
         return PaginatedPlayers(query.items, page, query.pages)

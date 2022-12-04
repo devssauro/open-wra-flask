@@ -31,6 +31,7 @@ class Tournament(Base, SerializerMixin):
         "end_date",
         "split",
         "female_only",
+        "teams",
     )
 
     def __init__(

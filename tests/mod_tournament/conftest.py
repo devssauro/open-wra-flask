@@ -1,4 +1,8 @@
+from datetime import datetime
+
 import pytest
+
+from app.mod_tournament.models import Tournament, TournamentTeam
 
 
 @pytest.fixture
@@ -112,3 +116,37 @@ def sample_wrong_players_payload(sample_players_payload: dict) -> dict:
         **sample_players_payload,
         "blue_baron_player": sample_players_payload["blue_jungle_player"],
     }
+
+
+@pytest.fixture
+def sample_tournament_payload() -> dict:
+    return {
+        "name": "Tournament 1",
+        "tag": "TEST",
+        "start_date": datetime(2022, 12, 4),
+        "end_date": datetime(2023, 1, 4),
+        "lineups": [
+            {"team_id": 1, "entry_phase": "playoffs", "players": []},
+        ],
+        "region": "br",
+        "split": "1",
+        "phases": "group,playoffs",
+    }
+
+
+@pytest.fixture
+def sample_tournament_team_1() -> TournamentTeam:
+    team = TournamentTeam(team_id=1, tournament_id=1, entry_phase="group")
+    team.id = 1
+    return team
+
+
+@pytest.fixture
+def sample_tournament_1(
+    sample_tournament_payload: dict, sample_tournament_team_1: TournamentTeam
+) -> Tournament:
+    del sample_tournament_payload["lineups"]
+    tournament = Tournament(**sample_tournament_payload)
+    tournament.id = 1
+    tournament.teams = [sample_tournament_team_1]
+    return tournament

@@ -69,7 +69,7 @@ class MatchupMapHandler:
         query = (
             MatchupMap.query.filter(*args)
             .order_by(MatchupMap.matchup_id, MatchupMap.map_number)
-            .paginate(page, per_page)
+            .paginate(page=page, per_page=per_page)
         )
 
         return PaginatedMatchupMaps(query.items, page, query.pages)
