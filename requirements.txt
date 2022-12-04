@@ -1,7 +1,7 @@
 bleach
 blinker
 cryptography
-flask
+flask~=2.2.2
 flask-cors
 flask-jwt-extended
 flask-mail
@@ -15,6 +15,10 @@ pre-commit
 python-dotenv
 python-decouple
 pyqrcode
+pytest
 SQLAlchemy-serializer
 wikitextparser
-wtforms
+wtforms~=3.0.1
+
+SQLAlchemy~=1.4.42
+alembic~=1.8.1

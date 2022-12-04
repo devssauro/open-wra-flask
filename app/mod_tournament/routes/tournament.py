@@ -1,51 +1,52 @@
-from typing import Dict, List
-
 from flask import Blueprint, request
 from flask_security import roles_accepted
 
+from app.db_handler import DBHandler
+from app.mod_tournament.models import Tournament, TournamentTeam
 from db_config import db
-
-from ...mod_team.models import Player
-from ..models import Tournament, TournamentTeam
 
 bp = Blueprint("tournament", __name__, url_prefix="/tournament")
 
 
 @bp.get("")
 def get_tournaments():
-    args = []
-    if request.args.get("s"):
-        args.append(Tournament.name.contains(request.args["s"]))
-    if "female_only" in request.args and request.args["female_only"] is not False:
-        args.append(Tournament.female_only)
-    tournaments: Tournament = Tournament.query.filter(*args).order_by(Tournament.name)
-
-    return {"tournaments": [tournament.to_dict() for tournament in tournaments]}
-
-
-@bp.get("/<int:id>")
-@roles_accepted("operational", "admin")
-def get_tournament_id(id: int):
-    tournament: Tournament = Tournament.query.get(id)
-    teams: TournamentTeam = TournamentTeam.query.filter(
-        TournamentTeam.tournament_id == tournament.id
+    args = request.args
+    result = DBHandler.get_tournaments(
+        args.get("name"),
+        args.get("tag"),
+        args.get("region"),
+        args.get("female_only"),
+        args.get("page", 1),
+        args.get("per_page", 10),
     )
+
+    return {
+        "tournaments": [tournament.to_dict() for tournament in result.tournaments],
+        "page": result.page,
+        "pages": result.pages,
+    }
+
+
+@bp.get("/<int:tournament_id>")
+@roles_accepted("operational", "admin")
+def get_tournament_id(tournament_id: int):
+    tournament = DBHandler.get_tournament_by_id(tournament_id)
+    if not tournament:
+        return {"msg": "Tournament not found"}, 404
+
     return {
         "tournament": {
-            "id": tournament.id,
-            "tag": tournament.tag,
-            "region": tournament.region,
-            "split": tournament.split,
-            "phases": tournament.phases,
-            "female_only": tournament.female_only,
-            "lineups": [
-                {
-                    "team_id": team.team_id,
-                    "entry_phase": team.entry_phase,
-                    "players": [p.id for p in team.players],
-                }
-                for team in teams
-            ],
+            **tournament.to_dict(),
+            **{
+                "lineups": [
+                    {
+                        "team_id": team.team_id,
+                        "entry_phase": team.entry_phase,
+                        "players": [p.id for p in team.players],
+                    }
+                    for team in tournament.teams
+                ]
+            },
         }
     }
 
@@ -56,68 +57,50 @@ def post_tournament():
     data = {**request.json}
     if "id" in data:
         del data["id"]
-    lineups: List[Dict] = []
+    lineups = []
     if "lineups" in data:
         lineups = data["lineups"]
         del data["lineups"]
-    tournament: Tournament = Tournament(**data)
-    db.session.add(tournament)
-    db.session.commit()
+
+    tournament = Tournament(**data)
+    tournament = DBHandler.create_update_tournament(tournament)
 
     for lineup in lineups:
         players = lineup["players"]
         del lineup["players"]
-        t_team: TournamentTeam = TournamentTeam(**{**lineup, "tournament_id": tournament.id})
-        db.session.add(t_team)
-        db.session.commit()
-        for player in players:
-            t_team.players.append(Player.query.get(player))
+        team = TournamentTeam(**{**lineup, "tournament_id": tournament.id})
+        team.players = DBHandler.get_players_by_ids(players)
+        DBHandler.create_update_tournament_team(team)
 
-    db.session.commit()
-    return {"tournament": tournament.id}
+    return {"tournament_id": tournament.id}, 201
 
 
-@bp.put("")
+@bp.put("/<int:tournament_id>")
 @roles_accepted("operational", "admin")
-def put_tournament():
+def put_tournament(tournament_id: int):
     data = {**request.json}
-    _id = None
     if "id" in data:
-        _id = data["id"]
         del data["id"]
-    lineups: List[Dict] = []
+    lineups: list[dict] = []
     if "lineups" in data:
         lineups = data["lineups"]
         del data["lineups"]
 
-    tournament: Tournament | None = None
-    if _id is None:
-        tournament: Tournament = Tournament(**data)
-        db.session.add(tournament)
-        db.session.commit()
+    tournament = DBHandler.get_tournament_by_id(tournament_id)
+    if tournament is None:
+        return {"msg": "Tournament not found"}, 404
 
-        for lineup in lineups:
-            players = lineup["players"]
-            del lineup["players"]
-            t_team = TournamentTeam(**{**lineup, "tournament_id": tournament.id})
-            db.session.add(t_team)
-            db.session.commit()
-            for player in players:
-                t_team.players.append(Player.query.get(player))
-    else:
-        tournament: Tournament = Tournament.query.get(_id)
-        teams: Dict[int, TournamentTeam] = {
-            t.team_id: t for t in TournamentTeam.query.filter(TournamentTeam.tournament_id == _id)
-        }
-        for lineup in lineups:
-            if lineup["team_id"] in teams.keys():
-                teams[lineup["team_id"]].players = list(
-                    Player.query.filter(Player.id.in_(lineup["players"]))
-                )
-                teams[lineup["team_id"]].entry_phase = lineup["entry_phase"]
-            else:
-                t_team = TournamentTeam(**{**lineup, "tournament_id": tournament.id})
-                db.session.add(t_team)
+    teams: dict[int, TournamentTeam] = {t.team_id: t for t in tournament.teams}
+
+    for lineup in lineups:
+        if lineup["team_id"] in teams.keys():
+            teams[lineup["team_id"]].players = DBHandler.get_players_by_ids(lineup["players"])
+            teams[lineup["team_id"]].entry_phase = lineup["entry_phase"]
+            DBHandler.create_update_tournament_team(teams[lineup["team_id"]])
+        else:
+            DBHandler.create_update_tournament_team(
+                TournamentTeam(**{**lineup, "tournament_id": tournament.id})
+            )
 
     db.session.commit()
-    return {"tournament": tournament.id}
+    return {"tournament_id": tournament.id}

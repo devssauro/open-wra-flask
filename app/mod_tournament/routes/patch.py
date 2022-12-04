@@ -1,18 +1,16 @@
 from flask import Blueprint, request
 
-from ...mod_view.utils import filter_map_data
-from ..models import MatchupMap
+from app.db_handler import DBHandler
 
 bp = Blueprint("patch", __name__, url_prefix="/")
 
 
 @bp.get("/patch")
 def get_patches():
-    patches = (
-        MatchupMap.query.with_entities(MatchupMap.patch)
-        .filter(*filter_map_data(request, "patch"), MatchupMap.patch.isnot(None))
-        .distinct()
-        .order_by(MatchupMap.patch)
+    args = request.args
+    patches = DBHandler.get_patches(
+        tournament=args.getlist("tournament"),
+        team=args.getlist("team"),
     )
 
-    return {"patches": [p.patch for p in patches]}
+    return {"patches": patches}

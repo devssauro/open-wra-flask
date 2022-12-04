@@ -178,8 +178,8 @@ def get_all_matches(player_id: int, champion_id: int):
     for role in roles:
         q_with.append(
             SingleView.query.with_entities(
-                Champion.id.label("champion_id"),
-                Champion.name.label("champion_name"),
+                Champion.id.label("champion_id"),  # type: ignore
+                Champion.name.label("champion_name"),  # type: ignore
                 label("role", role),
                 label("team_played", "with"),
                 func.count(role_champion_pick[role]).label("qty_match"),
@@ -197,8 +197,8 @@ def get_all_matches(player_id: int, champion_id: int):
         )
         q_against.append(
             SingleView.query.with_entities(
-                Champion.id.label("champion_id"),
-                Champion.name.label("champion_name"),
+                Champion.id.label("champion_id"),  # type: ignore
+                Champion.name.label("champion_name"),  # type: ignore
                 label("role", role),
                 label("team_played", "against"),
                 func.count(role_champion_pick[role]).label("qty_match"),
@@ -529,8 +529,8 @@ def get_players_info(player_id: int):
 
     all_champions = (
         SingleView.query.with_entities(
-            Champion.id.label("champion_id"),
-            Champion.name.label("name"),
+            Champion.id.label("champion_id"),  # type: ignore
+            Champion.name.label("name"),  # type: ignore
             *role_pick[request.args["role"]]["columns"]
         )
         .outerjoin(

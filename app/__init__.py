@@ -5,11 +5,9 @@ from flask_cors import CORS
 from db_config import db, migrate
 from jwt_config import jwt
 from mail_config import mail
-from security_config import csrf, security, user_datastore
+from security_config import security, user_datastore
 
 from . import config
-
-# from pre_data import create_roles, create_admin_users
 
 
 def create_app(test_config=None):
@@ -20,12 +18,8 @@ def create_app(test_config=None):
     app.config.from_object(config)
     db.init_app(app)
     migrate.init_app(app, db)
-    csrf.init_app(app)
-    security.init_app(
-        app,
-        user_datastore,
-        # register_form=ExtendedRegisterForm
-    )
+    # csrf.init_app(app)
+    security.init_app(app, user_datastore)
     jwt.init_app(app)
 
     app.config.update(
@@ -53,15 +47,6 @@ def create_app(test_config=None):
     @app.get("/")
     def hello():
         return "hello"
-
-    # @app.before_first_request
-    # def create_users():
-    #     create_admin_users(*create_roles())
-
-    # @user_confirmed.connect_via(app)
-    # def _user_confirmed(sender, user):
-    #     investor = user_datastore.find_role('investor')
-    #     user_datastore.add_role_to_user(user, investor)
 
     if test_config is None:
         app.config.from_pyfile("config.py", silent=True)

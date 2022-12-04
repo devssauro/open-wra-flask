@@ -103,3 +103,34 @@ def agt_time_diff(agt_all, agt_team):
     else:
         time = str(timedelta(seconds=agt_team - agt_all)).split(":")
         return f"+{time[1]}:{time[2][0:2]}"
+
+
+def filter_map_data_v2(
+    tournament: list[int] | int | None = None,
+    patch: list[str] | str | None = None,
+    team: list[int] | int | None = None,
+) -> list:
+    """utils to filter MatchupMap table
+
+    Args:
+        tournament (list[int] | int): The tournaments to be filtered
+        patch (list[str] | str): The patches to be filtered
+        team (list[int] | int): The teams to be filtered
+
+    Returns:
+        list: The filters for MatchupMap query
+    """
+    args = []
+    if tournament is not None:
+        if isinstance(tournament, int):
+            tournament = [tournament]
+        args.append(MatchupMap.tournament_id.in_(tournament))
+    if patch is not None:
+        if isinstance(patch, str):
+            patch = [patch]
+        args.append(MatchupMap.patch.in_(patch))
+    if team is not None:
+        if isinstance(team, str):
+            team = [team]
+        args.append(or_(MatchupMap.blue_side.in_(team), MatchupMap.red_side.in_(team)))
+    return args

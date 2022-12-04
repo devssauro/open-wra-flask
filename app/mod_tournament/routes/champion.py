@@ -1,15 +1,11 @@
-from flask import Blueprint, request
+from flask import Blueprint
 
-from ..models import Champion
+from app.db_handler import DBHandler
 
 bp = Blueprint("champion", __name__, url_prefix="/champion")
 
 
 @bp.get("")
 def get_champions():
-    args = []
-    if request.args.get("s"):
-        args.append(Champion.name.contains(request.args["s"]))
-    champions = Champion.query.filter(*args).order_by(Champion.name)
-
+    champions = DBHandler.get_champions()
     return {"champions": [champion.to_dict() for champion in champions]}
