@@ -46,12 +46,9 @@ class TestTeamGet:
     """Test the GET request to Team endpoint"""
 
     @staticmethod
-    def test_success(
-        sample_admin_user: User, sample_team_payload: dict, sample_team_1: Team, sample_app: Flask
-    ) -> None:
+    def test_success(sample_team_payload: dict, sample_team_1: Team, sample_app: Flask) -> None:
         """Test if the API brings the teams in a list
         Args:
-            sample_admin_user(User): The admin user to be logged in
             sample_team_payload(dict): The team payload with the team's data
             sample_team_1(Team): The team object returned from DBHandler
             sample_app(App): The Flask application

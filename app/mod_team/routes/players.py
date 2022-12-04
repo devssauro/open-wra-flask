@@ -42,9 +42,9 @@ def put_player(player_id: int):
     if not player:
         return {"msg": "Player not found"}, 404
 
-    player.name = request.json["nickname"]
-    player.role = request.json["role"]
-    player.flag = request.json["flag"]
+    player.nickname = request.json.get("nickname", player.nickname)
+    player.role = request.json.get("role", player.role)
+    player.flag = request.json.get("flag", player.flag)
 
     DBHandler.create_update_player(player)
 
