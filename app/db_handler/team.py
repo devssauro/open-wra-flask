@@ -61,11 +61,14 @@ class TeamHandler:
         ]
 
     @staticmethod
-    def get_teams(tag: str, flag: str, page: int = 1, per_page: int = 10) -> PaginatedTeams:
+    def get_teams(
+        tag: str, flag: str, order_by: str = "tag", page: int = 1, per_page: int = 10
+    ) -> PaginatedTeams:
         """Get a list of teams
         Args:
             tag (str): The team's tag
             flag (str): The team's region
+            order_by (str): How to order teams, by tag or by name
             page (int): The page for a pagination query, default is 1
             per_page (int): The quantity of teams per page, default is 10
 
@@ -78,6 +81,10 @@ class TeamHandler:
             args.append(Team.tag.contains(tag))  # type: ignore
         if flag is not None:
             args.append(Team.flag.contains(flag))  # type: ignore
-        query = Team.query.filter(*args).order_by(Team.nickname).paginate(page, per_page)
+        query = (
+            Team.query.filter(*args)
+            .order_by(Team.tag if order_by == "tag" else Team.name)
+            .paginate(page, per_page)
+        )
 
         return PaginatedTeams(query.items, page, query.pages)

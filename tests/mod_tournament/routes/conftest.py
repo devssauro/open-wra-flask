@@ -4,7 +4,7 @@ import pytest
 
 from app.db_handler.team import LineupTeam
 from app.mod_team.models import Team
-from app.mod_tournament.models import Champion, Matchup
+from app.mod_tournament.models import Champion, Matchup, MatchupMap
 
 
 @pytest.fixture
@@ -75,3 +75,17 @@ def sample_lieneupteam_list_sample(sample_team_1: Team, sample_team_2: Team) -> 
         LineupTeam(sample_team_1, []),
         LineupTeam(sample_team_2, []),
     ]
+
+
+@pytest.fixture
+def sample_map_payload(sample_players_payload: dict, sample_draft_payload: dict) -> dict:
+    return {**sample_draft_payload, **sample_players_payload}
+
+
+@pytest.fixture
+def sample_map_1(sample_map_payload: dict) -> MatchupMap:
+    _map = MatchupMap.from_payload(None, **sample_map_payload)
+    _map.id = 1
+    _map.date_created = datetime(2022, 12, 4)
+    _map.date_updated = datetime(2022, 12, 4)
+    return _map

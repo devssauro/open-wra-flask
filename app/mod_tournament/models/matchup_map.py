@@ -121,25 +121,26 @@ class MatchupMap(
     red_turrets_destroyed = Column(Integer, default=0)
 
     @staticmethod
-    def from_payload(**kwargs):
-        _map = MatchupMap()
+    def from_payload(obj=None, **kwargs):
+        if obj is None:
+            obj = MatchupMap()
 
-        Draft.from_payload(_map, **kwargs)
-        Players.from_payload(_map, **kwargs)
-        Objectives.from_payload(_map, **kwargs)
-        FinalStats.from_payload(_map, **kwargs)
+        Draft.from_payload(obj, **kwargs)
+        Players.from_payload(obj, **kwargs)
+        Objectives.from_payload(obj, **kwargs)
+        FinalStats.from_payload(obj, **kwargs)
 
-        _map.matchup_id = (kwargs.get("matchup_id"),)
-        _map.tournament_id = (kwargs.get("tournament_id"),)
-        _map.vod_link = (kwargs.get("vod_link"),)
-        _map.map_number = (kwargs.get("map_number"),)
-        _map.patch = (kwargs.get("patch"),)
-        _map.blue_side = (kwargs.get("blue_side"),)
-        _map.red_side = (kwargs.get("red_side"),)
-        _map.length = (kwargs.get("length"),)
-        _map.winner = (kwargs.get("winner"),)
-        _map.winner_side = (kwargs.get("winner_side"),)
-        _map.blue_turrets_destroyed = (kwargs.get("blue_turrets_destroyed"),)
-        _map.red_turrets_destroyed = (kwargs.get("red_turrets_destroyed"),)
+        obj.matchup_id = (kwargs.get("matchup_id"),)
+        obj.tournament_id = (kwargs.get("tournament_id"),)
+        obj.vod_link = (kwargs.get("vod_link"),)
+        obj.map_number = (kwargs.get("map_number"),)
+        obj.patch = (kwargs.get("patch"),)
+        obj.blue_side = (kwargs.get("blue_side"),)
+        obj.red_side = (kwargs.get("red_side"),)
+        obj.length = (kwargs.get("length"),)
+        obj.winner = (kwargs.get("winner"),)
+        obj.winner_side = (kwargs.get("winner_side"),)
+        obj.blue_turrets_destroyed = (kwargs.get("blue_turrets_destroyed"),)
+        obj.red_turrets_destroyed = (kwargs.get("red_turrets_destroyed"),)
 
-        return _map
+        return obj
