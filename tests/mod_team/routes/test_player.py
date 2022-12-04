@@ -25,11 +25,11 @@ class TestPlayerPost:
             sample_app(App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_player") as cut,
+            patch("app.db_handler.DBHandler.create_update_player") as cup,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cut.return_value = sample_player_1
+            cup.return_value = sample_player_1
             response = sample_app.post("/v1/player", json=sample_player_payload)
             assert response.status_code == 201
             assert response.json == {"id": 1}
@@ -63,10 +63,10 @@ class TestPlayerGet:
             sample_app(App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_players") as gt,
+            patch("app.db_handler.DBHandler.get_players") as gp,
             patch("flask_login.utils._get_user") as ge,
         ):
-            gt.return_value = PaginatedPlayers([sample_player_1], 1, 1)
+            gp.return_value = PaginatedPlayers([sample_player_1], 1, 1)
             ge.return_value = sample_admin_user
             response = sample_app.get("/v1/player")
             assert response.status_code == 200
@@ -84,8 +84,8 @@ class TestPlayerGet:
             sample_player_1(Player): The player object returned from DBHandler
             sample_app(App): The Flask application
         """
-        with patch("app.db_handler.DBHandler.get_players") as gt:
-            gt.return_value = PaginatedPlayers([sample_player_1], 1, 1)
+        with patch("app.db_handler.DBHandler.get_players") as gp:
+            gp.return_value = PaginatedPlayers([sample_player_1], 1, 1)
             response = sample_app.get("/v1/player")
             assert response.status_code == 403
 
@@ -108,13 +108,13 @@ class TestPlayerPut:
             sample_app(App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_player") as cut,
-            patch("app.db_handler.DBHandler.get_player_by_id") as gt_id,
+            patch("app.db_handler.DBHandler.create_update_player") as cup,
+            patch("app.db_handler.DBHandler.get_player_by_id") as gp_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cut.return_value = sample_player_1
-            gt_id.return_value = sample_player_1
+            cup.return_value = sample_player_1
+            gp_id.return_value = sample_player_1
             response = sample_app.put(
                 f"/v1/player/{sample_player_1.id}", json=sample_player_payload
             )
@@ -132,16 +132,16 @@ class TestPlayerPut:
             sample_app(App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_player") as cut,
-            patch("app.db_handler.DBHandler.get_player_by_id") as gt_id,
+            patch("app.db_handler.DBHandler.create_update_player") as cup,
+            patch("app.db_handler.DBHandler.get_player_by_id") as gp_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            gt_id.return_value = None
+            gp_id.return_value = None
             response = sample_app.put("/v1/player/1", json=sample_player_payload)
             assert response.status_code == 404
             assert response.json == {"msg": "Player not found"}
-            assert cut.called is False
+            assert cup.called is False
 
     @staticmethod
     def test_forbidden(
@@ -152,7 +152,5 @@ class TestPlayerPut:
             sample_player_payload(dict): The player payload with the player's data
             sample_app(App): The Flask application
         """
-        with patch("app.db_handler.DBHandler.create_update_player") as cut:
-            cut.return_value = sample_player_1
-            response = sample_app.post("/v1/player", json=sample_player_payload)
-            assert response.status_code == 403
+        response = sample_app.post("/v1/player", json=sample_player_payload)
+        assert response.status_code == 403

@@ -43,7 +43,9 @@ class Matchup(Base, SerializerMixin):
     mvp_id = Column(Integer, ForeignKey("player.id"))
     tournament_id = Column(Integer, ForeignKey("tournament.id"))
     team1_id = Column(Integer, ForeignKey("team.id"))
+    team1 = relationship("Team", foreign_keys=[team1_id], back_populates="matchups_1")
     team2_id = Column(Integer, ForeignKey("team.id"))
+    team2 = relationship("Team", foreign_keys=[team2_id], back_populates="matchups_2")
     vod_link = Column(String)
 
     maps = relationship("MatchupMap", back_populates="matchup")

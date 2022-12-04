@@ -23,6 +23,19 @@ def sample_team_1(sample_team_payload: dict) -> Team:
 
 
 @pytest.fixture
+def sample_team_2(sample_team_payload: dict) -> Team:
+    """Team object to be managed from DBHandler"""
+    team = Team(**sample_team_payload)
+    team.id = 2
+    team.tag = "T2"
+    team.name = "Team 2"
+    team.active = True
+    team.date_created = datetime(2022, 12, 3)
+    team.date_updated = datetime(2022, 12, 3)
+    return team
+
+
+@pytest.fixture
 def sample_player_payload() -> dict:
     """Payload for a player"""
     return {"nickname": "Player 1", "flag": "KR"}

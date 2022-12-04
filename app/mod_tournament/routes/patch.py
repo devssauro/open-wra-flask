@@ -7,6 +7,10 @@ bp = Blueprint("patch", __name__, url_prefix="/")
 
 @bp.get("/patch")
 def get_patches():
-    patches = DBHandler.get_patches(request)
+    args = request.args
+    patches = DBHandler.get_patches(
+        tournament=args.getlist("tournament"),
+        team=args.getlist("team"),
+    )
 
     return {"patches": patches}

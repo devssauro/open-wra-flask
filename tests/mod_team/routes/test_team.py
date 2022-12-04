@@ -115,7 +115,5 @@ class TestTeamPut:
             sample_team_payload(dict): The team payload with the team's data
             sample_app(App): The Flask application
         """
-        with patch("app.db_handler.DBHandler.create_update_team") as cut:
-            cut.return_value = sample_team_1
-            response = sample_app.post("/v1/team", json=sample_team_payload)
-            assert response.status_code == 403
+        response = sample_app.post("/v1/team", json=sample_team_payload)
+        assert response.status_code == 403

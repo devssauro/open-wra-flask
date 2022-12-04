@@ -1,6 +1,7 @@
 from enum import IntEnum, unique
 
 from sqlalchemy import Column, Enum, ForeignKey, Integer, String
+from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from db_config import Base
@@ -29,6 +30,17 @@ class Team(Base, SerializerMixin):
     tag: str | Column = Column(String)
     flag: str | Column = Column(String)
     phase: str | Column = Column(String)
+
+    matchups_1: list = relationship(
+        "Matchup", foreign_keys="Matchup.team1_id", back_populates="team1"
+    )
+    matchups_2: list = relationship(
+        "Matchup", foreign_keys="Matchup.team2_id", back_populates="team2"
+    )
+
+    @property
+    def matchups(self):
+        return [*self.matchups_1, *self.matchups_2]
 
 
 class Player(Base, SerializerMixin):
