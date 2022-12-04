@@ -4,6 +4,7 @@ from app.mod_team.models import Team
 from db_config import db
 
 PaginatedTeams = namedtuple("PaginatedTeams", ["teams", "page", "pages"])
+LineupTeam = namedtuple("LineupTeam", ["team", "players"])
 
 
 class TeamHandler:
@@ -30,8 +31,34 @@ class TeamHandler:
         Returns:
             Team: the team object if it exists, else None
         """
-        team = db.session.get(team_id)
+        team = Team.query.get(team_id)
         return team
+
+    @staticmethod
+    def get_teams_from_matchup(
+        tournament_id: int,
+        teams_ids: tuple[int] | list[int],
+    ) -> list[LineupTeam]:
+        """Get the teams from a matchup
+        Args:
+            tournament_id (int): The tournament's id from matchup
+            teams_ids (tuple[int] | list[int]): The team's IDs from matchup
+
+        Returns:
+            list[Team]: The teams from a Matchup
+        """
+        teams = Team.query.filter(Team.id.in_(teams_ids))  # type: ignore
+        return [
+            LineupTeam(
+                team,
+                *[
+                    lineup.players
+                    for lineup in team.lineups
+                    if lineup.tournament_id == tournament_id
+                ],
+            )
+            for team in teams
+        ]
 
     @staticmethod
     def get_teams(tag: str, flag: str, page: int = 1, per_page: int = 10) -> PaginatedTeams:

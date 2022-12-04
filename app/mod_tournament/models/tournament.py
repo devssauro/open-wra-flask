@@ -1,6 +1,7 @@
 from datetime import datetime
 
 from sqlalchemy import ARRAY, Boolean, Column, DateTime, Integer, String
+from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from db_config import Base
@@ -62,3 +63,5 @@ class Tournament(Base, SerializerMixin):
     split: int | Column = Column(Integer)
     phases: list[str] = Column(ARRAY(String))
     female_only: bool | Column = Column(Boolean, default=False)
+
+    teams: list = relationship("TournamentTeam", back_populates="tournament")

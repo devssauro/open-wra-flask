@@ -1,12 +1,9 @@
-from typing import List
-
 from flask import Blueprint, request
 from flask_security import roles_accepted
 
 from app.db_handler import DBHandler
 from app.db_handler.matchup import PaginatedMatchups
-from app.mod_team.models import Team
-from app.mod_tournament.models import Matchup, Tournament, TournamentTeam
+from app.mod_tournament.models import Matchup
 
 bp = Blueprint("matchup", __name__, url_prefix="/matchup")
 
@@ -54,29 +51,26 @@ def get_matchups():
 
 
 @bp.get("/<int:matchup_id>/teams")
+@roles_accepted("operational", "admin")
 def get_matchup_teams(matchup_id: int):
-    matchup: List[TournamentTeam] = list(
-        TournamentTeam.query.outerjoin(
-            (Tournament, Tournament.id == TournamentTeam.tournament_id),
-            (Matchup, Matchup.tournament_id == Tournament.id),
-        ).filter(
-            Matchup.id == matchup_id,
-            TournamentTeam.team_id.in_([Matchup.team1_id, Matchup.team2_id]),  # type: ignore
-        )
-    )
-    teams = Team.query.filter(Team.id.in_([t.team_id for t in matchup]))  # type: ignore
+    matchup = DBHandler.get_matchup_by_id(matchup_id)
+    if matchup is None:
+        return {"msg": "Matchup not found"}, 404
 
+    teams = DBHandler.get_teams_from_matchup(
+        matchup.tournament_id, [matchup.team1_id, matchup.team2_id]
+    )
     return {
         "id": matchup_id,
         **{
             f"team{team[0]+1}": {
-                "name": [t.name for t in teams if t.id == team[1].team_id][0],
-                "id": team[1].team_id,
+                "name": [t.team.name for t in teams if t.team.id == team[1].team.id][0],
+                "id": team[1].team.id,
                 "players": [
                     player.to_dict(only=("id", "nickname", "role")) for player in team[1].players
                 ],
             }
-            for team in enumerate(matchup)
+            for team in enumerate(teams)
         },
     }
 

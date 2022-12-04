@@ -22,6 +22,18 @@ class MatchupHandler:
         return matchup
 
     @staticmethod
+    def get_matchup_by_id(matchup_id: int) -> Matchup:
+        """Get a matchup by id
+        Args:
+            matchup_id (int): The matchup's id
+
+        Returns:
+            Matchup: the Matchup object if it exists, else None
+        """
+        matchup = Matchup.query.get(matchup_id)
+        return matchup
+
+    @staticmethod
     def get_matchups(
         tournament: list[int] | int | None = None,
         page: int = 1,

@@ -31,6 +31,7 @@ class Team(Base, SerializerMixin):
     flag: str | Column = Column(String)
     phase: str | Column = Column(String)
 
+    lineups: list = relationship("TournamentTeam", back_populates="team")
     matchups_1: list = relationship(
         "Matchup", foreign_keys="Matchup.team1_id", back_populates="team1"
     )
