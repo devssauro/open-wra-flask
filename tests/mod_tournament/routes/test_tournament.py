@@ -13,7 +13,7 @@ class TestTournamentPost:
     @staticmethod
     def test_success(
         sample_admin_user: User,
-        sample_tournament_payload: dict,
+        sample_tournament_payload_1,
         sample_tournament_1: Tournament,
         sample_tournament_team_1: TournamentTeam,
         sample_app: Flask,
@@ -21,7 +21,7 @@ class TestTournamentPost:
         """Test if the tournament was created successfully
         Args:
             sample_admin_user (User): The admin user to be logged in
-            sample_tournament_payload (dict): The tournament payload with the tournament's data
+            sample_tournament_payload_1 (dict): The tournament payload with the tournament's data
             sample_tournament_1 (Tournament): The tournament object returned from DBHandler
             sample_app (App): The Flask application
         """
@@ -33,18 +33,18 @@ class TestTournamentPost:
             ge.return_value = sample_admin_user
             cut.return_value = sample_tournament_1
             cutt.return_value = sample_tournament_team_1
-            response = sample_app.post("/v1/tournament", json=sample_tournament_payload)
+            response = sample_app.post("/v1/tournament", json=sample_tournament_payload_1)
             assert response.status_code == 201
             assert response.json == {"tournament_id": 1}
 
     @staticmethod
-    def test_forbidden(sample_tournament_payload: dict, sample_app: Flask) -> None:
+    def test_forbidden(sample_tournament_payload_1, sample_app: Flask) -> None:
         """Test if the tournament wasn't created
         Args:
-            sample_tournament_payload (dict): The tournament payload with the tournament's data
+            sample_tournament_payload_1 (dict): The tournament payload with the tournament's data
             sample_app (App): The Flask application
         """
-        response = sample_app.post("/v1/tournament", json=sample_tournament_payload)
+        response = sample_app.post("/v1/tournament", json=sample_tournament_payload_1)
         assert response.status_code == 403
 
 
@@ -126,14 +126,14 @@ class TestTournamentPut:
     @staticmethod
     def test_success(
         sample_admin_user: User,
-        sample_tournament_payload: dict,
+        sample_tournament_payload_1,
         sample_tournament_1: Tournament,
         sample_app: Flask,
     ) -> None:
         """Test if the API brings the tournaments in a list
         Args:
             sample_admin_user (User): The admin user to be logged in
-            sample_tournament_payload (dict): The tournament payload
+            sample_tournament_payload_1 (dict): The tournament payload
             sample_tournament_1 (Tournament): The tournament object returned from DBHandler
             sample_app (App): The Flask application
         """
@@ -146,7 +146,7 @@ class TestTournamentPut:
             ge.return_value = sample_admin_user
             cut.return_value = sample_tournament_1
             response = sample_app.put(
-                f"/v1/tournament/{sample_tournament_1.id}", json=sample_tournament_payload
+                f"/v1/tournament/{sample_tournament_1.id}", json=sample_tournament_payload_1
             )
             assert response.status_code == 200
             assert response.json == {"tournament_id": 1}
@@ -154,12 +154,12 @@ class TestTournamentPut:
     @staticmethod
     def test_not_found(
         sample_admin_user: User,
-        sample_tournament_payload: dict,
+        sample_tournament_payload_1,
         sample_app: Flask,
     ) -> None:
         """Test if the API gets nof found
         Args:
-            sample_tournament_payload (dict): The tournament payload
+            sample_tournament_payload_1 (dict): The tournament payload
             sample_admin_user (User): The admin user to be logged in
             sample_app (App): The Flask application
         """
@@ -169,16 +169,16 @@ class TestTournamentPut:
         ):
             gm.return_value = None
             ge.return_value = sample_admin_user
-            response = sample_app.put("/v1/tournament/1", json=sample_tournament_payload)
+            response = sample_app.put("/v1/tournament/1", json=sample_tournament_payload_1)
             assert response.status_code == 404
             assert response.json == {"msg": "Tournament not found"}
 
     @staticmethod
-    def test_forbidden(sample_tournament_payload: dict, sample_app: Flask) -> None:
+    def test_forbidden(sample_tournament_payload_1, sample_app: Flask) -> None:
         """Test if the user has no permission
         Args:
-            sample_tournament_payload(dict): The tournament payload
+            sample_tournament_payload_1(dict): The tournament payload
             sample_app(App): The Flask application
         """
-        response = sample_app.put("/v1/tournament/1", json=sample_tournament_payload)
+        response = sample_app.put("/v1/tournament/1", json=sample_tournament_payload_1)
         assert response.status_code == 403

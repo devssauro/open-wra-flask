@@ -119,7 +119,7 @@ def sample_wrong_players_payload(sample_players_payload: dict) -> dict:
 
 
 @pytest.fixture
-def sample_tournament_payload() -> dict:
+def sample_tournament_payload_1() -> dict:
     return {
         "name": "Tournament 1",
         "tag": "TEST",
@@ -130,8 +130,33 @@ def sample_tournament_payload() -> dict:
         ],
         "region": "br",
         "split": "1",
-        "phases": "group,playoffs",
+        "phases": "group,playoffs,final",
     }
+
+
+@pytest.fixture
+def sample_tournament_payload_2(sample_tournament_payload_1) -> dict:
+    sample_tournament_payload_1["name"] = "Tournament 2"
+    sample_tournament_payload_1["split"] = "2"
+    sample_tournament_payload_1["phases"] = [
+        {"name": "group", "bo_size": 3, "with_global_ban": True, "last_no_global_ban": False},
+        {
+            "name": "quarterfinals",
+            "bo_size": 5,
+            "with_global_ban": True,
+            "last_no_global_ban": False,
+        },
+        {"name": "semifinals", "bo_size": 5, "with_global_ban": True, "last_no_global_ban": True},
+        {"name": "final", "bo_size": 7, "with_global_ban": True, "last_no_global_ban": True},
+    ]
+    return sample_tournament_payload_1
+
+
+@pytest.fixture
+def sample_tournament_payload_3(sample_tournament_payload_1) -> dict:
+    sample_tournament_payload_1["name"] = "Tournament 3"
+    sample_tournament_payload_1["phases"] = ["group", "knockout", "final"]
+    return sample_tournament_payload_1
 
 
 @pytest.fixture
@@ -143,10 +168,10 @@ def sample_tournament_team_1() -> TournamentTeam:
 
 @pytest.fixture
 def sample_tournament_1(
-    sample_tournament_payload: dict, sample_tournament_team_1: TournamentTeam
+    sample_tournament_payload_1, sample_tournament_team_1: TournamentTeam
 ) -> Tournament:
-    del sample_tournament_payload["lineups"]
-    tournament = Tournament(**sample_tournament_payload)
+    del sample_tournament_payload_1["lineups"]
+    tournament = Tournament(**sample_tournament_payload_1)
     tournament.id = 1
     tournament.teams = [sample_tournament_team_1]
     return tournament
