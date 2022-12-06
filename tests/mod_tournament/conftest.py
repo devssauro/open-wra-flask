@@ -175,3 +175,14 @@ def sample_tournament_1(
     tournament.id = 1
     tournament.teams = [sample_tournament_team_1]
     return tournament
+
+
+@pytest.fixture
+def sample_tournament_2(
+    sample_tournament_payload_2, sample_tournament_team_1: TournamentTeam
+) -> Tournament:
+    del sample_tournament_payload_2["lineups"]
+    tournament = Tournament.from_payload(None, **sample_tournament_payload_2)
+    tournament.id = 2
+    tournament.teams = [sample_tournament_team_1]
+    return tournament

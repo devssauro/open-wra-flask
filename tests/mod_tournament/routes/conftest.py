@@ -26,6 +26,7 @@ def sample_patch_1() -> str:
 @pytest.fixture
 def sample_matchup_payload() -> dict:
     return {
+        "tournament_id": 1,
         "datetime": datetime(2022, 12, 4, 18, 0),
         "phase": "group",
         "mvp_id": None,
