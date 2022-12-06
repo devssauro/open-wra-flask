@@ -66,21 +66,25 @@ def get_team_stats():
                 "wr": round((team.qty_win / team.qty_games) * 100, 2),
                 "qty_blue_games": team.qty_blue,
                 "win_blue_games": team.qty_win,
-                "wr_blue": "-"
-                if team.qty_blue == 0
-                else round((team.win_blue / team.qty_blue) * 100, 2),
+                "wr_blue": (
+                    "-" if team.qty_blue == 0 else round((team.win_blue / team.qty_blue) * 100, 2)
+                ),
                 "qty_red_games": team.qty_red,
                 "win_red_games": team.qty_win,
-                "wr_red": "-"
-                if team.qty_red == 0
-                else round((team.win_red / team.qty_red) * 100, 2),
+                "wr_red": (
+                    "-" if team.qty_red == 0 else round((team.win_red / team.qty_red) * 100, 2)
+                ),
                 "agt": "{1}:{2}".format(*str(timedelta(seconds=team.agt)).split(":")),
-                "agt_win": "-"
-                if team.agt_win is None
-                else "{1}:{2}".format(*str(timedelta(seconds=team.agt_win or 0)).split(":")),
-                "agt_loss": "-"
-                if team.agt_loss is None
-                else "{1}:{2}".format(*str(timedelta(seconds=team.agt_loss or 0)).split(":")),
+                "agt_win": (
+                    "-"
+                    if team.agt_win is None
+                    else "{1}:{2}".format(*str(timedelta(seconds=team.agt_win or 0)).split(":"))
+                ),
+                "agt_loss": (
+                    "-"
+                    if team.agt_loss is None
+                    else "{1}:{2}".format(*str(timedelta(seconds=team.agt_loss or 0)).split(":"))
+                ),
                 "diff_agt": agt_time_diff(agt, team.agt),
                 "diff_agt_win": agt_time_diff(agt, team.agt_win or 0),
                 "diff_agt_loss": agt_time_diff(agt, team.agt_loss or 0),
@@ -199,21 +203,29 @@ def get_champion_stats():
             "wr": round((champion.qty_win / champion.qty_picks) * 100, 2),
             "qty_blue_games": champion.qty_blue,
             "win_blue_games": champion.qty_win,
-            "wr_blue": "-"
-            if champion.qty_blue == 0
-            else round((champion.win_blue / champion.qty_blue) * 100, 2),
+            "wr_blue": (
+                "-"
+                if champion.qty_blue == 0
+                else round((champion.win_blue / champion.qty_blue) * 100, 2)
+            ),
             "qty_red_games": champion.qty_red,
             "win_red_games": champion.qty_win,
-            "wr_red": "-"
-            if champion.qty_red == 0
-            else round((champion.win_red / champion.qty_red) * 100, 2),
+            "wr_red": (
+                "-"
+                if champion.qty_red == 0
+                else round((champion.win_red / champion.qty_red) * 100, 2)
+            ),
             "agt": "{1}:{2}".format(*str(timedelta(seconds=champion.agt)).split(":")),
-            "agt_win": "-"
-            if champion.agt_win is None
-            else "{1}:{2}".format(*str(timedelta(seconds=champion.agt_win or 0)).split(":")),
-            "agt_loss": "-"
-            if champion.agt_loss is None
-            else "{1}:{2}".format(*str(timedelta(seconds=champion.agt_loss or 0)).split(":")),
+            "agt_win": (
+                "-"
+                if champion.agt_win is None
+                else "{1}:{2}".format(*str(timedelta(seconds=champion.agt_win or 0)).split(":"))
+            ),
+            "agt_loss": (
+                "-"
+                if champion.agt_loss is None
+                else "{1}:{2}".format(*str(timedelta(seconds=champion.agt_loss or 0)).split(":"))
+            ),
             "diff_agt": agt_time_diff(agt, champion.agt),
             "diff_agt_win": agt_time_diff(agt, champion.agt_win or 0),
             "diff_agt_loss": agt_time_diff(agt, champion.agt_loss or 0),
@@ -257,13 +269,6 @@ def get_champion_stats():
 
 @bp.get("/player")
 def get_player_stats():
-    # args = []
-    # if 'patch' in request.args:
-    #     args.append(MatchupMap.patch == request.args['patch'])
-    # if 't' in request.args:
-    #     args.append(MatchupMap.tournament_id == request.args['t'])
-    # total_games = MatchupMap.query.with_entities(
-    #     func.count(MatchupMap.id).label('total')).filter(*args).first().total
     query = list(
         PicksBansPrioView.query.with_entities(
             Player.id.label("id"),
@@ -347,21 +352,29 @@ def get_player_stats():
                 "wr": round((player.qty_win / player.qty_games) * 100, 2),
                 "qty_blue_games": player.qty_blue,
                 "win_blue_games": player.qty_win,
-                "wr_blue": "-"
-                if player.qty_blue == 0
-                else round((player.win_blue / player.qty_blue) * 100, 2),
+                "wr_blue": (
+                    "-"
+                    if player.qty_blue == 0
+                    else round((player.win_blue / player.qty_blue) * 100, 2)
+                ),
                 "qty_red_games": player.qty_red,
                 "win_red_games": player.qty_win,
-                "wr_red": "-"
-                if player.qty_red == 0
-                else round((player.win_red / player.qty_red) * 100, 2),
+                "wr_red": (
+                    "-"
+                    if player.qty_red == 0
+                    else round((player.win_red / player.qty_red) * 100, 2)
+                ),
                 "agt": "{1}:{2}".format(*str(timedelta(seconds=player.agt)).split(":")),
-                "agt_win": "-"
-                if player.agt_win is None
-                else "{1}:{2}".format(*str(timedelta(seconds=player.agt_win or 0)).split(":")),
-                "agt_loss": "-"
-                if player.agt_loss is None
-                else "{1}:{2}".format(*str(timedelta(seconds=player.agt_loss or 0)).split(":")),
+                "agt_win": (
+                    "-"
+                    if player.agt_win is None
+                    else "{1}:{2}".format(*str(timedelta(seconds=player.agt_win or 0)).split(":"))
+                ),
+                "agt_loss": (
+                    "-"
+                    if player.agt_loss is None
+                    else "{1}:{2}".format(*str(timedelta(seconds=player.agt_loss or 0)).split(":"))
+                ),
                 "diff_agt": agt_time_diff(agt, player.agt),
                 "diff_agt_win": agt_time_diff(agt, player.agt_win or 0),
                 "diff_agt_loss": agt_time_diff(agt, player.agt_loss or 0),
