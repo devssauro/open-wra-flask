@@ -1,5 +1,5 @@
 from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy.orm import declarative_mixin, relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from app.mod_tournament.models.abstracts import (
@@ -39,6 +39,7 @@ class FinalStats(
         return obj
 
 
+@declarative_mixin
 class Objectives(
     FirstBlood,
     FirstTower,
@@ -48,6 +49,16 @@ class Objectives(
     SecondDrake,
     ThirdDrake,
 ):
+    __table_args__ = (
+        *FirstBlood.__table_args__,
+        *FirstTower.__table_args__,
+        *FirstHerald.__table_args__,
+        *SecondHerald.__table_args__,
+        *FirstDrake.__table_args__,
+        *SecondDrake.__table_args__,
+        *ThirdDrake.__table_args__,
+    )
+
     @staticmethod
     def from_payload(obj, **kwargs):
         if obj is None:
@@ -75,6 +86,7 @@ class MatchupMap(
     """Class to represent a map in a matchup"""
 
     __tablename__ = "matchup_map"
+    __table_args__ = tuple(Objectives.__table_args__)  # type: ignore
 
     def __init__(
         self,

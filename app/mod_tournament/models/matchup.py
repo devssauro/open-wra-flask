@@ -1,4 +1,4 @@
-from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
@@ -29,14 +29,30 @@ class Matchup(Base, SerializerMixin):
         "team1_id",
         "team2_id",
         "vod_link",
+        "bo_size",
     )
 
-    def __int__(self, datetime, phase, mvp, team1, team2):
+    def __int__(
+        self,
+        datetime,
+        phase,
+        mvp,
+        team1,
+        team2,
+        vod_link,
+        bo_size,
+        with_global_ban,
+        last_no_global_ban,
+    ):
         self.datetime = datetime
         self.phase = phase
         self.mvp_id = mvp
         self.team1_id = team1
         self.team2_id = team2
+        self.vod_link = vod_link
+        self.bo_size = bo_size
+        self.with_global_ban = with_global_ban
+        self.last_no_global_ban = last_no_global_ban
 
     phase = Column(String)
     datetime = Column(DateTime)
@@ -46,6 +62,9 @@ class Matchup(Base, SerializerMixin):
     team1 = relationship("Team", foreign_keys=[team1_id], back_populates="matchups_1")
     team2_id = Column(Integer, ForeignKey("team.id"))
     team2 = relationship("Team", foreign_keys=[team2_id], back_populates="matchups_2")
+    bo_size = Column(Integer)
     vod_link = Column(String)
+    with_global_ban = Column(Boolean, default=False)
+    last_no_global_ban = Column(Boolean, default=False)
 
     maps = relationship("MatchupMap", back_populates="matchup")
