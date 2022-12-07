@@ -28,7 +28,11 @@ def post_map(matchup_id: int):
     except LineupIntegrityError as e:
         return {"msg": e.message}, 406
     except GlobalBanError as e:
-        return {"msg": e.message}, 406
+        return {
+            "msg": e.message,
+            "team_id": e.team_id,
+            "champion_id": e.champion_id,
+        }, 406
 
     _map.matchup_id = matchup_id
     _map.map_number = len(matchup.maps) + 1
