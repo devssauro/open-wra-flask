@@ -2,6 +2,8 @@ from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy_serializer import SerializerMixin
 
+from app.exceptions import GlobalBanError
+from app.mod_tournament.models.matchup_map import MatchupMap
 from db_config import Base
 
 
@@ -67,4 +69,94 @@ class Matchup(Base, SerializerMixin):
     with_global_ban = Column(Boolean, default=False)
     last_no_global_ban = Column(Boolean, default=False)
 
-    maps = relationship("MatchupMap", back_populates="matchup")
+    maps: list[MatchupMap] = relationship("MatchupMap", back_populates="matchup")
+
+    def add_map(self, matchup_map: MatchupMap) -> None:
+        """Verify if the matchup has global ban and if it has some conflict with last maps"""
+        if self.with_global_ban:
+            if self.team1 == matchup_map.blue_side:
+                team1_picks = [
+                    matchup_map.blue_pick_1,
+                    matchup_map.blue_pick_2,
+                    matchup_map.blue_pick_3,
+                    matchup_map.blue_pick_4,
+                    matchup_map.blue_pick_5,
+                ]
+                team2_picks = [
+                    matchup_map.red_pick_1,
+                    matchup_map.red_pick_2,
+                    matchup_map.red_pick_3,
+                    matchup_map.red_pick_4,
+                    matchup_map.red_pick_5,
+                ]
+            else:
+                team2_picks = [
+                    matchup_map.blue_pick_1,
+                    matchup_map.blue_pick_2,
+                    matchup_map.blue_pick_3,
+                    matchup_map.blue_pick_4,
+                    matchup_map.blue_pick_5,
+                ]
+                team1_picks = [
+                    matchup_map.red_pick_1,
+                    matchup_map.red_pick_2,
+                    matchup_map.red_pick_3,
+                    matchup_map.red_pick_4,
+                    matchup_map.red_pick_5,
+                ]
+            if (
+                self.last_no_global_ban
+                and matchup_map.map_number < self.bo_size
+                or not self.last_no_global_ban
+                and matchup_map.map_number == self.bo_size
+            ):
+                for pick in team1_picks:
+                    if pick in self.all_team1_picks:
+                        raise GlobalBanError(
+                            f"Team {self.team1_id} can't pick this champion again",
+                            self.team_1_id,
+                            pick,
+                        )
+                for pick in team2_picks:
+                    if pick in self.all_team2_picks:
+                        raise GlobalBanError(
+                            f"Team {self.team2_id} can't pick this champion again",
+                            self.team_2_id,
+                            pick,
+                        )
+
+    @property
+    def all_team1_picks(self) -> list:
+        picks = []
+        for _map in self.maps:
+            if _map.team1_id == _map.blue_side:
+                picks.append(_map.blue_pick_1)
+                picks.append(_map.blue_pick_2)
+                picks.append(_map.blue_pick_3)
+                picks.append(_map.blue_pick_4)
+                picks.append(_map.blue_pick_5)
+            else:
+                picks.append(_map.red_pick_1)
+                picks.append(_map.red_pick_2)
+                picks.append(_map.red_pick_3)
+                picks.append(_map.red_pick_4)
+                picks.append(_map.red_pick_5)
+        return picks
+
+    @property
+    def all_team2_picks(self) -> list:
+        picks = []
+        for _map in self.maps:
+            if _map.team2_id == _map.blue_side:
+                picks.append(_map.blue_pick_1)
+                picks.append(_map.blue_pick_2)
+                picks.append(_map.blue_pick_3)
+                picks.append(_map.blue_pick_4)
+                picks.append(_map.blue_pick_5)
+            else:
+                picks.append(_map.red_pick_1)
+                picks.append(_map.red_pick_2)
+                picks.append(_map.red_pick_3)
+                picks.append(_map.red_pick_4)
+                picks.append(_map.red_pick_5)
+        return picks

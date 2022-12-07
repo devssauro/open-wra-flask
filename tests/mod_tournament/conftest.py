@@ -57,6 +57,83 @@ def sample_draft_payload(sample_picks_bans_payload: dict) -> dict:
 
 
 @pytest.fixture
+def sample_wrong_draft_picks_bans_payload(sample_wrong_picks_bans_payload: dict) -> dict:
+    """Draft payload with all champions setted for every player
+    but with a champion double picked.
+    """
+    return {
+        **sample_wrong_picks_bans_payload,
+        "blue_baron_pick": sample_wrong_picks_bans_payload["blue_pick_1"],
+        "blue_jungle_pick": sample_wrong_picks_bans_payload["blue_pick_2"],
+        "blue_mid_pick": sample_wrong_picks_bans_payload["blue_pick_3"],
+        "blue_dragon_pick": sample_wrong_picks_bans_payload["blue_pick_4"],
+        "blue_sup_pick": sample_wrong_picks_bans_payload["blue_pick_5"],
+        "red_baron_pick": sample_wrong_picks_bans_payload["red_pick_1"],
+        "red_jungle_pick": sample_wrong_picks_bans_payload["red_pick_2"],
+        "red_mid_pick": sample_wrong_picks_bans_payload["red_pick_3"],
+        "red_dragon_pick": sample_wrong_picks_bans_payload["red_pick_4"],
+        "red_sup_pick": sample_wrong_picks_bans_payload["red_pick_5"],
+    }
+
+
+@pytest.fixture
+def sample_wrong_draft_payload(sample_picks_bans_payload: dict) -> dict:
+    """Draft payload with all champions setted for every player,
+    but a champion is double picked"""
+    return {
+        **sample_picks_bans_payload,
+        "blue_baron_pick": sample_picks_bans_payload["blue_pick_1"],
+        "blue_jungle_pick": sample_picks_bans_payload["blue_pick_1"],
+        "blue_mid_pick": sample_picks_bans_payload["blue_pick_3"],
+        "blue_dragon_pick": sample_picks_bans_payload["blue_pick_4"],
+        "blue_sup_pick": sample_picks_bans_payload["blue_pick_5"],
+        "red_baron_pick": sample_picks_bans_payload["red_pick_1"],
+        "red_jungle_pick": sample_picks_bans_payload["red_pick_2"],
+        "red_mid_pick": sample_picks_bans_payload["red_pick_3"],
+        "red_dragon_pick": sample_picks_bans_payload["red_pick_4"],
+        "red_sup_pick": sample_picks_bans_payload["red_pick_5"],
+    }
+
+
+@pytest.fixture
+def sample_wrong_blue_side_payload(sample_picks_bans_payload: dict) -> dict:
+    """Draft payload with all champions setted for every player,
+    but a non-picked champion is set on blue side"""
+    return {
+        **sample_picks_bans_payload,
+        "blue_baron_pick": 99,
+        "blue_jungle_pick": sample_picks_bans_payload["blue_pick_1"],
+        "blue_mid_pick": sample_picks_bans_payload["blue_pick_3"],
+        "blue_dragon_pick": sample_picks_bans_payload["blue_pick_4"],
+        "blue_sup_pick": sample_picks_bans_payload["blue_pick_5"],
+        "red_baron_pick": sample_picks_bans_payload["red_pick_1"],
+        "red_jungle_pick": sample_picks_bans_payload["red_pick_2"],
+        "red_mid_pick": sample_picks_bans_payload["red_pick_3"],
+        "red_dragon_pick": sample_picks_bans_payload["red_pick_4"],
+        "red_sup_pick": sample_picks_bans_payload["red_pick_5"],
+    }
+
+
+@pytest.fixture
+def sample_wrong_red_side_payload(sample_picks_bans_payload: dict) -> dict:
+    """Draft payload with all champions setted for every player,
+    but a non-picked champion is set on red side"""
+    return {
+        **sample_picks_bans_payload,
+        "blue_baron_pick": sample_picks_bans_payload["blue_pick_1"],
+        "blue_jungle_pick": sample_picks_bans_payload["blue_pick_2"],
+        "blue_mid_pick": sample_picks_bans_payload["blue_pick_3"],
+        "blue_dragon_pick": sample_picks_bans_payload["blue_pick_4"],
+        "blue_sup_pick": sample_picks_bans_payload["blue_pick_5"],
+        "red_baron_pick": 99,
+        "red_jungle_pick": sample_picks_bans_payload["red_pick_2"],
+        "red_mid_pick": sample_picks_bans_payload["red_pick_3"],
+        "red_dragon_pick": sample_picks_bans_payload["red_pick_4"],
+        "red_sup_pick": sample_picks_bans_payload["red_pick_5"],
+    }
+
+
+@pytest.fixture
 def sample_wrong_blue_draft_payload(sample_picks_bans_payload: dict) -> dict:
     """Draft with a mistake on blue team"""
     return {

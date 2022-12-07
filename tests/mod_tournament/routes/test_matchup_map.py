@@ -38,6 +38,126 @@ class TestMatchupMapPost:
             assert response.json == {"map_id": 1}
 
     @staticmethod
+    def test_pick_ban_error(
+        sample_admin_user: User,
+        sample_wrong_draft_picks_bans_payload: dict,
+        sample_map_1: MatchupMap,
+        sample_matchup_1: Matchup,
+        sample_app: Flask,
+    ) -> None:
+        """Test if the map signs a error on picks and bans
+        Args:
+            sample_admin_user (User): The admin user to be logged in
+            sample_wrong_draft_picks_bans_payload (dict): The map payload with the map's data
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_matchup_1 (Matchup): The matchup to be linked to map
+            sample_app (App): The Flask application
+        """
+        with (
+            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("flask_login.utils._get_user") as ge,
+        ):
+            ge.return_value = sample_admin_user
+            cum.return_value = sample_map_1
+            gm_bi.return_value = sample_matchup_1
+            response = sample_app.post(
+                "/v1/matchup/1/map", json=sample_wrong_draft_picks_bans_payload
+            )
+            assert response.status_code == 406
+            assert response.json == {"msg": "Cannot have redundant picks/bans"}
+
+    @staticmethod
+    def test_draft_error(
+        sample_admin_user: User,
+        sample_wrong_draft_payload: dict,
+        sample_map_1: MatchupMap,
+        sample_matchup_1: Matchup,
+        sample_app: Flask,
+    ) -> None:
+        """Test if the a champion was double selected on draft
+        Args:
+            sample_admin_user (User): The admin user to be logged in
+            sample_wrong_draft_payload (dict): The map payload with the map's data
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_matchup_1 (Matchup): The matchup to be linked to map
+            sample_app (App): The Flask application
+        """
+        with (
+            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("flask_login.utils._get_user") as ge,
+        ):
+            ge.return_value = sample_admin_user
+            cum.return_value = sample_map_1
+            gm_bi.return_value = sample_matchup_1
+            response = sample_app.post("/v1/matchup/1/map", json=sample_wrong_draft_payload)
+            assert response.status_code == 406
+            assert response.json == {
+                "msg": "A champion can't stay in two positions at the same time"
+            }
+
+    @staticmethod
+    def test_blue_side_error(
+        sample_admin_user: User,
+        sample_wrong_blue_side_payload: dict,
+        sample_map_1: MatchupMap,
+        sample_matchup_1: Matchup,
+        sample_app: Flask,
+    ) -> None:
+        """Test if a non-picked champion was setted on blue side.
+        Args:
+            sample_admin_user (User): The admin user to be logged in
+            sample_wrong_blue_side_payload (dict): The map payload with the map's data
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_matchup_1 (Matchup): The matchup to be linked to map
+            sample_app (App): The Flask application
+        """
+        with (
+            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("flask_login.utils._get_user") as ge,
+        ):
+            ge.return_value = sample_admin_user
+            cum.return_value = sample_map_1
+            gm_bi.return_value = sample_matchup_1
+            response = sample_app.post("/v1/matchup/1/map", json=sample_wrong_blue_side_payload)
+            assert response.status_code == 406
+            assert response.json == {
+                "msg": "An unselected champion from blue side cannot be used to be played"
+            }
+
+    @staticmethod
+    def test_red_side_error(
+        sample_admin_user: User,
+        sample_wrong_red_side_payload: dict,
+        sample_map_1: MatchupMap,
+        sample_matchup_1: Matchup,
+        sample_app: Flask,
+    ) -> None:
+        """Test if a non-picked champion was setted on blue side.
+        Args:
+            sample_admin_user (User): The admin user to be logged in
+            sample_wrong_red_side_payload (dict): The map payload with the map's data
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_matchup_1 (Matchup): The matchup to be linked to map
+            sample_app (App): The Flask application
+        """
+        with (
+            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("flask_login.utils._get_user") as ge,
+        ):
+            ge.return_value = sample_admin_user
+            cum.return_value = sample_map_1
+            gm_bi.return_value = sample_matchup_1
+            response = sample_app.post("/v1/matchup/1/map", json=sample_wrong_red_side_payload)
+            assert response.status_code == 406
+            assert response.json == {
+                "msg": "An unselected champion from red side cannot be used to be played"
+            }
+
+    @staticmethod
     def test_not_found(
         sample_admin_user: User,
         sample_map_payload: dict,

@@ -84,6 +84,13 @@ def sample_map_payload(sample_players_payload: dict, sample_draft_payload: dict)
 
 
 @pytest.fixture
+def sample_map_wrong_draft_payload(
+    sample_players_payload: dict, sample_wrong_draft_picks_bans_payload
+) -> dict:
+    return {**sample_wrong_draft_picks_bans_payload, **sample_players_payload}
+
+
+@pytest.fixture
 def sample_map_1(sample_map_payload: dict) -> MatchupMap:
     _map = MatchupMap.from_payload(None, **sample_map_payload)
     _map.id = 1
