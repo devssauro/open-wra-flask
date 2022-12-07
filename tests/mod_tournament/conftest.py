@@ -188,11 +188,19 @@ def sample_players_payload() -> dict:
 
 @pytest.fixture
 def sample_wrong_players_payload(sample_players_payload: dict) -> dict:
-    """Draft payload with a player setted in two positions"""
+    """Draft payload with a player set in two positions"""
     return {
         **sample_players_payload,
         "blue_baron_player": sample_players_payload["blue_jungle_player"],
     }
+
+
+@pytest.fixture
+def sample_draft_wrong_players_payload(
+    sample_draft_payload: dict, sample_wrong_players_payload: dict
+) -> dict:
+    """Payload with player set in two positions"""
+    return {**sample_draft_payload, **sample_wrong_players_payload}
 
 
 @pytest.fixture
