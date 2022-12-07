@@ -8,9 +8,9 @@ class TestPicksBans:
     """Tests made to ensure the integrity check on Picks & Bans"""
 
     @staticmethod
-    def test_success(sample_picks_bans_payload: dict) -> None:
+    def test_success(sample_picks_bans_payload_1) -> None:
         """Check if the picks and bans are correctly set"""
-        pb = PicksBans.from_payload(None, **sample_picks_bans_payload)
+        pb = PicksBans.from_payload(None, **sample_picks_bans_payload_1)
         assert isinstance(pb, PicksBans)
 
     @staticmethod
@@ -24,9 +24,9 @@ class TestDraft:
     """Tests made to ensure the integrity check on Blue & Red drafts"""
 
     @staticmethod
-    def test_success(sample_draft_payload: dict):
+    def test_success(sample_draft_payload_1):
         """Check if the draft is correctly set"""
-        draft = Draft.from_payload(None, **sample_draft_payload)
+        draft = Draft.from_payload(None, **sample_draft_payload_1)
         assert isinstance(draft, Draft)
 
     @staticmethod

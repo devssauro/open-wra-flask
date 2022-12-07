@@ -2,6 +2,7 @@ from flask import Blueprint, request
 from flask_security import roles_accepted
 
 from app.db_handler import DBHandler
+from app.exceptions import DraftIntegrityError, GlobalBanError, LineupIntegrityError
 from app.mod_tournament.models import MatchupMap
 
 bp = Blueprint("map", __name__, url_prefix="matchup/<int:matchup_id>/map")
@@ -18,9 +19,27 @@ def post_map(matchup_id: int):
     if "team_first_death" in request.json:
         del data["team_first_death"]
 
-    _map: MatchupMap = MatchupMap.from_payload(**{**data, "tournament_id": matchup.tournament_id})
+    try:
+        _map: MatchupMap = MatchupMap.from_payload(
+            **{**data, "tournament_id": matchup.tournament_id}
+        )
+    except DraftIntegrityError as e:
+        return {"msg": e.message}, 406
+    except LineupIntegrityError as e:
+        return {"msg": e.message}, 406
+
     _map.matchup_id = matchup_id
     _map.map_number = len(matchup.maps) + 1
+
+    try:
+        matchup.add_map(_map)
+    except GlobalBanError as e:
+        return {
+            "msg": e.message,
+            "team_id": e.team_id,
+            "champion_id": e.champion_id,
+        }, 406
+
     _map = DBHandler.create_update_map(_map)
 
     return {"map_id": _map.id}, 201

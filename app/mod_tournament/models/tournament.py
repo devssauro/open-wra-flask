@@ -36,13 +36,13 @@ class Tournament(Base, SerializerMixin):
 
     def __init__(
         self,
-        name,
-        tag,
-        region,
-        start_date,
-        end_date,
-        split,
-        phases: list | str,
+        name=None,
+        tag=None,
+        region=None,
+        start_date=None,
+        end_date=None,
+        split=None,
+        phases: list | str = [],
         female_only: bool = False,
     ):
         self.name = name
@@ -62,7 +62,37 @@ class Tournament(Base, SerializerMixin):
     start_date: datetime | Column = Column(DateTime)
     end_date: datetime | Column = Column(DateTime)
     split: int | Column = Column(Integer)
-    phases: list[str] = Column(ARRAY(String))
+    phases: list[str] | str = Column(ARRAY(String))
     female_only: bool | Column = Column(Boolean, default=False)
 
     teams: list = relationship("TournamentTeam", back_populates="tournament")
+
+    @staticmethod
+    def from_payload(obj, **kwargs):
+        if obj is None:
+            obj = Tournament()
+
+        obj.name = kwargs.get("name", None)
+        obj.tag = kwargs.get("tag", None)
+        obj.region = kwargs.get("region", None)
+        obj.start_date = kwargs.get("start_date", None)
+        obj.end_date = kwargs.get("end_date", None)
+        obj.split = kwargs.get("split", None)
+        obj.female_only = kwargs.get("female_only", None)
+        obj._set_phases(kwargs.get("phases", None))
+
+        return obj
+
+    def _set_phases(self, phases: list | str | None = None):
+        """Function to set phases of a tournament"""
+        if isinstance(phases, str):
+            self.phases = phases.split(",")
+        if isinstance(phases, (list, tuple)) and len(phases) > 0:
+            if isinstance(phases[0], str):
+                self.phases = phases
+            if isinstance(phases[0], dict):
+                self.phases = [phase["name"] for phase in phases]
+                if isinstance(self.extra, dict):
+                    self.extra["phases"] = phases
+                else:
+                    self.extra = {"phases": phases}

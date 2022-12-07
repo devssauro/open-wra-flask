@@ -62,7 +62,7 @@ def post_tournament():
         lineups = data["lineups"]
         del data["lineups"]
 
-    tournament = Tournament(**data)
+    tournament = Tournament.from_payload(None, **data)
     tournament = DBHandler.create_update_tournament(tournament)
 
     for lineup in lineups:
@@ -89,6 +89,8 @@ def put_tournament(tournament_id: int):
     tournament = DBHandler.get_tournament_by_id(tournament_id)
     if tournament is None:
         return {"msg": "Tournament not found"}, 404
+
+    Tournament.from_payload(tournament, **data)
 
     teams: dict[int, TournamentTeam] = {t.team_id: t for t in tournament.teams}
 

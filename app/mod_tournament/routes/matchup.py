@@ -78,7 +78,23 @@ def get_matchup_teams(matchup_id: int):
 @bp.post("")
 @roles_accepted("operational", "admin")
 def post_matchup():
-    matchup = Matchup(**request.json)
+    data = {**request.json}
+    tournament = DBHandler.get_tournament_by_id(data["tournament_id"])
+    if tournament is None:
+        return {"msg": "Tournament not found"}, 404
+
+    matchup = Matchup(**data)
+
+    if "phases" in tournament.extra:
+        _phase = [phase for phase in tournament.extra["phases"] if phase["name"] == matchup.phase]
+        if len(_phase) == 1:
+            _phase = _phase[0]
+            matchup.with_global_ban = data.get("with_global_ban", _phase["with_global_ban"])
+            matchup.last_no_global_ban = data.get(
+                "last_no_global_ban", _phase["last_no_global_ban"]
+            )
+            matchup.bo_size = data.get("bo_size", _phase["bo_size"])
+
     matchup = DBHandler.create_update_matchup(matchup)
 
     return {"id": matchup.id}, 201
