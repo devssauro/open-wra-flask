@@ -4,7 +4,7 @@ import pytest
 
 from app.db_handler.team import LineupTeam
 from app.mod_team.models import Team
-from app.mod_tournament.models import Champion, Matchup, MatchupMap
+from app.mod_tournament.models import Champion
 
 
 @pytest.fixture
@@ -24,53 +24,6 @@ def sample_patch_1() -> str:
 
 
 @pytest.fixture
-def sample_matchup_payload() -> dict:
-    return {
-        "tournament_id": 1,
-        "datetime": datetime(2022, 12, 4, 18, 0),
-        "phase": "group",
-        "mvp_id": None,
-        "team1_id": 1,
-        "team2_id": 2,
-    }
-
-
-@pytest.fixture
-def sample_team_1() -> Team:
-    """Team object for Matchup"""
-    team = Team(name="Team 1", tag="T1", flag="KR")
-    team.id = 1
-    team.active = True
-    team.date_created = datetime(2022, 12, 3)
-    team.date_updated = datetime(2022, 12, 3)
-    return team
-
-
-@pytest.fixture
-def sample_team_2(sample_team_1: Team) -> Team:
-    """Team object for Matchup"""
-    sample_team_1.id = 2
-    sample_team_1.tag = "T2"
-    sample_team_1.name = "Team 2"
-    sample_team_1.date_created = datetime(2022, 12, 3)
-    sample_team_1.date_updated = datetime(2022, 12, 3)
-    return sample_team_1
-
-
-@pytest.fixture
-def sample_matchup_1(
-    sample_matchup_payload: dict,
-    sample_team_1: Team,
-    sample_team_2: Team,
-) -> Matchup:
-    matchup = Matchup(**sample_matchup_payload)
-    matchup.id = 1
-    matchup.team1 = sample_team_1
-    matchup.team2 = sample_team_2
-    return matchup
-
-
-@pytest.fixture
 def sample_lieneupteam_list_sample(sample_team_1: Team, sample_team_2: Team) -> list[LineupTeam]:
     return [
         LineupTeam(sample_team_1, []),
@@ -79,21 +32,7 @@ def sample_lieneupteam_list_sample(sample_team_1: Team, sample_team_2: Team) -> 
 
 
 @pytest.fixture
-def sample_map_payload(sample_players_payload: dict, sample_draft_payload: dict) -> dict:
-    return {**sample_draft_payload, **sample_players_payload}
-
-
-@pytest.fixture
 def sample_map_wrong_draft_payload(
     sample_players_payload: dict, sample_wrong_draft_picks_bans_payload
 ) -> dict:
     return {**sample_wrong_draft_picks_bans_payload, **sample_players_payload}
-
-
-@pytest.fixture
-def sample_map_1(sample_map_payload: dict) -> MatchupMap:
-    _map = MatchupMap.from_payload(None, **sample_map_payload)
-    _map.id = 1
-    _map.date_created = datetime(2022, 12, 4)
-    _map.date_updated = datetime(2022, 12, 4)
-    return _map

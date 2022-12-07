@@ -71,7 +71,7 @@ class Matchup(Base, SerializerMixin):
 
     maps: list[MatchupMap] = relationship("MatchupMap", back_populates="matchup")
 
-    def add_map(self, matchup_map: MatchupMap) -> None:
+    def add_map(self, matchup_map: MatchupMap) -> bool:
         """Verify if the matchup has global ban and if it has some conflict with last maps"""
         if self.with_global_ban:
             if self.team1 == matchup_map.blue_side:
@@ -113,23 +113,24 @@ class Matchup(Base, SerializerMixin):
                 for pick in team1_picks:
                     if pick in self.all_team1_picks:
                         raise GlobalBanError(
-                            f"Team {self.team1_id} can't pick this champion again",
-                            self.team_1_id,
+                            f"Team {self.team1_id} can't pick this champion {pick} again",
+                            self.team1_id,
                             pick,
                         )
                 for pick in team2_picks:
                     if pick in self.all_team2_picks:
                         raise GlobalBanError(
-                            f"Team {self.team2_id} can't pick this champion again",
-                            self.team_2_id,
+                            f"Team {self.team2_id} can't pick this champion {pick} again",
+                            self.team2_id,
                             pick,
                         )
+        return True
 
     @property
     def all_team1_picks(self) -> list:
         picks = []
         for _map in self.maps:
-            if _map.team1_id == _map.blue_side:
+            if self.team1_id == _map.blue_side:
                 picks.append(_map.blue_pick_1)
                 picks.append(_map.blue_pick_2)
                 picks.append(_map.blue_pick_3)
@@ -147,7 +148,7 @@ class Matchup(Base, SerializerMixin):
     def all_team2_picks(self) -> list:
         picks = []
         for _map in self.maps:
-            if _map.team2_id == _map.blue_side:
+            if self.team2_id == _map.blue_side:
                 picks.append(_map.blue_pick_1)
                 picks.append(_map.blue_pick_2)
                 picks.append(_map.blue_pick_3)

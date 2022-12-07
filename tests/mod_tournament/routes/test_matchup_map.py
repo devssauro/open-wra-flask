@@ -12,18 +12,18 @@ class TestMatchupMapPost:
     @staticmethod
     def test_success(
         sample_admin_user: User,
-        sample_map_payload: dict,
+        sample_map_payload_1,
         sample_map_1: MatchupMap,
         sample_matchup_1: Matchup,
         sample_app: Flask,
     ) -> None:
         """Test if the map was created successfully
         Args:
-            sample_admin_user(User): The admin user to be logged in
-            sample_map_payload(dict): The map payload with the map's data
-            sample_map_1(MatchupMap): The map object returned from DBHandler
-            sample_matchup_1(Matchup): The matchup to be linked to map
-            sample_app(App): The Flask application
+            sample_admin_user (User): The admin user to be logged in
+            sample_map_payload_1 (dict): The map payload with the map's data
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_matchup_1 (Matchup): The matchup to be linked to map
+            sample_app (App): The Flask application
         """
         with (
             patch("app.db_handler.DBHandler.create_update_map") as cum,
@@ -33,7 +33,7 @@ class TestMatchupMapPost:
             ge.return_value = sample_admin_user
             cum.return_value = sample_map_1
             gm_bi.return_value = sample_matchup_1
-            response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload)
+            response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
             assert response.status_code == 201
             assert response.json == {"map_id": 1}
 
@@ -75,7 +75,7 @@ class TestMatchupMapPost:
         sample_matchup_1: Matchup,
         sample_app: Flask,
     ) -> None:
-        """Test if the a champion was double selected on draft
+        """Test if a champion was double selected on draft
         Args:
             sample_admin_user (User): The admin user to be logged in
             sample_wrong_draft_payload (dict): The map payload with the map's data
@@ -190,16 +190,48 @@ class TestMatchupMapPost:
             }
 
     @staticmethod
+    def test_global_ban_error(
+        sample_admin_user: User,
+        sample_map_payload_1: dict,
+        sample_map_1: MatchupMap,
+        sample_matchup_with_global_ban_1: Matchup,
+        sample_app: Flask,
+    ) -> None:
+        """Test if a non-picked champion was setted on blue side.
+        Args:
+            sample_admin_user (User): The admin user to be logged in
+            sample_map_payload_1 (dict): The map payload with the map's data
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_matchup_with_global_ban_1 (Matchup): The matchup to be linked to map
+            sample_app (App): The Flask application
+        """
+        with (
+            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("flask_login.utils._get_user") as ge,
+        ):
+            ge.return_value = sample_admin_user
+            cum.return_value = sample_map_1
+            gm_bi.return_value = sample_matchup_with_global_ban_1
+            response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
+            assert response.status_code == 406
+            assert response.json == {
+                "msg": "Team 1 can't pick this champion 8 again",
+                "team_id": 1,
+                "champion_id": 8,
+            }
+
+    @staticmethod
     def test_not_found(
         sample_admin_user: User,
-        sample_map_payload: dict,
+        sample_map_payload_1,
         sample_app: Flask,
     ) -> None:
         """Test if the matchup is not found
         Args:
-            sample_admin_user(User): The admin user to be logged in
-            sample_map_payload(dict): The map payload with the map's data
-            sample_app(App): The Flask application
+            sample_admin_user (User): The admin user to be logged in
+            sample_map_payload_1 (dict): The map payload with the map's data
+            sample_app (App): The Flask application
         """
         with (
             patch("app.db_handler.DBHandler.create_update_map") as cum,
@@ -208,19 +240,19 @@ class TestMatchupMapPost:
         ):
             ge.return_value = sample_admin_user
             gm_bi.return_value = None
-            response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload)
+            response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
             assert response.status_code == 404
             assert response.json == {"msg": "Matchup not found"}
             assert cum.called is False
 
     @staticmethod
-    def test_forbidden(sample_map_payload: dict, sample_app: Flask) -> None:
+    def test_forbidden(sample_map_payload_1, sample_app: Flask) -> None:
         """Test if the map wasn't created
         Args:
-            sample_map_payload(dict): The map payload with the map's data
-            sample_app(App): The Flask application
+            sample_map_payload_1 (dict): The map payload with the map's data
+            sample_app (App): The Flask application
         """
-        response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload)
+        response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
         assert response.status_code == 403
 
 
@@ -235,9 +267,9 @@ class TestMatchupMapGet:
     ) -> None:
         """Test if the API brings the maps in a list
         Args:
-            sample_admin_user(User): The admin user to be logged in
-            sample_map_1(MatchupMap): The map object returned from DBHandler
-            sample_app(App): The Flask application
+            sample_admin_user (User): The admin user to be logged in
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_app (App): The Flask application
         """
         with (
             patch("app.db_handler.DBHandler.get_map_by_id") as gm,
@@ -256,8 +288,8 @@ class TestMatchupMapGet:
     ) -> None:
         """Test if the API gets nof found
         Args:
-            sample_admin_user(User): The admin user to be logged in
-            sample_app(App): The Flask application
+            sample_admin_user (User): The admin user to be logged in
+            sample_app (App): The Flask application
         """
         with (
             patch("app.db_handler.DBHandler.get_map_by_id") as gm,
@@ -273,7 +305,7 @@ class TestMatchupMapGet:
     def test_forbidden(sample_app: Flask) -> None:
         """Test if the user has no permission
         Args:
-            sample_app(App): The Flask application
+            sample_app (App): The Flask application
         """
         response = sample_app.get("/v1/matchup/1/map/1/edit")
         assert response.status_code == 403
@@ -285,16 +317,16 @@ class TestMatchupMapPut:
     @staticmethod
     def test_success(
         sample_admin_user: User,
-        sample_map_payload: dict,
+        sample_map_payload_1,
         sample_map_1: MatchupMap,
         sample_app: Flask,
     ) -> None:
         """Test if the API brings the maps in a list
         Args:
-            sample_admin_user(User): The admin user to be logged in
-            sample_map_payload(dict): The map payload
-            sample_map_1(MatchupMap): The map object returned from DBHandler
-            sample_app(App): The Flask application
+            sample_admin_user (User): The admin user to be logged in
+            sample_map_payload_1 (dict): The map payload
+            sample_map_1 (MatchupMap): The map object returned from DBHandler
+            sample_app (App): The Flask application
         """
         with (
             patch("app.db_handler.DBHandler.create_update_map") as cum,
@@ -305,7 +337,7 @@ class TestMatchupMapPut:
             ge.return_value = sample_admin_user
             cum.return_value = sample_map_1
             response = sample_app.put(
-                f"/v1/matchup/1/map/{sample_map_1.id}/edit", json=sample_map_payload
+                f"/v1/matchup/1/map/{sample_map_1.id}/edit", json=sample_map_payload_1
             )
             assert response.status_code == 200
             assert response.json["id"] == 1
@@ -313,14 +345,14 @@ class TestMatchupMapPut:
     @staticmethod
     def test_not_found(
         sample_admin_user: User,
-        sample_map_payload: dict,
+        sample_map_payload_1,
         sample_app: Flask,
     ) -> None:
         """Test if the API gets nof found
         Args:
-            sample_map_payload(dict): The map payload
-            sample_admin_user(User): The admin user to be logged in
-            sample_app(App): The Flask application
+            sample_map_payload_1 (dict): The map payload
+            sample_admin_user (User): The admin user to be logged in
+            sample_app (App): The Flask application
         """
         with (
             patch("app.db_handler.DBHandler.get_map_by_id") as gm,
@@ -328,16 +360,16 @@ class TestMatchupMapPut:
         ):
             gm.return_value = None
             ge.return_value = sample_admin_user
-            response = sample_app.put("/v1/matchup/1/map/1/edit", json=sample_map_payload)
+            response = sample_app.put("/v1/matchup/1/map/1/edit", json=sample_map_payload_1)
             assert response.status_code == 404
             assert response.json == {"msg": "Map not found"}
 
     @staticmethod
-    def test_forbidden(sample_map_payload: dict, sample_app: Flask) -> None:
+    def test_forbidden(sample_map_payload_1, sample_app: Flask) -> None:
         """Test if the user has no permission
         Args:
-            sample_map_payload(dict): The map payload
-            sample_app(App): The Flask application
+            sample_map_payload_1 (dict): The map payload
+            sample_app (App): The Flask application
         """
-        response = sample_app.put("/v1/matchup/1/map/1/edit", json=sample_map_payload)
+        response = sample_app.put("/v1/matchup/1/map/1/edit", json=sample_map_payload_1)
         assert response.status_code == 403

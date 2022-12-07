@@ -27,6 +27,12 @@ def post_map(matchup_id: int):
         return {"msg": e.message}, 406
     except LineupIntegrityError as e:
         return {"msg": e.message}, 406
+
+    _map.matchup_id = matchup_id
+    _map.map_number = len(matchup.maps) + 1
+
+    try:
+        matchup.add_map(_map)
     except GlobalBanError as e:
         return {
             "msg": e.message,
@@ -34,9 +40,6 @@ def post_map(matchup_id: int):
             "champion_id": e.champion_id,
         }, 406
 
-    _map.matchup_id = matchup_id
-    _map.map_number = len(matchup.maps) + 1
-    matchup.add_map(matchup)
     _map = DBHandler.create_update_map(_map)
 
     return {"map_id": _map.id}, 201
