@@ -26,12 +26,12 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
             patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
+            create_update_map.return_value = sample_map_1
             gm_bi.return_value = sample_matchup_1
             response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
             assert response.status_code == 201
@@ -54,13 +54,13 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
-            gm_bi.return_value = sample_matchup_1
+            create_update_map.return_value = sample_map_1
+            get_matchup_by_id.return_value = sample_matchup_1
             response = sample_app.post(
                 "/v1/matchup/1/map", json=sample_wrong_draft_picks_bans_payload
             )
@@ -84,13 +84,13 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
-            gm_bi.return_value = sample_matchup_1
+            create_update_map.return_value = sample_map_1
+            get_matchup_by_id.return_value = sample_matchup_1
             response = sample_app.post("/v1/matchup/1/map", json=sample_wrong_draft_payload)
             assert response.status_code == 406
             assert response.json == {
@@ -114,13 +114,13 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
-            gm_bi.return_value = sample_matchup_1
+            create_update_map.return_value = sample_map_1
+            get_matchup_by_id.return_value = sample_matchup_1
             response = sample_app.post("/v1/matchup/1/map", json=sample_wrong_blue_side_payload)
             assert response.status_code == 406
             assert response.json == {
@@ -144,13 +144,13 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
-            gm_bi.return_value = sample_matchup_1
+            create_update_map.return_value = sample_map_1
+            get_matchup_by_id.return_value = sample_matchup_1
             response = sample_app.post("/v1/matchup/1/map", json=sample_wrong_red_side_payload)
             assert response.status_code == 406
             assert response.json == {
@@ -174,13 +174,13 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
-            gm_bi.return_value = sample_matchup_1
+            create_update_map.return_value = sample_map_1
+            get_matchup_by_id.return_value = sample_matchup_1
             response = sample_app.post(
                 "/v1/matchup/1/map", json=sample_draft_wrong_players_payload
             )
@@ -206,13 +206,13 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
-            gm_bi.return_value = sample_matchup_with_global_ban_1
+            create_update_map.return_value = sample_map_1
+            get_matchup_by_id.return_value = sample_matchup_with_global_ban_1
             response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
             assert response.status_code == 406
             assert response.json == {
@@ -234,16 +234,16 @@ class TestMatchupMapPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            gm_bi.return_value = None
+            get_matchup_by_id.return_value = None
             response = sample_app.post("/v1/matchup/1/map", json=sample_map_payload_1)
             assert response.status_code == 404
             assert response.json == {"msg": "Matchup not found"}
-            assert cum.called is False
+            assert create_update_map.called is False
 
     @staticmethod
     def test_forbidden(sample_map_payload_1, sample_app: Flask) -> None:
@@ -329,13 +329,13 @@ class TestMatchupMapPut:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_map") as cum,
+            patch("app.db_handler.DBHandler.create_update_map") as create_update_map,
             patch("app.db_handler.DBHandler.get_map_by_id") as gm,
             patch("flask_login.utils._get_user") as ge,
         ):
             gm.return_value = sample_map_1
             ge.return_value = sample_admin_user
-            cum.return_value = sample_map_1
+            create_update_map.return_value = sample_map_1
             response = sample_app.put(
                 f"/v1/matchup/1/map/{sample_map_1.id}/edit", json=sample_map_payload_1
             )

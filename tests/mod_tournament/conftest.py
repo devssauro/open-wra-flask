@@ -232,6 +232,7 @@ def sample_draft_wrong_players_payload(
 
 @pytest.fixture
 def sample_tournament_payload_1() -> dict:
+    """Payload for a tournament"""
     return {
         "name": "Tournament 1",
         "tag": "TEST",
@@ -248,6 +249,7 @@ def sample_tournament_payload_1() -> dict:
 
 @pytest.fixture
 def sample_tournament_payload_2(sample_tournament_payload_1) -> dict:
+    """Payload for a tournament"""
     sample_tournament_payload_1["name"] = "Tournament 2"
     sample_tournament_payload_1["split"] = "2"
     sample_tournament_payload_1["phases"] = [
@@ -266,6 +268,7 @@ def sample_tournament_payload_2(sample_tournament_payload_1) -> dict:
 
 @pytest.fixture
 def sample_tournament_payload_3(sample_tournament_payload_1) -> dict:
+    """Payload for a tournament"""
     sample_tournament_payload_1["name"] = "Tournament 3"
     sample_tournament_payload_1["phases"] = ["group", "knockout", "final"]
     return sample_tournament_payload_1
@@ -273,16 +276,19 @@ def sample_tournament_payload_3(sample_tournament_payload_1) -> dict:
 
 @pytest.fixture
 def sample_map_payload_1(sample_players_payload: dict, sample_draft_payload_1) -> dict:
+    """Payload for a map"""
     return {**sample_draft_payload_1, **sample_players_payload}
 
 
 @pytest.fixture
 def sample_map_payload_2(sample_players_payload: dict, sample_draft_payload_2) -> dict:
+    """Payload for a map"""
     return {**sample_draft_payload_2, **sample_players_payload}
 
 
 @pytest.fixture
 def sample_matchup_payload() -> dict:
+    """Payload for a matchup"""
     return {
         "tournament_id": 1,
         "datetime": datetime(2022, 12, 4, 18, 0),
@@ -318,6 +324,7 @@ def sample_team_2(sample_team_1: Team) -> Team:
 
 @pytest.fixture
 def sample_map_1(sample_map_payload_1) -> MatchupMap:
+    """A Map of a matchup"""
     _map = MatchupMap.from_payload(None, **sample_map_payload_1)
     _map.id = 1
     _map.map_number = 1
@@ -328,8 +335,9 @@ def sample_map_1(sample_map_payload_1) -> MatchupMap:
 
 @pytest.fixture
 def sample_map_2(sample_map_payload_2) -> MatchupMap:
+    """A Map of a matchup"""
     _map = MatchupMap.from_payload(None, **sample_map_payload_2)
-    _map.id = 1
+    _map.id = 2
     _map.map_number = 2
     _map.date_created = datetime(2022, 12, 7)
     _map.date_updated = datetime(2022, 12, 7)
@@ -338,6 +346,7 @@ def sample_map_2(sample_map_payload_2) -> MatchupMap:
 
 @pytest.fixture
 def sample_map_3(sample_map_payload_1) -> MatchupMap:
+    """A Map of a matchup"""
     _map = MatchupMap.from_payload(None, **sample_map_payload_1)
     _map.id = 3
     _map.map_number = 3
@@ -353,6 +362,7 @@ def sample_matchup_1(
     sample_team_2: Team,
     sample_map_1: MatchupMap,
 ) -> Matchup:
+    """The Matchup object of a tournament"""
     matchup = Matchup(**sample_matchup_payload)
     matchup.id = 1
     matchup.team1 = sample_team_1
@@ -363,6 +373,7 @@ def sample_matchup_1(
 
 @pytest.fixture
 def sample_tournament_team_1() -> TournamentTeam:
+    """A team of a tournament"""
     team = TournamentTeam(team_id=1, tournament_id=1, entry_phase="group")
     team.id = 1
     return team
@@ -372,6 +383,7 @@ def sample_tournament_team_1() -> TournamentTeam:
 def sample_tournament_1(
     sample_tournament_payload_1, sample_tournament_team_1: TournamentTeam
 ) -> Tournament:
+    """A tournament object"""
     del sample_tournament_payload_1["lineups"]
     tournament = Tournament(**sample_tournament_payload_1)
     tournament.id = 1
@@ -383,6 +395,7 @@ def sample_tournament_1(
 def sample_tournament_2(
     sample_tournament_payload_2, sample_tournament_team_1: TournamentTeam
 ) -> Tournament:
+    """A tournament object"""
     del sample_tournament_payload_2["lineups"]
     tournament = Tournament.from_payload(None, **sample_tournament_payload_2)
     tournament.id = 2
@@ -392,6 +405,7 @@ def sample_tournament_2(
 
 @pytest.fixture
 def sample_matchup_with_global_ban_1(sample_matchup_1: Matchup) -> Matchup:
+    """A matchup with global ban but not on last map"""
     sample_matchup_1.with_global_ban = True
     sample_matchup_1.last_no_global_ban = True
     return sample_matchup_1
@@ -399,6 +413,7 @@ def sample_matchup_with_global_ban_1(sample_matchup_1: Matchup) -> Matchup:
 
 @pytest.fixture
 def sample_matchup_with_global_ban_2(sample_matchup_1: Matchup) -> Matchup:
+    """A matchup with global ban until the last map"""
     sample_matchup_1.with_global_ban = True
     sample_matchup_1.last_no_global_ban = False
     return sample_matchup_1

@@ -26,13 +26,15 @@ class TestTournamentPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_tournament") as cut,
-            patch("app.db_handler.DBHandler.create_update_tournament_team") as cutt,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.create_update_tournament") as create_update_tournament,
+            patch(
+                "app.db_handler.DBHandler.create_update_tournament_team"
+            ) as create_update_tournament_team,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            ge.return_value = sample_admin_user
-            cut.return_value = sample_tournament_1
-            cutt.return_value = sample_tournament_team_1
+            _get_user.return_value = sample_admin_user
+            create_update_tournament.return_value = sample_tournament_1
+            create_update_tournament_team.return_value = sample_tournament_team_1
             response = sample_app.post("/v1/tournament", json=sample_tournament_payload_1)
             assert response.status_code == 201
             assert response.json == {"tournament_id": 1}
@@ -64,11 +66,11 @@ class TestTournamentGet:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_tournaments") as gt,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_tournaments") as get_tournaments,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gt.return_value = PaginatedTournaments([sample_tournament_1], 1, 1)
-            ge.return_value = sample_admin_user
+            get_tournaments.return_value = PaginatedTournaments([sample_tournament_1], 1, 1)
+            _get_user.return_value = sample_admin_user
             response = sample_app.get("/v1/tournament")
             assert response.status_code == 200
             assert response.json["tournaments"][0]["id"] == 1
@@ -90,11 +92,11 @@ class TestTournamentGetById:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_tournament_by_id") as gt,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_tournament_by_id") as get_tournament_by_id,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gt.return_value = sample_tournament_1
-            ge.return_value = sample_admin_user
+            get_tournament_by_id.return_value = sample_tournament_1
+            _get_user.return_value = sample_admin_user
             response = sample_app.get(f"/v1/tournament/{sample_tournament_1.id}")
             assert response.status_code == 200
             assert response.json["tournament"]["id"] == 1
@@ -110,11 +112,11 @@ class TestTournamentGetById:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_tournament_by_id") as gt,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_tournament_by_id") as get_tournament_by_id,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gt.return_value = None
-            ge.return_value = sample_admin_user
+            get_tournament_by_id.return_value = None
+            _get_user.return_value = sample_admin_user
             response = sample_app.get("/v1/tournament/1")
             assert response.status_code == 404
             assert response.json == {"msg": "Tournament not found"}
@@ -138,13 +140,13 @@ class TestTournamentPut:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_tournament") as cut,
-            patch("app.db_handler.DBHandler.get_tournament_by_id") as gm,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.create_update_tournament") as create_update_tournament,
+            patch("app.db_handler.DBHandler.get_tournament_by_id") as get_tournament_by_id,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gm.return_value = sample_tournament_1
-            ge.return_value = sample_admin_user
-            cut.return_value = sample_tournament_1
+            get_tournament_by_id.return_value = sample_tournament_1
+            _get_user.return_value = sample_admin_user
+            create_update_tournament.return_value = sample_tournament_1
             response = sample_app.put(
                 f"/v1/tournament/{sample_tournament_1.id}", json=sample_tournament_payload_1
             )
@@ -164,11 +166,11 @@ class TestTournamentPut:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_tournament_by_id") as gm,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_tournament_by_id") as get_tournament_by_id,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gm.return_value = None
-            ge.return_value = sample_admin_user
+            get_tournament_by_id.return_value = None
+            _get_user.return_value = sample_admin_user
             response = sample_app.put("/v1/tournament/1", json=sample_tournament_payload_1)
             assert response.status_code == 404
             assert response.json == {"msg": "Tournament not found"}

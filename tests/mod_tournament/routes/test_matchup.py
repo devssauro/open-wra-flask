@@ -27,13 +27,13 @@ class TestMatchupPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_matchup") as cum,
-            patch("app.db_handler.DBHandler.get_tournament_by_id") as gt_bi,
+            patch("app.db_handler.DBHandler.create_update_matchup") as create_update_matchup,
+            patch("app.db_handler.DBHandler.get_tournament_by_id") as get_tournament_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            gt_bi.return_value = sample_tournament_2
-            cum.return_value = sample_matchup_1
+            get_tournament_by_id.return_value = sample_tournament_2
+            create_update_matchup.return_value = sample_matchup_1
             response = sample_app.post("/v1/matchup", json=sample_matchup_payload)
             assert response.status_code == 201
             assert response.json == {"id": 1}
@@ -53,13 +53,13 @@ class TestMatchupPost:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.create_update_matchup") as cum,
-            patch("app.db_handler.DBHandler.get_tournament_by_id") as gt_bi,
+            patch("app.db_handler.DBHandler.create_update_matchup") as create_update_matchup,
+            patch("app.db_handler.DBHandler.get_tournament_by_id") as get_tournament_by_id,
             patch("flask_login.utils._get_user") as ge,
         ):
             ge.return_value = sample_admin_user
-            gt_bi.return_value = None
-            cum.return_value = sample_matchup_1
+            get_tournament_by_id.return_value = None
+            create_update_matchup.return_value = sample_matchup_1
             response = sample_app.post("/v1/matchup", json=sample_matchup_payload)
             assert response.status_code == 404
             assert response.json == {"msg": "Tournament not found"}
@@ -93,11 +93,11 @@ class TestMatchupGet:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_matchups") as gm,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_matchups") as get_matchups,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gm.return_value = PaginatedMatchups([sample_matchup_1], 1, 1)
-            ge.return_value = sample_admin_user
+            get_matchups.return_value = PaginatedMatchups([sample_matchup_1], 1, 1)
+            _get_user.return_value = sample_admin_user
             response = sample_app.get("/v1/matchup")
             assert response.status_code == 200
             assert response.json["matchups"][0]["id"] == 1
@@ -122,11 +122,11 @@ class TestMatchupTeamGet:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_teams_from_matchup") as gt_fm,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_teams_from_matchup") as get_teams_from_matchup,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gt_fm.return_value = sample_lieneupteam_list_sample
-            ge.return_value = sample_admin_user
+            get_teams_from_matchup.return_value = sample_lieneupteam_list_sample
+            _get_user.return_value = sample_admin_user
             response = sample_app.get(f"/v1/matchup/{sample_matchup_1.id}/teams")
             assert response.status_code == 200
             assert response.json["id"] == 1
@@ -139,15 +139,15 @@ class TestMatchupTeamGet:
             sample_app (App): The Flask application
         """
         with (
-            patch("app.db_handler.DBHandler.get_teams_from_matchup") as gt_fm,
-            patch("app.db_handler.DBHandler.get_matchup_by_id") as gm_bi,
-            patch("flask_login.utils._get_user") as ge,
+            patch("app.db_handler.DBHandler.get_teams_from_matchup") as get_teams_from_matchup,
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
+            patch("flask_login.utils._get_user") as _get_user,
         ):
-            gm_bi.return_value = None
-            ge.return_value = sample_admin_user
+            get_matchup_by_id.return_value = None
+            _get_user.return_value = sample_admin_user
             response = sample_app.get("/v1/matchup/1/teams")
             assert response.status_code == 404
-            assert gt_fm.called is False
+            assert get_teams_from_matchup.called is False
 
     @staticmethod
     def test_forbidden(sample_app: Flask) -> None:
