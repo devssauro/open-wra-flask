@@ -49,14 +49,17 @@ class Objectives(
     SecondDrake,
     ThirdDrake,
 ):
-    __table_args__ = (
-        *FirstBlood.__table_args__,
-        *FirstTower.__table_args__,
-        *FirstHerald.__table_args__,
-        *SecondHerald.__table_args__,
-        *FirstDrake.__table_args__,
-        *SecondDrake.__table_args__,
-        *ThirdDrake.__table_args__,
+
+    __table_args__ = tuple(
+        [
+            *FirstBlood.__table_args__,
+            *FirstTower.__table_args__,
+            *FirstHerald.__table_args__,
+            *SecondHerald.__table_args__,
+            *FirstDrake.__table_args__,
+            *SecondDrake.__table_args__,
+            *ThirdDrake.__table_args__,
+        ]
     )
 
     @staticmethod
@@ -86,7 +89,13 @@ class MatchupMap(
     """Class to represent a map in a matchup"""
 
     __tablename__ = "matchup_map"
-    __table_args__ = Objectives.__table_args__  # type: ignore
+    __table_args__ = tuple(
+        [
+            *Draft.__table_args__,
+            *Players.__table_args__,
+            *Objectives.__table_args__,
+        ],
+    )
 
     def __init__(
         self,

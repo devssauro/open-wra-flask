@@ -24,8 +24,8 @@ ALL_RED_PICKS = tuple(f"red_pick_{position}" for position in range(1, 6))
 class PicksBans:
     """All picks and bans from a matchup"""
 
-    __table_args__ = (
-        ForeignKeyConstraint(tuple([pick_ban]), "champion.id", f"matchup_map_{pick_ban}_fkey")
+    __table_args__ = tuple(
+        ForeignKeyConstraint((pick_ban,), ("champion.id",), f"matchup_map_{pick_ban}_fkey")
         for pick_ban in ALL_PICKS_BANS
     )
 
@@ -86,9 +86,14 @@ class PicksBans:
 
 @declarative_mixin
 class Draft(PicksBans):
-    __table_args__ = (
-        ForeignKeyConstraint(tuple([pick]), "champion.id", f"matchup_map_{pick}_fkey")
-        for pick in ALL_PICKS
+    __table_args__ = tuple(
+        [
+            *[
+                ForeignKeyConstraint((pick,), ("champion.id",), f"matchup_map_{pick}_fkey")
+                for pick in ALL_PICKS
+            ],
+            *PicksBans.__table_args__,
+        ]
     )
 
     blue_baron_pick = Column(Integer)
@@ -143,8 +148,8 @@ class Draft(PicksBans):
 
 @declarative_mixin
 class Players:
-    __table_args__ = (
-        ForeignKeyConstraint(tuple(player), "player.id", f"matchup_map_{player}_fkey")
+    __table_args__ = tuple(
+        ForeignKeyConstraint((player,), ("player.id",), f"matchup_map_{player}_fkey")
         for player in ALL_PLAYERS
     )
 
@@ -340,14 +345,16 @@ class TotalGold:
 @declarative_mixin
 class FirstBlood:
 
-    __table_args__ = ForeignKeyConstraint(
-        tuple(["team_first_blood", "player_first_blood", "player_first_death"]),
-        ("team.id", "player.id", "player.id"),
-        [
-            "matchup_map_team_first_blood_fkey",
-            "matchup_map_player_first_blood_fkey",
-            "matchup_map_player_first_death_fkey",
-        ],
+    __table_args__ = tuple(
+        ForeignKeyConstraint(
+            tuple(["team_first_blood", "player_first_blood", "player_first_death"]),
+            ("team.id", "player.id", "player.id"),
+            [
+                "matchup_map_team_first_blood_fkey",
+                "matchup_map_player_first_blood_fkey",
+                "matchup_map_player_first_death_fkey",
+            ],
+        )
     )
 
     team_first_blood = Column(Integer)
@@ -370,10 +377,10 @@ class FirstTower:
 
     __table_args__ = tuple(
         ForeignKeyConstraint(
-            tuple(["team_first_tower"]),
-            tuple(["team.id"]),
+            ("team_first_tower",),
+            ("team.id",),
             "matchup_map_team_first_tower_fkey",
-        )
+        ),
     )
 
     team_first_tower = Column(Integer)
@@ -401,10 +408,10 @@ class FirstHerald:
 
     __table_args__ = tuple(
         ForeignKeyConstraint(
-            tuple(["team_first_herald"]),
-            tuple(["team.id"]),
+            ("team_first_herald",),
+            ("team.id",),
             "matchup_map_team_first_herald_fkey",
-        )
+        ),
     )
 
     team_first_herald = Column(Integer)
@@ -434,10 +441,10 @@ class SecondHerald:
 
     __table_args__ = tuple(
         ForeignKeyConstraint(
-            tuple(["team_second_herald"]),
-            tuple(["team.id"]),
+            ("team_second_herald",),
+            ("team.id",),
             "matchup_map_team_second_herald_fkey",
-        )
+        ),
     )
 
     team_second_herald = Column(Integer)
@@ -467,10 +474,10 @@ class FirstDrake:
 
     __table_args__ = tuple(
         ForeignKeyConstraint(
-            tuple(["team_first_drake"]),
-            tuple(["team.id"]),
+            ("team_first_drake",),
+            ("team.id",),
             "matchup_map_team_first_drake_fkey",
-        )
+        ),
     )
 
     team_first_drake = Column(Integer)
@@ -500,10 +507,10 @@ class SecondDrake:
 
     __table_args__ = tuple(
         ForeignKeyConstraint(
-            tuple(["team_second_drake"]),
-            tuple(["team.id"]),
+            ("team_second_drake",),
+            ("team.id",),
             "matchup_map_team_second_drake_fkey",
-        )
+        ),
     )
 
     team_second_drake = Column(Integer)
@@ -533,10 +540,10 @@ class ThirdDrake:
 
     __table_args__ = tuple(
         ForeignKeyConstraint(
-            tuple(["team_third_drake"]),
-            tuple(["team.id"]),
+            ("team_third_drake",),
+            ("team.id",),
             "matchup_map_team_third_drake_fkey",
-        )
+        ),
     )
 
     team_third_drake = Column(Integer)
