@@ -1,4 +1,4 @@
-"""rota que os arautos foram lanćados
+"""rota que os arautos foram lancados
 
 Revision ID: 0e4528fc45c9
 Revises: 2cfceb9fa7e9

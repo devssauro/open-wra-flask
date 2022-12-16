@@ -10,11 +10,13 @@ from security_config import security, user_datastore
 from . import config
 
 
-def create_app(test_config=None):
+def create_app(is_testing: bool = False):
     app = Flask(
         __name__,
         instance_relative_config=True,
     )
+    if is_testing:
+        config.SQLALCHEMY_DATABASE_URI = config.SQLALCHEMY_DATABASE_TEST_URI
     app.config.from_object(config)
     db.init_app(app)
     migrate.init_app(app, db)
@@ -48,10 +50,10 @@ def create_app(test_config=None):
     def hello():
         return "hello"
 
-    if test_config is None:
-        app.config.from_pyfile("config.py", silent=True)
-    else:
-        app.config.from_mapping(test_config)
+    # if test_config is None:
+    #     app.config.from_pyfile("config.py", silent=True)
+    # else:
+    #     app.config.from_mapping(test_config)
 
     from . import mod_auth
 

@@ -1,4 +1,4 @@
-"""início da lógica de torneio
+"""inicio da logica de torneio
 
 Revision ID: c67467713733
 Revises: 46b0020fb15f

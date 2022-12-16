@@ -86,7 +86,7 @@ class MatchupMap(
     """Class to represent a map in a matchup"""
 
     __tablename__ = "matchup_map"
-    __table_args__ = tuple(Objectives.__table_args__)  # type: ignore
+    __table_args__ = Objectives.__table_args__  # type: ignore
 
     def __init__(
         self,
