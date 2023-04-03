@@ -1,0 +1,79 @@
+version: "3.6"
+
+volumes:
+  open-wra-vol: {}
+  open-wra-vue: {}
+
+networks:
+  wranetwork:
+    name: wranetwork
+
+services:
+
+  frontend:
+    container_name: vue-wranalytics
+    build:
+      context: https://github.com/devssauro/vue-wra.git
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    volumes:
+      - open-wra-vue:/app
+    environment:
+      NODE_ENV: development
+    depends_on:
+      - api
+    networks:
+      - wranetwork
+
+  api:
+    container_name: open-wra-flask
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      DEBUG: 1
+      FLASK_DEBUG: 0
+      FLASK_APP: app
+      FLASK_RUN_PORT: 5010
+      SQLALCHEMY_DATABASE_URI: postgresql://postgres:postgres@pg:5432/db_wr
+      SQLALCHEMY_DATABASE_TEST_URI: postgresql://postgres:postgres@pg:5432/db_wr_test
+      SECRET_KEY: secret_key
+      SECURITY_PASSWORD_SALT: 333327544806887000460833891360313979066
+      SECURITY_PASSWORD_HASH: pbkdf2_sha512
+      JWT_SECRET_KEY: the_key
+      MAIL_SERVER: smtp.gmail.com
+      MAIL_PORT: 465
+      MAIL_USE_SSL: 1
+      MAIL_USE_TLS: 0
+      MAIL_USERNAME:
+      MAIL_PASSWORD:
+      CORS_ORIGINS: "*"
+      FRONT_URL: localhost:8080
+      FIREBASE_STORAGE: custom.appspot.com
+      GCLOUD_PASSWD: 123456
+    ports:
+      - "5010:5010"
+    depends_on:
+      - pg
+    links:
+      - pg
+    volumes:
+      - ./app:/usr/src/app
+    networks:
+      - wranetwork
+
+  pg:
+    image: postgres:14.7-alpine
+    restart: always
+    environment:
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_DB: db_wr
+    ports:
+      - "5434:5432"
+    volumes:
+      - open-wra-vol:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - wranetwork
