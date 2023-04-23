@@ -1,5 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import backref, relationship
+from typing import List, Optional
+
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import Mapped, backref, mapped_column, relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from app.mod_team.models import Player
@@ -24,12 +26,11 @@ class TournamentTeam(Base, SerializerMixin):
         self.team_id = team_id
         self.entry_phase = entry_phase
 
-    tournament_id: int | Column = Column(Integer, ForeignKey("tournament.id"))
-    team_id: int | Column = Column(Integer, ForeignKey("team.id"))
-    entry_phase: str | Column = Column(String)
+    tournament_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament.id"))
+    team_id: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    entry_phase: Mapped[Optional[str]] = mapped_column(String)
 
-    tournament: list = relationship("Tournament", back_populates="teams")
-    team = relationship("Team", back_populates="lineups")
-    players: list[Player] = relationship(
-        "Player", secondary="tournament_lineup", backref=backref("lineups", lazy="dynamic")
+    tournament: Mapped[Optional[List["Tournament"]]] = relationship(backref="teams")  # noqa: F821
+    players: Mapped[Optional[list["Player"]]] = relationship(
+        secondary="tournament_lineup", backref=backref("lineups", lazy="dynamic")
     )

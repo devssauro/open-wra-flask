@@ -51,7 +51,7 @@ def get_team_stats():
             ).label("agt_loss"),
         )
         .filter(*filter_sv_data(request, "side"))
-        .outerjoin((Team, Team.id == SingleView.team_id))
+        .outerjoin(Team, Team.id == SingleView.team_id)
         .group_by(Team.id, Team.name, Team.tag)
     )
     agt = int(sum([t.agt for t in query]) / len(query))
@@ -105,10 +105,8 @@ def get_champion_stats():
         .order_by(Champion.name)
         .distinct()
         .outerjoin(
-            (
-                PicksBansPrioView,
-                Champion.id.in_([PicksBansPrioView.pick_id, PicksBansPrioView.ban_id]),
-            )
+            PicksBansPrioView,
+            Champion.id.in_([PicksBansPrioView.pick_id, PicksBansPrioView.ban_id]),
         )
     )
     args = []
@@ -181,7 +179,7 @@ def get_champion_stats():
             ).label("agt_loss"),
         )
         .filter(*filter_pb_data(request, "side"))
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.pick_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.pick_id)
         .group_by(Champion.id, Champion.name)
         .distinct()
         .order_by(Champion.name)
@@ -240,7 +238,7 @@ def get_champion_stats():
             func.count(PicksBansPrioView.pick_id).label("qty_bans"),
         )
         .filter(*filter_pb_data(request, "side"))
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.ban_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.ban_id)
         .group_by(Champion.id, Champion.name)
         .distinct()
         .order_by(Champion.name)
@@ -329,7 +327,7 @@ def get_player_stats():
             ).label("agt_loss"),
         )
         .filter(*filter_pb_data(request, "side"))
-        .outerjoin((Player, Player.id == PicksBansPrioView.player))
+        .outerjoin(Player, Player.id == PicksBansPrioView.player)
         .group_by(Player.id, PicksBansPrioView.role, Player.nickname)
         .order_by(Player.nickname)
     )

@@ -12,7 +12,7 @@ bp = Blueprint("matchup", __name__, url_prefix="/matchup")
 def get_matchups():
     args = request.args
     result: PaginatedMatchups = DBHandler.get_matchups(
-        tournament=args.getlist("tournament"),
+        tournament=[*args.getlist("tournament"), *args.getlist("t")],
         page=args.get("page", 1),
         per_page=args.get("per_page", 10),
     )

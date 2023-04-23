@@ -1,5 +1,7 @@
-from sqlalchemy import Column, Integer, String
+from typing import Optional
+
 from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy_serializer import SerializerMixin
 
 from app.mod_view.models.abstracts import ObjectiveFields
@@ -9,68 +11,68 @@ from db_config import db
 class SingleView(db.Model, ObjectiveFields, SerializerMixin):
     __tablename__ = "single_view"
 
-    id = Column(UUID, primary_key=True)
-    map_id = Column(Integer)
-    matchup_id = Column(Integer)
-    tournament_id = Column(Integer)
-    map_number = Column(Integer)
-    patch = Column(String)
-    team_id = Column(Integer)
-    side = Column(String)
-    length = Column(String)
-    length_sec = Column(String)
-    winner = Column(Integer)
-    winner_side = Column(String)
-    ban_1 = Column(Integer)
-    ban_2 = Column(Integer)
-    ban_3 = Column(Integer)
-    ban_4 = Column(Integer)
-    ban_5 = Column(Integer)
-    pick_1 = Column(Integer)
-    pick_2 = Column(Integer)
-    pick_3 = Column(Integer)
-    pick_4 = Column(Integer)
-    pick_5 = Column(Integer)
-    baron_pick = Column(Integer)
-    jungle_pick = Column(Integer)
-    mid_pick = Column(Integer)
-    dragon_pick = Column(Integer)
-    sup_pick = Column(Integer)
-    baron_kills = Column(Integer)
-    jungle_kills = Column(Integer)
-    mid_kills = Column(Integer)
-    dragon_kills = Column(Integer)
-    sup_kills = Column(Integer)
-    baron_deaths = Column(Integer)
-    jungle_deaths = Column(Integer)
-    mid_deaths = Column(Integer)
-    dragon_deaths = Column(Integer)
-    sup_deaths = Column(Integer)
-    baron_assists = Column(Integer)
-    jungle_assists = Column(Integer)
-    mid_assists = Column(Integer)
-    dragon_assists = Column(Integer)
-    sup_assists = Column(Integer)
-    baron_dmg_taken = Column(Integer)
-    jungle_dmg_taken = Column(Integer)
-    mid_dmg_taken = Column(Integer)
-    dragon_dmg_taken = Column(Integer)
-    sup_dmg_taken = Column(Integer)
-    baron_dmg_dealt = Column(Integer)
-    jungle_dmg_dealt = Column(Integer)
-    mid_dmg_dealt = Column(Integer)
-    dragon_dmg_dealt = Column(Integer)
-    sup_dmg_dealt = Column(Integer)
-    baron_total_gold = Column(Integer)
-    jungle_total_gold = Column(Integer)
-    mid_total_gold = Column(Integer)
-    dragon_total_gold = Column(Integer)
-    sup_total_gold = Column(Integer)
-    baron_player = Column(Integer)
-    jungle_player = Column(Integer)
-    mid_player = Column(Integer)
-    dragon_player = Column(Integer)
-    sup_player = Column(Integer)
-    player_first_blood = Column(Integer)
-    player_first_death = Column(Integer)
-    turrets_destroyed = Column(Integer)
+    uuid: Mapped[Optional[str]] = mapped_column(type_=UUID, primary_key=True)
+    map_id: Mapped[Optional[int]]
+    matchup_id: Mapped[Optional[int]]
+    tournament_id: Mapped[Optional[int]]
+    map_number: Mapped[Optional[int]]
+    patch: Mapped[Optional[int]]
+    team_id: Mapped[Optional[int]]
+    side: Mapped[Optional[str]]
+    length: Mapped[Optional[str]]
+    length_sec: Mapped[Optional[str]]
+    winner: Mapped[Optional[int]]
+    winner_side: Mapped[Optional[str]]
+    ban_1: Mapped[Optional[int]]
+    ban_2: Mapped[Optional[int]]
+    ban_3: Mapped[Optional[int]]
+    ban_4: Mapped[Optional[int]]
+    ban_5: Mapped[Optional[int]]
+    pick_1: Mapped[Optional[int]]
+    pick_2: Mapped[Optional[int]]
+    pick_3: Mapped[Optional[int]]
+    pick_4: Mapped[Optional[int]]
+    pick_5: Mapped[Optional[int]]
+    baron_pick: Mapped[Optional[int]]
+    jungle_pick: Mapped[Optional[int]]
+    mid_pick: Mapped[Optional[int]]
+    dragon_pick: Mapped[Optional[int]]
+    sup_pick: Mapped[Optional[int]]
+    baron_kills: Mapped[Optional[int]]
+    jungle_kills: Mapped[Optional[int]]
+    mid_kills: Mapped[Optional[int]]
+    dragon_kills: Mapped[Optional[int]]
+    sup_kills: Mapped[Optional[int]]
+    baron_deaths: Mapped[Optional[int]]
+    jungle_deaths: Mapped[Optional[int]]
+    mid_deaths: Mapped[Optional[int]]
+    dragon_deaths: Mapped[Optional[int]]
+    sup_deaths: Mapped[Optional[int]]
+    baron_assists: Mapped[Optional[int]]
+    jungle_assists: Mapped[Optional[int]]
+    mid_assists: Mapped[Optional[int]]
+    dragon_assists: Mapped[Optional[int]]
+    sup_assists: Mapped[Optional[int]]
+    baron_dmg_taken: Mapped[Optional[int]]
+    jungle_dmg_taken: Mapped[Optional[int]]
+    mid_dmg_taken: Mapped[Optional[int]]
+    dragon_dmg_taken: Mapped[Optional[int]]
+    sup_dmg_taken: Mapped[Optional[int]]
+    baron_dmg_dealt: Mapped[Optional[int]]
+    jungle_dmg_dealt: Mapped[Optional[int]]
+    mid_dmg_dealt: Mapped[Optional[int]]
+    dragon_dmg_dealt: Mapped[Optional[int]]
+    sup_dmg_dealt: Mapped[Optional[int]]
+    baron_total_gold: Mapped[Optional[int]]
+    jungle_total_gold: Mapped[Optional[int]]
+    mid_total_gold: Mapped[Optional[int]]
+    dragon_total_gold: Mapped[Optional[int]]
+    sup_total_gold: Mapped[Optional[int]]
+    baron_player: Mapped[Optional[int]]
+    jungle_player: Mapped[Optional[int]]
+    mid_player: Mapped[Optional[int]]
+    dragon_player: Mapped[Optional[int]]
+    sup_player: Mapped[Optional[int]]
+    player_first_blood: Mapped[Optional[int]]
+    player_first_death: Mapped[Optional[int]]
+    turrets_destroyed: Mapped[Optional[int]]

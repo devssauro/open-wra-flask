@@ -27,7 +27,7 @@ def get_players_by_role(role: str):
             {"id": c.id, "nickname": c.nickname}
             for c in Player.query.with_entities(Player.id, Player.nickname)
             .distinct()
-            .outerjoin((SingleView, role_pick[role] == Player.id))
+            .outerjoin(SingleView, role_pick[role] == Player.id)
             .filter(role_pick[role].is_not(None), *filter_sv_data(request))
             .order_by(Player.nickname)
         ]
@@ -534,7 +534,8 @@ def get_players_info(player_id: int):
             *role_pick[request.args["role"]]["columns"]
         )
         .outerjoin(
-            (Champion, Champion.id == role_pick[request.args["role"]]["champion"]),
+            Champion,
+            Champion.id == role_pick[request.args["role"]]["champion"],
         )
         .filter(role_pick[request.args["role"]]["column"] == player_id, *filter_sv_data(request))
         .group_by(Champion.id, Champion.name)

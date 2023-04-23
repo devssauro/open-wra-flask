@@ -1,7 +1,8 @@
 from datetime import datetime
+from typing import List, Optional
 
-from sqlalchemy import ARRAY, Boolean, Column, DateTime, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import ARRAY, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from db_config import Base
@@ -44,7 +45,10 @@ class Tournament(Base, SerializerMixin):
         split=None,
         phases: list | str = [],
         female_only: bool = False,
+        *args,
+        **kwargs
     ):
+        super(self.__class__, self).__init__(*args, **kwargs)
         self.name = name
         self.tag = tag
         self.region = region
@@ -56,16 +60,15 @@ class Tournament(Base, SerializerMixin):
         self.phases = phases
         self.female_only = female_only
 
-    name: str | Column = Column(String)
-    tag: str | Column = Column(String)
-    region: str | Column = Column(String)
-    start_date: datetime | Column = Column(DateTime)
-    end_date: datetime | Column = Column(DateTime)
-    split: int | Column = Column(Integer)
-    phases: list[str] | str = Column(ARRAY(String))
-    female_only: bool | Column = Column(Boolean, default=False)
-
-    teams: list = relationship("TournamentTeam", back_populates="tournament")
+    name: Mapped[Optional[str]]
+    tag: Mapped[Optional[str]]
+    region: Mapped[Optional[str]]
+    start_date: Mapped[Optional[datetime]]
+    end_date: Mapped[Optional[datetime]]
+    split: Mapped[Optional[int]]
+    phases: Mapped[Optional[List[str]]] = mapped_column(type_=ARRAY(String))
+    female_only: Mapped[Optional[bool]] = mapped_column(default=False)
+    matchups: Mapped["Matchup"] = relationship(backref="tournament")  # noqa: F821
 
     @staticmethod
     def from_payload(obj, **kwargs):

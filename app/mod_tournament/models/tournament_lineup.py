@@ -1,4 +1,7 @@
-from sqlalchemy import Column, ForeignKey, Integer
+from typing import Optional
+
+from sqlalchemy import ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy_serializer import SerializerMixin
 
 from db_config import Base
@@ -18,5 +21,5 @@ class TournamentLineup(Base, SerializerMixin):
         self.tournament_team_id = tournament_team_id
         self.player_id = player_id
 
-    tournament_team_id: int | Column = Column(Integer, ForeignKey("tournament_team.id"))
-    player_id: int | Column = Column(Integer, ForeignKey("player.id"))
+    tournament_team_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament_team.id"))
+    player_id: Mapped[Optional[int]] = mapped_column(ForeignKey("player.id"))

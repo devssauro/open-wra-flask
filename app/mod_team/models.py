@@ -1,7 +1,8 @@
 from enum import IntEnum, unique
+from typing import List, Optional
 
-from sqlalchemy import Column, Enum, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from sqlalchemy import Column, Enum, ForeignKey, String
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from db_config import Base
@@ -26,21 +27,15 @@ class Team(Base, SerializerMixin):
         self.flag = flag
         self.phase = phase
 
-    name: str | Column = Column(String)
-    tag: str | Column = Column(String)
-    flag: str | Column = Column(String)
-    phase: str | Column = Column(String)
+    name: Mapped[Optional[str]]
+    tag: Mapped[Optional[str]]
+    flag: Mapped[Optional[str]]
+    phase: Mapped[Optional[str]]
 
-    lineups: list = relationship("TournamentTeam", back_populates="team")
-    matchups_1: list = relationship(
-        "Matchup", foreign_keys="Matchup.team1_id", back_populates="team1"
-    )
-    matchups_2: list = relationship(
-        "Matchup", foreign_keys="Matchup.team2_id", back_populates="team2"
-    )
+    lineups: Mapped[List["TournamentTeam"]] = relationship(backref="team")  # noqa: F821
 
     @property
-    def matchups(self):
+    def matchups(self) -> list:  # noqa: F821
         return [*self.matchups_1, *self.matchups_2]
 
 
@@ -49,13 +44,15 @@ class Player(Base, SerializerMixin):
     serialize_only = ("id", "nickname", "flag")
 
     def __int__(self, nickname, team_id, flag, role):
+        super(Base).__init__()
+        super(SerializerMixin).__init__()
         self.nickname = nickname
         self.team_id = team_id
         self.flag = flag
         self.role = role
 
-    nickname: str | Column = Column(String)
-    team_id: int | Column = Column(Integer, ForeignKey("team.id"))
-    # team = relationship("Team", back_populates="players")
-    flag: str | Column = Column(String)
-    role: Role | Column = Column(Enum(Role))
+    nickname: Mapped[Optional[str]]
+    team_id: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    flag: Mapped[Optional[str]] = Column(String)
+    role: Mapped[Optional[Role]] = Column(type_=Enum(Role))
+    matchup_mvps: Mapped[List["Matchup"]] = relationship(backref="mvp")  # noqa: F821

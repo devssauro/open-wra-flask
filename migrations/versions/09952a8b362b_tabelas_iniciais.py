@@ -99,11 +99,11 @@ def upgrade():
         sa.Column("user_id", sa.Integer(), nullable=True),
         sa.Column("role_id", sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["role_id"],
+            ("role_id",),
             ["auth_role.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["user_id"],
+            ("user_id",),
             ["auth_user.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
@@ -125,7 +125,7 @@ def upgrade():
             "role", sa.Enum("baron", "jungle", "mid", "dragon", "sup", name="role"), nullable=True
         ),
         sa.ForeignKeyConstraint(
-            ["team_id"],
+            ("team_id",),
             ["team.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
@@ -146,15 +146,15 @@ def upgrade():
         sa.Column("team1_id", sa.Integer(), nullable=True),
         sa.Column("team2_id", sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["mvp_id"],
+            ("mvp_id",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["team1_id"],
+            ("team1_id",),
             ["team.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["team2_id"],
+            ("team2_id",),
             ["team.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
@@ -277,179 +277,179 @@ def upgrade():
         sa.Column("red_dragon_total_gold", sa.Integer(), nullable=True),
         sa.Column("red_sup_total_gold", sa.Integer(), nullable=True),
         sa.ForeignKeyConstraint(
-            ["blue_ban_1"],
+            ("blue_ban_1",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_ban_2"],
+            ("blue_ban_2",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_ban_3"],
+            ("blue_ban_3",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_ban_4"],
+            ("blue_ban_4",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_ban_5"],
+            ("blue_ban_5",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_baron_pick"],
+            ("blue_baron_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_baron_player"],
+            ("blue_baron_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_dragon_pick"],
+            ("blue_dragon_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_dragon_player"],
+            ("blue_dragon_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_jungle_pick"],
+            ("blue_jungle_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_jungle_player"],
+            ("blue_jungle_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_mid_pick"],
+            ("blue_mid_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_mid_player"],
+            ("blue_mid_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_pick_1"],
+            ("blue_pick_1",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_pick_2"],
+            ("blue_pick_2",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_pick_3"],
+            ("blue_pick_3",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_pick_4"],
+            ("blue_pick_4",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_pick_5"],
+            ("blue_pick_5",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_side"],
+            ("blue_side",),
             ["team.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_sup_pick"],
+            ("blue_sup_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["blue_sup_player"],
+            ("blue_sup_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["matchup_id"],
+            ("matchup_id",),
             ["matchup.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_ban_1"],
+            ("red_ban_1",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_ban_2"],
+            ("red_ban_2",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_ban_3"],
+            ("red_ban_3",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_ban_4"],
+            ("red_ban_4",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_ban_5"],
+            ("red_ban_5",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_baron_pick"],
+            ("red_baron_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_baron_player"],
+            ("red_baron_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_dragon_pick"],
+            ("red_dragon_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_dragon_player"],
+            ("red_dragon_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_jungle_pick"],
+            ("red_jungle_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_jungle_player"],
+            ("red_jungle_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_mid_pick"],
+            ("red_mid_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_mid_player"],
+            ("red_mid_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_pick_1"],
+            ("red_pick_1",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_pick_2"],
+            ("red_pick_2",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_pick_3"],
+            ("red_pick_3",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_pick_4"],
+            ("red_pick_4",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_pick_5"],
+            ("red_pick_5",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_side"],
+            ("red_side",),
             ["team.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_sup_pick"],
+            ("red_sup_pick",),
             ["champion.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["red_sup_player"],
+            ("red_sup_player",),
             ["player.id"],
         ),
         sa.ForeignKeyConstraint(
-            ["winner"],
+            ("winner",),
             ["team.id"],
         ),
         sa.PrimaryKeyConstraint("id"),
@@ -465,8 +465,8 @@ def downgrade():
     op.drop_table("player")
     op.drop_table("auth_role_user")
     op.drop_table("team")
-    op.drop_table("single_view")
     op.drop_table("champion")
     op.drop_table("auth_user")
     op.drop_table("auth_role")
+    op.execute("""DROP TYPE role""")
     # ### end Alembic commands ###

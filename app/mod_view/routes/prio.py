@@ -363,7 +363,7 @@ def get_pick_rotation():
             PicksBansPrioView.side.label("side"),
             func.sum(case((PicksBansPrioView.winner, 1), else_=0)).label("qty_win"),
         )
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.pick_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.pick_id)
         .filter(*data)
         .group_by(
             Champion.id, Champion.name, PicksBansPrioView.pick_rotation, PicksBansPrioView.side
@@ -415,7 +415,7 @@ def get_ban_rotation():
             PicksBansPrioView.side.label("side"),
             func.sum(case((PicksBansPrioView.winner, 1), else_=0)).label("qty_win"),
         )
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.ban_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.ban_id)
         .filter(*filter_pb_data(request, "side"), Champion.id.isnot(None))
         .group_by(
             Champion.id, Champion.name, PicksBansPrioView.ban_rotation, PicksBansPrioView.side
@@ -469,7 +469,7 @@ def get_champions_presence():
         )
         .order_by(Champion.name)
         .distinct()
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.pick_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.pick_id)
     )
 
     pick_presence = (
@@ -480,7 +480,7 @@ def get_champions_presence():
             func.count(PicksBansPrioView.pick_id).label("qty_picks"),
             func.sum(func.cast(PicksBansPrioView.winner, Integer)).label("qty_win"),
         )
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.pick_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.pick_id)
         .filter(*filter_pb_data(request), Champion.id.isnot(None))
         .group_by(Champion.id, Champion.name, PicksBansPrioView.role)
         .order_by(func.count(PicksBansPrioView.pick_id).desc(), Champion.name)
@@ -501,7 +501,7 @@ def get_champions_presence():
             Champion.name.label("champion_name"),
             func.count(PicksBansPrioView.ban_id).label("qty_bans"),
         )
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.ban_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.ban_id)
         .filter(*filter_pb_data(request), Champion.id.isnot(None))
         .group_by(
             Champion.id,

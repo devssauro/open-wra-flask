@@ -52,7 +52,7 @@ class MatchupHandler:
         args = []
         if tournament is not None:
             if isinstance(tournament, int):
-                tournament = [tournament]
+                tournament = [int(tournament)]
             args.append(Matchup.tournament_id.in_(tournament))  # type: ignore
         query = (
             Matchup.query.filter(*args)

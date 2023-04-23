@@ -1,5 +1,13 @@
-from sqlalchemy import Column, ForeignKey, Integer, String
-from sqlalchemy.orm import declarative_mixin, relationship
+from typing import Optional
+
+from sqlalchemy import ForeignKey, String
+from sqlalchemy.orm import (
+    Mapped,
+    declarative_mixin,
+    declared_attr,
+    mapped_column,
+    relationship,
+)
 from sqlalchemy_serializer import SerializerMixin
 
 from app.mod_tournament.models.abstracts import (
@@ -49,18 +57,19 @@ class Objectives(
     SecondDrake,
     ThirdDrake,
 ):
-
-    __table_args__ = tuple(
-        [
-            *FirstBlood.__table_args__,
-            *FirstTower.__table_args__,
-            *FirstHerald.__table_args__,
-            *SecondHerald.__table_args__,
-            *FirstDrake.__table_args__,
-            *SecondDrake.__table_args__,
-            *ThirdDrake.__table_args__,
-        ]
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return tuple(
+            [
+                *FirstBlood.__table_args__,
+                *FirstTower.__table_args__,
+                *FirstHerald.__table_args__,
+                *SecondHerald.__table_args__,
+                *FirstDrake.__table_args__,
+                *SecondDrake.__table_args__,
+                *ThirdDrake.__table_args__,
+            ]
+        )
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -89,13 +98,16 @@ class MatchupMap(
     """Class to represent a map in a matchup"""
 
     __tablename__ = "matchup_map"
-    __table_args__ = tuple(
-        [
-            *Draft.__table_args__,
-            *Players.__table_args__,
-            *Objectives.__table_args__,
-        ],
-    )
+
+    @declared_attr
+    def __table_args__(cls):
+        return tuple(
+            [
+                *Draft.__table_args__,
+                *Players.__table_args__,
+                *Objectives.__table_args__,
+            ],
+        )
 
     def __init__(
         self,
@@ -126,20 +138,19 @@ class MatchupMap(
         self.red_turrets_destroyed = red_turrets_destroyed
         super().__init__()
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    matchup_id = Column(Integer, ForeignKey("matchup.id"))
-    matchup = relationship("Matchup", back_populates="maps")
-    tournament_id = Column(Integer, ForeignKey("tournament.id"))
-    vod_link = Column(String)
-    map_number = Column(Integer)
-    patch = Column(String)
-    blue_side = Column(Integer, ForeignKey("team.id"))
-    red_side = Column(Integer, ForeignKey("team.id"))
-    length = Column(String)
-    winner = Column(Integer, ForeignKey("team.id"))
-    winner_side = Column(String)
-    blue_turrets_destroyed = Column(Integer, default=0)
-    red_turrets_destroyed = Column(Integer, default=0)
+    matchup_id: Mapped[Optional[int]] = mapped_column(ForeignKey("matchup.id"))
+    matchup: Mapped["Matchup"] = relationship(backref="maps")  # noqa: F821
+    tournament_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament.id"))
+    vod_link: Mapped[Optional[str]]
+    map_number: Mapped[Optional[int]]
+    patch: Mapped[Optional[str]]
+    blue_side: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    red_side: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    length: Mapped[Optional[str]] = mapped_column(String)
+    winner: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    winner_side: Mapped[Optional[str]] = mapped_column(String)
+    blue_turrets_destroyed: Mapped[Optional[int]] = mapped_column(default=0)
+    red_turrets_destroyed: Mapped[Optional[int]] = mapped_column(default=0)
 
     @staticmethod
     def from_payload(obj=None, **kwargs):

@@ -2,25 +2,11 @@ from datetime import datetime
 from uuid import uuid4
 
 import pytest
-from alembic import command
-from alembic.config import Config
-from decouple import config
 from flask import Flask
 from flask_security import hash_password
 
 from app import create_app
 from app.mod_auth.models import Role, User
-
-
-@pytest.fixture(autouse=True)
-def create_test_database():
-    """Create fresh test database for each test in this package"""
-    c = Config("migrations/alembic.ini")
-    c.set_main_option("script_location", "migrations")
-    c.set_main_option("sqlalchemy.url", config("SQLALCHEMY_DATABASE_TEST_URI"))
-    command.upgrade(c, "head")
-    yield
-    command.downgrade(c, "base")
 
 
 @pytest.fixture
@@ -38,7 +24,7 @@ def app() -> Flask:
 
 
 @pytest.fixture
-def sample_app(app, create_test_database):
+def sample_app(app):
     """Sample app in test client for automated testing."""
     return app.test_client()
 

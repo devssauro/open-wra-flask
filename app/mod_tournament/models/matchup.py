@@ -1,5 +1,8 @@
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
-from sqlalchemy.orm import relationship
+from datetime import datetime
+from typing import Optional
+
+from sqlalchemy import Boolean, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column, relationship
 from sqlalchemy_serializer import SerializerMixin
 
 from app.exceptions import GlobalBanError
@@ -36,7 +39,7 @@ class Matchup(Base, SerializerMixin):
 
     def __int__(
         self,
-        datetime,
+        date_time,
         phase,
         mvp,
         team1,
@@ -46,7 +49,7 @@ class Matchup(Base, SerializerMixin):
         with_global_ban,
         last_no_global_ban,
     ):
-        self.datetime = datetime
+        self.date_time = date_time
         self.phase = phase
         self.mvp_id = mvp
         self.team1_id = team1
@@ -56,20 +59,22 @@ class Matchup(Base, SerializerMixin):
         self.with_global_ban = with_global_ban
         self.last_no_global_ban = last_no_global_ban
 
-    phase = Column(String)
-    datetime = Column(DateTime)
-    mvp_id = Column(Integer, ForeignKey("player.id"))
-    tournament_id = Column(Integer, ForeignKey("tournament.id"))
-    team1_id = Column(Integer, ForeignKey("team.id"))
-    team1 = relationship("Team", foreign_keys=[team1_id], back_populates="matchups_1")
-    team2_id = Column(Integer, ForeignKey("team.id"))
-    team2 = relationship("Team", foreign_keys=[team2_id], back_populates="matchups_2")
-    bo_size = Column(Integer)
-    vod_link = Column(String)
-    with_global_ban = Column(Boolean, default=False)
-    last_no_global_ban = Column(Boolean, default=False)
-
-    maps: list[MatchupMap] = relationship("MatchupMap", back_populates="matchup")
+    phase: Mapped[Optional[str]]
+    datetime: Mapped[Optional[datetime]]
+    mvp_id: Mapped[Optional[int]] = mapped_column(ForeignKey("player.id"))
+    tournament_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament.id"))
+    team1_id: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    team1: Mapped["Team"] = relationship(  # noqa: F821
+        foreign_keys=[team1_id], backref="matchups_1"
+    )  # noqa: F821
+    team2_id: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
+    team2: Mapped["Team"] = relationship(  # noqa: F821
+        foreign_keys=[team2_id], backref="matchups_2"
+    )  # noqa: F821
+    bo_size: Mapped[Optional[int]]
+    vod_link: Mapped[Optional[str]]
+    with_global_ban: Mapped[Optional[bool]] = mapped_column(default=False)
+    last_no_global_ban: Mapped[Optional[bool]] = mapped_column(Boolean, default=False)
 
     def add_map(self, matchup_map: MatchupMap) -> bool:
         """Verify if the matchup has global ban and if it has some conflict with last maps"""

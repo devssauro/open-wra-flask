@@ -1,5 +1,7 @@
-from sqlalchemy import Boolean, Column, Enum, ForeignKeyConstraint, Integer, String
-from sqlalchemy.orm import declarative_mixin
+from typing import Optional
+
+from sqlalchemy import ForeignKeyConstraint
+from sqlalchemy.orm import Mapped, declarative_mixin, declared_attr, mapped_column
 
 from app.exceptions import DraftIntegrityError, LineupIntegrityError
 from app.mod_team.models import Role
@@ -24,31 +26,33 @@ ALL_RED_PICKS = tuple(f"red_pick_{position}" for position in range(1, 6))
 class PicksBans:
     """All picks and bans from a matchup"""
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint((pick_ban,), ("champion.id",), f"matchup_map_{pick_ban}_fkey")
-        for pick_ban in ALL_PICKS_BANS
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return tuple(
+            ForeignKeyConstraint([pick_ban], ["champion.id"], f"matchup_map_{pick_ban}_fkey")
+            for pick_ban in ALL_PICKS_BANS
+        )
 
-    blue_ban_1 = Column("blue_ban_1", Integer)
-    red_ban_1 = Column("red_ban_1", Integer)
-    blue_ban_2 = Column("blue_ban_2", Integer)
-    red_ban_2 = Column("red_ban_2", Integer)
-    blue_ban_3 = Column("blue_ban_3", Integer)
-    red_ban_3 = Column("red_ban_3", Integer)
-    blue_pick_1 = Column("blue_pick_1", Integer)
-    red_pick_1 = Column("red_pick_1", Integer)
-    red_pick_2 = Column("red_pick_2", Integer)
-    blue_pick_2 = Column("blue_pick_2", Integer)
-    blue_pick_3 = Column("blue_pick_3", Integer)
-    red_pick_3 = Column("red_pick_3", Integer)
-    red_ban_4 = Column("red_ban_4", Integer)
-    blue_ban_4 = Column("blue_ban_4", Integer)
-    red_ban_5 = Column("red_ban_5", Integer)
-    blue_ban_5 = Column("blue_ban_5", Integer)
-    red_pick_4 = Column("red_pick_4", Integer)
-    blue_pick_4 = Column("blue_pick_4", Integer)
-    blue_pick_5 = Column("blue_pick_5", Integer)
-    red_pick_5 = Column("red_pick_5", Integer)
+    blue_ban_1: Mapped[Optional[int]]
+    red_ban_1: Mapped[Optional[int]]
+    blue_ban_2: Mapped[Optional[int]]
+    red_ban_2: Mapped[Optional[int]]
+    blue_ban_3: Mapped[Optional[int]]
+    red_ban_3: Mapped[Optional[int]]
+    blue_pick_1: Mapped[Optional[int]]
+    red_pick_1: Mapped[Optional[int]]
+    red_pick_2: Mapped[Optional[int]]
+    blue_pick_2: Mapped[Optional[int]]
+    blue_pick_3: Mapped[Optional[int]]
+    red_pick_3: Mapped[Optional[int]]
+    red_ban_4: Mapped[Optional[int]]
+    blue_ban_4: Mapped[Optional[int]]
+    red_ban_5: Mapped[Optional[int]]
+    blue_ban_5: Mapped[Optional[int]]
+    red_pick_4: Mapped[Optional[int]]
+    blue_pick_4: Mapped[Optional[int]]
+    blue_pick_5: Mapped[Optional[int]]
+    red_pick_5: Mapped[Optional[int]]
 
     @staticmethod
     def from_payload(obj=None, **kwargs):
@@ -89,23 +93,23 @@ class Draft(PicksBans):
     __table_args__ = tuple(
         [
             *[
-                ForeignKeyConstraint((pick,), ("champion.id",), f"matchup_map_{pick}_fkey")
+                ForeignKeyConstraint([pick], ["champion.id"], f"matchup_map_{pick}_fkey")
                 for pick in ALL_PICKS
             ],
             *PicksBans.__table_args__,
         ]
     )
 
-    blue_baron_pick = Column(Integer)
-    blue_jungle_pick = Column(Integer)
-    blue_mid_pick = Column(Integer)
-    blue_dragon_pick = Column(Integer)
-    blue_sup_pick = Column(Integer)
-    red_baron_pick = Column(Integer)
-    red_mid_pick = Column(Integer)
-    red_jungle_pick = Column(Integer)
-    red_dragon_pick = Column(Integer)
-    red_sup_pick = Column(Integer)
+    blue_baron_pick: Mapped[Optional[int]]
+    blue_jungle_pick: Mapped[Optional[int]]
+    blue_mid_pick: Mapped[Optional[int]]
+    blue_dragon_pick: Mapped[Optional[int]]
+    blue_sup_pick: Mapped[Optional[int]]
+    red_baron_pick: Mapped[Optional[int]]
+    red_mid_pick: Mapped[Optional[int]]
+    red_jungle_pick: Mapped[Optional[int]]
+    red_dragon_pick: Mapped[Optional[int]]
+    red_sup_pick: Mapped[Optional[int]]
 
     @staticmethod
     def from_payload(obj=None, **kwargs):
@@ -148,21 +152,23 @@ class Draft(PicksBans):
 
 @declarative_mixin
 class Players:
-    __table_args__ = tuple(
-        ForeignKeyConstraint((player,), ("player.id",), f"matchup_map_{player}_fkey")
-        for player in ALL_PLAYERS
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return tuple(
+            ForeignKeyConstraint([player], ["player.id"], f"matchup_map_{player}_fkey")
+            for player in ALL_PLAYERS
+        )
 
-    blue_baron_player = Column(Integer)
-    blue_jungle_player = Column(Integer)
-    blue_mid_player = Column(Integer)
-    blue_dragon_player = Column(Integer)
-    blue_sup_player = Column(Integer)
-    red_baron_player = Column(Integer)
-    red_mid_player = Column(Integer)
-    red_jungle_player = Column(Integer)
-    red_dragon_player = Column(Integer)
-    red_sup_player = Column(Integer)
+    blue_baron_player: Mapped[Optional[int]]
+    blue_jungle_player: Mapped[Optional[int]]
+    blue_mid_player: Mapped[Optional[int]]
+    blue_dragon_player: Mapped[Optional[int]]
+    blue_sup_player: Mapped[Optional[int]]
+    red_baron_player: Mapped[Optional[int]]
+    red_mid_player: Mapped[Optional[int]]
+    red_jungle_player: Mapped[Optional[int]]
+    red_dragon_player: Mapped[Optional[int]]
+    red_sup_player: Mapped[Optional[int]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -187,36 +193,36 @@ class Players:
 
 @declarative_mixin
 class KDA:
-    blue_baron_kills = Column(Integer, default=0)
-    blue_jungle_kills = Column(Integer, default=0)
-    blue_mid_kills = Column(Integer, default=0)
-    blue_dragon_kills = Column(Integer, default=0)
-    blue_sup_kills = Column(Integer, default=0)
-    red_baron_kills = Column(Integer, default=0)
-    red_jungle_kills = Column(Integer, default=0)
-    red_mid_kills = Column(Integer, default=0)
-    red_dragon_kills = Column(Integer, default=0)
-    red_sup_kills = Column(Integer, default=0)
-    blue_baron_deaths = Column(Integer, default=0)
-    blue_jungle_deaths = Column(Integer, default=0)
-    blue_mid_deaths = Column(Integer, default=0)
-    blue_dragon_deaths = Column(Integer, default=0)
-    blue_sup_deaths = Column(Integer, default=0)
-    red_baron_deaths = Column(Integer, default=0)
-    red_jungle_deaths = Column(Integer, default=0)
-    red_mid_deaths = Column(Integer, default=0)
-    red_dragon_deaths = Column(Integer, default=0)
-    red_sup_deaths = Column(Integer, default=0)
-    blue_baron_assists = Column(Integer, default=0)
-    blue_jungle_assists = Column(Integer, default=0)
-    blue_mid_assists = Column(Integer, default=0)
-    blue_dragon_assists = Column(Integer, default=0)
-    blue_sup_assists = Column(Integer, default=0)
-    red_baron_assists = Column(Integer, default=0)
-    red_jungle_assists = Column(Integer, default=0)
-    red_mid_assists = Column(Integer, default=0)
-    red_dragon_assists = Column(Integer, default=0)
-    red_sup_assists = Column(Integer, default=0)
+    blue_baron_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_jungle_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_mid_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_dragon_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_sup_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    red_baron_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    red_jungle_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    red_mid_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    red_dragon_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    red_sup_kills: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_baron_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_jungle_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_mid_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_dragon_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_sup_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    red_baron_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    red_jungle_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    red_mid_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    red_dragon_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    red_sup_deaths: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_baron_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_jungle_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_mid_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_dragon_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_sup_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    red_baron_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    red_jungle_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    red_mid_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    red_dragon_assists: Mapped[Optional[int]] = mapped_column(default=0)
+    red_sup_assists: Mapped[Optional[int]] = mapped_column(default=0)
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -257,16 +263,16 @@ class KDA:
 
 @declarative_mixin
 class DamageTaken:
-    blue_baron_dmg_taken = Column(Integer, default=0)
-    blue_jungle_dmg_taken = Column(Integer, default=0)
-    blue_mid_dmg_taken = Column(Integer, default=0)
-    blue_dragon_dmg_taken = Column(Integer, default=0)
-    blue_sup_dmg_taken = Column(Integer, default=0)
-    red_baron_dmg_taken = Column(Integer, default=0)
-    red_jungle_dmg_taken = Column(Integer, default=0)
-    red_mid_dmg_taken = Column(Integer, default=0)
-    red_dragon_dmg_taken = Column(Integer, default=0)
-    red_sup_dmg_taken = Column(Integer, default=0)
+    blue_baron_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_jungle_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_mid_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_dragon_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_sup_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    red_baron_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    red_jungle_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    red_mid_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    red_dragon_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
+    red_sup_dmg_taken: Mapped[Optional[int]] = mapped_column(default=0)
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -286,16 +292,16 @@ class DamageTaken:
 
 @declarative_mixin
 class DamageDealt:
-    blue_baron_dmg_dealt = Column(Integer, default=0)
-    blue_jungle_dmg_dealt = Column(Integer, default=0)
-    blue_mid_dmg_dealt = Column(Integer, default=0)
-    blue_dragon_dmg_dealt = Column(Integer, default=0)
-    blue_sup_dmg_dealt = Column(Integer, default=0)
-    red_baron_dmg_dealt = Column(Integer, default=0)
-    red_jungle_dmg_dealt = Column(Integer, default=0)
-    red_mid_dmg_dealt = Column(Integer, default=0)
-    red_dragon_dmg_dealt = Column(Integer, default=0)
-    red_sup_dmg_dealt = Column(Integer, default=0)
+    blue_baron_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_jungle_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_mid_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_dragon_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_sup_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    red_baron_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    red_jungle_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    red_mid_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    red_dragon_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
+    red_sup_dmg_dealt: Mapped[Optional[int]] = mapped_column(default=0)
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -315,16 +321,16 @@ class DamageDealt:
 
 @declarative_mixin
 class TotalGold:
-    blue_baron_total_gold = Column(Integer, default=0)
-    blue_jungle_total_gold = Column(Integer, default=0)
-    blue_mid_total_gold = Column(Integer, default=0)
-    blue_dragon_total_gold = Column(Integer, default=0)
-    blue_sup_total_gold = Column(Integer, default=0)
-    red_baron_total_gold = Column(Integer, default=0)
-    red_jungle_total_gold = Column(Integer, default=0)
-    red_mid_total_gold = Column(Integer, default=0)
-    red_dragon_total_gold = Column(Integer, default=0)
-    red_sup_total_gold = Column(Integer, default=0)
+    blue_baron_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_jungle_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_mid_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_dragon_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    blue_sup_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    red_baron_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    red_jungle_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    red_mid_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    red_dragon_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
+    red_sup_total_gold: Mapped[Optional[int]] = mapped_column(default=0)
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -344,23 +350,30 @@ class TotalGold:
 
 @declarative_mixin
 class FirstBlood:
-
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            tuple(["team_first_blood", "player_first_blood", "player_first_death"]),
-            ("team.id", "player.id", "player.id"),
-            [
+    @declared_attr
+    def __table_args__(cls):
+        return (
+            ForeignKeyConstraint(
+                ["team_first_blood"],
+                ["team.id"],
                 "matchup_map_team_first_blood_fkey",
+            ),
+            ForeignKeyConstraint(
+                ["player_first_blood"],
+                ["player.id"],
                 "matchup_map_player_first_blood_fkey",
+            ),
+            ForeignKeyConstraint(
+                ["player_first_death"],
+                ["player.id"],
                 "matchup_map_player_first_death_fkey",
-            ],
+            ),
         )
-    )
 
-    team_first_blood = Column(Integer)
-    player_first_blood = Column(Integer)
-    player_first_death = Column(Integer)
-    place_first_blood = Column(String)
+    team_first_blood: Mapped[Optional[int]]
+    player_first_blood: Mapped[Optional[int]]
+    player_first_death: Mapped[Optional[int]]
+    place_first_blood: Mapped[Optional[str]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -374,18 +387,19 @@ class FirstBlood:
 
 @declarative_mixin
 class FirstTower:
+    @declared_attr
+    def __table_args__(cls):
+        return [
+            ForeignKeyConstraint(
+                ["team_first_tower"],
+                ["team.id"],
+                "matchup_map_team_first_tower_fkey",
+            ),
+        ]
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            ("team_first_tower",),
-            ("team.id",),
-            "matchup_map_team_first_tower_fkey",
-        ),
-    )
-
-    team_first_tower = Column(Integer)
-    first_tower_route = Column(Enum(Role))
-    first_tower_herald = Column(Boolean, default=False)
+    team_first_tower: Mapped[Optional[int]]
+    first_tower_route: Mapped[Optional[Role]]
+    first_tower_herald: Mapped[Optional[bool]] = mapped_column(default=False)
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -406,18 +420,20 @@ class FirstHerald:
         first_herald_stealed (bool): If the herald was stealed
     """
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            ("team_first_herald",),
-            ("team.id",),
-            "matchup_map_team_first_herald_fkey",
-        ),
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return [
+            ForeignKeyConstraint(
+                ["team_first_herald"],
+                ["team.id"],
+                "matchup_map_team_first_herald_fkey",
+            ),
+        ]
 
-    team_first_herald = Column(Integer)
-    first_herald_teamfight = Column(Boolean, default=False)
-    first_herald_stealed = Column(Boolean, default=False)
-    first_herald_route = Column(String)
+    team_first_herald: Mapped[Optional[int]]
+    first_herald_teamfight: Mapped[Optional[bool]] = mapped_column(default=False)
+    first_herald_stealed: Mapped[Optional[bool]] = mapped_column(default=False)
+    first_herald_route: Mapped[Optional[str]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -439,23 +455,25 @@ class SecondHerald:
         second_herald_stealed (bool): If the herald was stealed
     """
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            ("team_second_herald",),
-            ("team.id",),
-            "matchup_map_team_second_herald_fkey",
-        ),
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return [
+            ForeignKeyConstraint(
+                ["team_second_herald"],
+                ["team.id"],
+                "matchup_map_team_second_herald_fkey",
+            ),
+        ]
 
-    team_second_herald = Column(Integer)
-    second_herald_teamfight = Column(Boolean, default=False)
-    second_herald_stealed = Column(Boolean, default=False)
-    second_herald_route = Column(String)
+    team_second_herald: Mapped[Optional[int]]
+    second_herald_teamfight: Mapped[Optional[bool]] = mapped_column(default=False)
+    second_herald_stealed: Mapped[Optional[bool]] = mapped_column(default=False)
+    second_herald_route: Mapped[Optional[str]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
         if obj is None:
-            obj = SecondHerald()
+            obj = FirstHerald()
         obj.team_second_herald = kwargs.get("team_second_herald")
         obj.second_herald_teamfight = kwargs.get("second_herald_teamfight")
         obj.second_herald_stealed = kwargs.get("second_herald_stealed")
@@ -472,18 +490,20 @@ class FirstDrake:
         first_drake_stealed (bool): If the drake was stealed
     """
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            ("team_first_drake",),
-            ("team.id",),
-            "matchup_map_team_first_drake_fkey",
-        ),
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return [
+            ForeignKeyConstraint(
+                ["team_first_drake"],
+                ["team.id"],
+                "matchup_map_team_first_drake_fkey",
+            ),
+        ]
 
-    team_first_drake = Column(Integer)
-    first_drake_teamfight = Column(Boolean, default=False)
-    first_drake_stealed = Column(Boolean, default=False)
-    first_drake_type = Column(String)
+    team_first_drake: Mapped[Optional[int]]
+    first_drake_teamfight: Mapped[Optional[bool]] = mapped_column(default=False)
+    first_drake_stealed: Mapped[Optional[bool]] = mapped_column(default=False)
+    first_drake_type: Mapped[Optional[str]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
@@ -505,23 +525,25 @@ class SecondDrake:
         second_drake_stealed (bool): If the drake was stealed
     """
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            ("team_second_drake",),
-            ("team.id",),
-            "matchup_map_team_second_drake_fkey",
-        ),
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return [
+            ForeignKeyConstraint(
+                ["team_second_drake"],
+                ["team.id"],
+                "matchup_map_team_second_drake_fkey",
+            ),
+        ]
 
-    team_second_drake = Column(Integer)
-    second_drake_teamfight = Column(Boolean, default=False)
-    second_drake_stealed = Column(Boolean, default=False)
-    second_drake_type = Column(String)
+    team_second_drake: Mapped[Optional[int]]
+    second_drake_teamfight: Mapped[Optional[bool]] = mapped_column(default=False)
+    second_drake_stealed: Mapped[Optional[bool]] = mapped_column(default=False)
+    second_drake_type: Mapped[Optional[str]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
         if obj is None:
-            obj = SecondDrake()
+            obj = FirstDrake()
         obj.team_second_drake = kwargs.get("team_second_drake")
         obj.second_drake_teamfight = kwargs.get("second_drake_teamfight")
         obj.second_drake_stealed = kwargs.get("second_drake_stealed")
@@ -538,23 +560,25 @@ class ThirdDrake:
         third_drake_stealed (bool): If the drake was stealed
     """
 
-    __table_args__ = tuple(
-        ForeignKeyConstraint(
-            ("team_third_drake",),
-            ("team.id",),
-            "matchup_map_team_third_drake_fkey",
-        ),
-    )
+    @declared_attr
+    def __table_args__(cls):
+        return [
+            ForeignKeyConstraint(
+                ["team_third_drake"],
+                ["team.id"],
+                "matchup_map_team_third_drake_fkey",
+            ),
+        ]
 
-    team_third_drake = Column(Integer)
-    third_drake_teamfight = Column(Boolean, default=False)
-    third_drake_stealed = Column(Boolean, default=False)
-    third_drake_type = Column(String)
+    team_third_drake: Mapped[Optional[int]]
+    third_drake_teamfight: Mapped[Optional[bool]] = mapped_column(default=False)
+    third_drake_stealed: Mapped[Optional[bool]] = mapped_column(default=False)
+    third_drake_type: Mapped[Optional[str]]
 
     @staticmethod
     def from_payload(obj, **kwargs):
         if obj is None:
-            obj = ThirdDrake()
+            obj = FirstDrake()
         obj.team_third_drake = kwargs.get("team_third_drake")
         obj.third_drake_teamfight = kwargs.get("third_drake_teamfight")
         obj.third_drake_stealed = kwargs.get("third_drake_stealed")

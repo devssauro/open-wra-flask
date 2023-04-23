@@ -7,6 +7,7 @@ def bp():
     from .routes import teams
 
     _bp.register_blueprint(teams.bp)
+
     from .routes import players
 
     _bp.register_blueprint(players.bp)

@@ -9,7 +9,7 @@ bp = Blueprint("patch", __name__, url_prefix="/")
 def get_patches():
     args = request.args
     patches = DBHandler.get_patches(
-        tournament=args.getlist("tournament"),
+        tournament=[*args.getlist("tournament"), *args.getlist("t")],
         team=args.getlist("team"),
     )
 

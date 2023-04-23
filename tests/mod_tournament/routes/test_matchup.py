@@ -122,9 +122,11 @@ class TestMatchupTeamGet:
             sample_app (App): The Flask application
         """
         with (
+            patch("app.db_handler.DBHandler.get_matchup_by_id") as get_matchup_by_id,
             patch("app.db_handler.DBHandler.get_teams_from_matchup") as get_teams_from_matchup,
             patch("flask_login.utils._get_user") as _get_user,
         ):
+            get_matchup_by_id.return_value = sample_matchup_1
             get_teams_from_matchup.return_value = sample_lieneupteam_list_sample
             _get_user.return_value = sample_admin_user
             response = sample_app.get(f"/v1/matchup/{sample_matchup_1.id}/teams")

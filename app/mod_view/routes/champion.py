@@ -37,7 +37,7 @@ def get_champions():
     query = (
         PicksBansPrioView.query.with_entities(Champion.id, Champion.name, PicksBansPrioView.role)
         .distinct()
-        .outerjoin((Champion, Champion.id == PicksBansPrioView.pick_id))
+        .outerjoin(Champion, Champion.id == PicksBansPrioView.pick_id)
         .filter(*filter_pb_data(request, "team"))
         .order_by(Champion.name)
     )
@@ -200,7 +200,7 @@ def get_all_matches(champion_id: int):
                     "qty_win"
                 ),
             )
-            .outerjoin((Champion, Champion.id == role_pick[role]))
+            .outerjoin(Champion, Champion.id == role_pick[role])
             .filter(
                 Champion.id != champion_id,
                 or_(*[role_pick[role] == champion_id for role in selected_roles]),
@@ -219,7 +219,7 @@ def get_all_matches(champion_id: int):
                     "qty_win"
                 ),
             )
-            .outerjoin((Champion, Champion.id == role_pick[role]))
+            .outerjoin(Champion, Champion.id == role_pick[role])
             .filter(
                 and_(*[role_pick[role] != champion_id for role in selected_roles]),
                 SingleView.map_id.in_(maps),
@@ -460,7 +460,7 @@ def get_players_info(champion_id: int):
                 Integer,
             ).label("agt_loss"),
         )
-        .outerjoin((Player, Player.id == PicksBansPrioView.player))
+        .outerjoin(Player, Player.id == PicksBansPrioView.player)
         .group_by(Player.nickname, PicksBansPrioView.role)
         .filter(
             *filter_pb_data(request),

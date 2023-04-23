@@ -122,15 +122,18 @@ def filter_map_data_v2(
     """
     args = []
     if tournament is not None:
-        if isinstance(tournament, int):
+        if isinstance(tournament, (str, int)):
             tournament = [tournament]
-        args.append(MatchupMap.tournament_id.in_(tournament))
+        if len(tournament) > 0:
+            args.append(MatchupMap.tournament_id.in_(tournament))
     if patch is not None:
-        if isinstance(patch, str):
+        if isinstance(patch, (str, int)):
             patch = [patch]
-        args.append(MatchupMap.patch.in_(patch))
+        if len(patch) > 0:
+            args.append(MatchupMap.patch.in_(patch))
     if team is not None:
-        if isinstance(team, str):
+        if isinstance(team, (str, int)):
             team = [team]
-        args.append(or_(MatchupMap.blue_side.in_(team), MatchupMap.red_side.in_(team)))
+        if len(team) > 0:
+            args.append(or_(MatchupMap.blue_side.in_(team), MatchupMap.red_side.in_(team)))
     return args
