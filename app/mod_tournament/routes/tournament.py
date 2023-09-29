@@ -1,5 +1,4 @@
 from flask import Blueprint, request
-from flask_security import roles_accepted
 
 from app.db_handler import DBHandler
 from app.mod_tournament.models import Tournament, TournamentTeam
@@ -28,7 +27,7 @@ def get_tournaments():
 
 
 @bp.get("/<int:tournament_id>")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def get_tournament_id(tournament_id: int):
     tournament = DBHandler.get_tournament_by_id(tournament_id)
     if not tournament:
@@ -52,7 +51,7 @@ def get_tournament_id(tournament_id: int):
 
 
 @bp.post("")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def post_tournament():
     data = {**request.json}
     if "id" in data:
@@ -76,7 +75,7 @@ def post_tournament():
 
 
 @bp.put("/<int:tournament_id>")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def put_tournament(tournament_id: int):
     data = {**request.json}
     if "id" in data:

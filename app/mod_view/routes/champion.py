@@ -35,7 +35,9 @@ def get_champions_by_role(role: str):
 @bp.get("")
 def get_champions():
     query = (
-        PicksBansPrioView.query.with_entities(Champion.id, Champion.name, PicksBansPrioView.role)
+        PicksBansPrioView.query.with_entities(
+            Champion.id, Champion.name, Champion.avatar, PicksBansPrioView.role
+        )
         .distinct()
         .outerjoin(Champion, Champion.id == PicksBansPrioView.pick_id)
         .filter(*filter_pb_data(request, "team"))
@@ -45,7 +47,7 @@ def get_champions():
     champions = {}
     for row in query:
         if row.id not in champions.keys():
-            champions[row.id] = {"id": row.id, "name": row.name, "roles": []}
+            champions[row.id] = {"id": row.id, "name": row.name, "roles": [], "avatar": row.avatar}
         champions[row.id]["roles"].append(row.role)
 
     return {"champions": [champions[key] for key in champions.keys()]}
@@ -193,6 +195,7 @@ def get_all_matches(champion_id: int):
             SingleView.query.with_entities(
                 Champion.id.label("champion_id"),  # type: ignore
                 Champion.name.label("champion_name"),  # type: ignore
+                Champion.avatar,
                 label("role", role),
                 label("team_played", "with"),
                 func.count(role_pick[role]).label("qty_match"),
@@ -212,6 +215,7 @@ def get_all_matches(champion_id: int):
             SingleView.query.with_entities(
                 Champion.id.label("champion_id"),  # type: ignore
                 Champion.name.label("champion_name"),  # type: ignore
+                Champion.avatar,
                 label("role", role),
                 label("team_played", "against"),
                 func.count(role_pick[role]).label("qty_match"),
@@ -235,6 +239,7 @@ def get_all_matches(champion_id: int):
             {
                 "champion_id": d.champion_id,
                 "champion_name": d.champion_name,
+                "avatar": d.avatar,
                 "role": d.role,
                 "team_played": d.team_played,
                 "qty_match": d.qty_match,
@@ -246,6 +251,7 @@ def get_all_matches(champion_id: int):
             {
                 "champion_id": d.champion_id,
                 "champion_name": d.champion_name,
+                "avatar": d.avatar,
                 "role": d.role,
                 "team_played": d.team_played,
                 "qty_match": d.qty_match,

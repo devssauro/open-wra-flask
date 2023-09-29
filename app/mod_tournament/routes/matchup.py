@@ -1,5 +1,4 @@
 from flask import Blueprint, request
-from flask_security import roles_accepted
 
 from app.db_handler import DBHandler
 from app.db_handler.matchup import PaginatedMatchups
@@ -51,7 +50,7 @@ def get_matchups():
 
 
 @bp.get("/<int:matchup_id>/teams")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def get_matchup_teams(matchup_id: int):
     matchup = DBHandler.get_matchup_by_id(matchup_id)
     if matchup is None:
@@ -76,7 +75,7 @@ def get_matchup_teams(matchup_id: int):
 
 
 @bp.post("")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def post_matchup():
     data = {**request.json}
     tournament = DBHandler.get_tournament_by_id(data["tournament_id"])

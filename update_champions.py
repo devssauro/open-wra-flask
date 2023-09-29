@@ -9,14 +9,14 @@ DDRAGON_ENDPOINT = config("DDRAGON_ENDPOINT")
 DDRAGON_LATEST_PATCH = config("DDRAGON_LATEST_PATCH")
 DDRAGON_CHAMPION_DATA = config("DDRAGON_CHAMPION_DATA")
 DDRAGON_CHAMPION_IMAGE = config("DDRAGON_CHAMPION_IMAGE")
-BASE_ROUTE = f"{DDRAGON_ENDPOINT}{DDRAGON_LATEST_PATCH}"
-CHAMPION_URL = f"{BASE_ROUTE}{DDRAGON_CHAMPION_DATA}"
+BASE_ROUTE = f"{DDRAGON_ENDPOINT}/{DDRAGON_LATEST_PATCH}"
+CHAMPION_URL = f"{BASE_ROUTE}/{DDRAGON_CHAMPION_DATA}"
 
 create_app().app_context().push()
 champions = DBHandler.get_champions()
 champions_object = {champion.name: champion for champion in champions}
 
-response = requests.get(CHAMPION_URL).json()["data"]
+response = requests.get(CHAMPION_URL, timeout=5).json()["data"]
 champions_data = {response[champion]["name"]: response[champion] for champion in response}
 
 for champion in champions_data:

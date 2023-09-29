@@ -10,7 +10,7 @@ from app.mod_view.models import ObjectiveView, PicksBansPrioView, SingleView
 ROLES = ["baron", "jungle", "mid", "dragon", "sup"]
 
 
-def binary_types(column, return_type, iso_return_type, label: str = None):
+def binary_types(column, return_type, iso_return_type, label: str | None = None):
     if iso_return_type is not None:
         return_type = iso_return_type
     if label is None and iso_return_type is not None:

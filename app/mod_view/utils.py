@@ -23,7 +23,7 @@ def team_expression_resolver(team_type: str, team_id: int) -> BinaryExpression:
         return ObjectiveView.team_id.is_(None)
 
 
-def filter_sv_data(request: Request, ignore: str = None):
+def filter_sv_data(request: Request, ignore: str | None = None):
     args = []
     if ignore != "side" and "side" in request.args and request.args["side"] in ("blue", "red"):
         args.append(SingleView.side == request.args["side"])
@@ -38,7 +38,7 @@ def filter_sv_data(request: Request, ignore: str = None):
     return args
 
 
-def filter_map_data(request: Request, ignore: str = None):
+def filter_map_data(request: Request, ignore: str | None = None):
     args = []
     # if ignore != 'side' and 'side' in request.args and request.args['side'] in ('blue', 'red'):
     #     args.append(MatchupMap.side == request.args['side'])
@@ -53,7 +53,7 @@ def filter_map_data(request: Request, ignore: str = None):
     return args
 
 
-def filter_pb_data(request: Request, ignore: str = None):
+def filter_pb_data(request: Request, ignore: str | None = None):
     args = []
     if ignore != "side" and "side" in request.args and request.args["side"] in ("blue", "red"):
         args.append(PicksBansPrioView.side == request.args["side"])

@@ -62,7 +62,7 @@ class TeamHandler:
 
     @staticmethod
     def get_teams(
-        tag: str, flag: str, order_by: str = "tag", page: int = 1, per_page: int = 10
+        tag: str | None, flag: str | None, order_by: str = "tag", page: int = 1, per_page: int = 10
     ) -> PaginatedTeams:
         """Get a list of teams
         Args:
@@ -82,9 +82,8 @@ class TeamHandler:
         if flag is not None:
             args.append(Team.flag.contains(flag))  # type: ignore
         query = (
-            Team.query.filter(*args)
-            .order_by(Team.tag if order_by == "tag" else Team.name)
-            .paginate(page=page, per_page=per_page)
+            Team.query.filter(*args).order_by(Team.tag if order_by == "tag" else Team.name)
+            # .paginate(page=page, per_page=per_page, error_out=False)
         )
 
-        return PaginatedTeams(query.items, page, query.pages)
+        return PaginatedTeams(query, page, 10)

@@ -358,6 +358,7 @@ def get_pick_rotation():
         PicksBansPrioView.query.with_entities(
             Champion.id.label("champion_id"),
             Champion.name.label("champion_name"),
+            Champion.avatar,
             PicksBansPrioView.pick_rotation.label("rotation"),
             func.count(PicksBansPrioView.pick_id).label("qty_picks"),
             PicksBansPrioView.side.label("side"),
@@ -381,6 +382,7 @@ def get_pick_rotation():
             {
                 "champion_id": row.champion_id,
                 "champion_name": row.champion_name,
+                "avatar": row.avatar,
                 "qty_games": row.qty_picks,
                 "qty_win": row.qty_win,
                 "percent_win": round((row.qty_win / row.qty_picks) * 100, 2),
@@ -393,6 +395,7 @@ def get_pick_rotation():
             {
                 "champion_id": row.champion_id,
                 "champion_name": row.champion_name,
+                "avatar": row.avatar,
                 "qty_games": row.qty_picks,
                 "qty_win": row.qty_win,
                 "percent_win": round((row.qty_win / row.qty_picks) * 100, 2),
@@ -410,6 +413,7 @@ def get_ban_rotation():
         PicksBansPrioView.query.with_entities(
             Champion.id.label("champion_id"),
             Champion.name.label("champion_name"),
+            Champion.avatar,
             PicksBansPrioView.ban_rotation.label("rotation"),
             func.count(PicksBansPrioView.ban_id).label("qty_picks"),
             PicksBansPrioView.side.label("side"),
@@ -433,6 +437,7 @@ def get_ban_rotation():
             {
                 "champion_id": row.champion_id,
                 "champion_name": row.champion_name,
+                "avatar": row.avatar,
                 "qty_games": row.qty_picks,
                 "qty_win": row.qty_win,
                 "percent_win": round((row.qty_win / row.qty_picks) * 100, 2),
@@ -445,6 +450,7 @@ def get_ban_rotation():
             {
                 "champion_id": row.champion_id,
                 "champion_name": row.champion_name,
+                "avatar": row.avatar,
                 "qty_games": row.qty_picks,
                 "qty_win": row.qty_win,
                 "percent_win": round((row.qty_win / row.qty_picks) * 100, 2),
@@ -462,6 +468,7 @@ def get_champions_presence():
         PicksBansPrioView.query.with_entities(
             Champion.id.label("id"),
             Champion.name.label("name"),
+            Champion.avatar,
             PicksBansPrioView.role.label("role"),
         )
         .filter(
@@ -476,6 +483,7 @@ def get_champions_presence():
         PicksBansPrioView.query.with_entities(
             Champion.id.label("champion_id"),
             Champion.name.label("champion_name"),
+            Champion.avatar,
             PicksBansPrioView.role.label("role"),
             func.count(PicksBansPrioView.pick_id).label("qty_picks"),
             func.sum(func.cast(PicksBansPrioView.winner, Integer)).label("qty_win"),
@@ -499,6 +507,7 @@ def get_champions_presence():
         PicksBansPrioView.query.with_entities(
             Champion.id.label("champion_id"),
             Champion.name.label("champion_name"),
+            Champion.avatar,
             func.count(PicksBansPrioView.ban_id).label("qty_bans"),
         )
         .outerjoin(Champion, Champion.id == PicksBansPrioView.ban_id)
@@ -535,6 +544,7 @@ def get_champions_presence():
             _temp = {
                 "champion_id": c.id,
                 "champion_name": c.name,
+                "avatar": c.avatar,
                 "qty_picks": qty_picks,
                 "qty_win": qty_win,
                 "qty_presence": qty_presence,

@@ -54,7 +54,7 @@ def get_team_stats():
         .outerjoin(Team, Team.id == SingleView.team_id)
         .group_by(Team.id, Team.name, Team.tag)
     )
-    agt = int(sum([t.agt for t in query]) / len(query))
+    agt = None if len(query) == 0 else int(sum([t.agt for t in query]) / len(query))
     return {
         "teams": [
             {
@@ -124,6 +124,7 @@ def get_champion_stats():
         PicksBansPrioView.query.with_entities(
             Champion.id.label("champion_id"),
             Champion.name.label("champion_name"),
+            Champion.avatar,
             func.round(func.avg(PicksBansPrioView.kills), 2).label("avg_kills"),
             func.round(func.avg(PicksBansPrioView.deaths), 2).label("avg_deaths"),
             func.round(func.avg(PicksBansPrioView.assists), 2).label("avg_assists"),
@@ -184,11 +185,12 @@ def get_champion_stats():
         .distinct()
         .order_by(Champion.name)
     )
-    agt = int(sum([t.agt for t in query]) / len(query))
+    agt = None if len(query) == 0 else int(sum([t.agt for t in query]) / len(query))
     pick_dict = [
         {
             "champion_id": champion.champion_id,
             "champion_name": champion.champion_name,
+            "avatar": champion.avatar,
             "avg_kills": float(champion.avg_kills),
             "avg_deaths": float(champion.avg_deaths),
             "avg_assists": float(champion.avg_assists),
@@ -331,7 +333,7 @@ def get_player_stats():
         .group_by(Player.id, PicksBansPrioView.role, Player.nickname)
         .order_by(Player.nickname)
     )
-    agt = int(sum([t.agt for t in query]) / len(query))
+    agt = None if len(query) == 0 else int(sum([t.agt for t in query]) / len(query))
     return {
         "players": [
             {

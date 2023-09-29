@@ -1,5 +1,4 @@
 from flask import Blueprint, request
-from flask_security import roles_accepted
 from sqlalchemy import and_, or_
 
 from app.mod_view.models import ObjectiveView, PicksBansPrioView
@@ -98,7 +97,7 @@ view = {
 
 
 @bp.post("")
-@roles_accepted("analyst", "admin")
+# @roles_accepted("analyst", "admin")
 def objectives():
     """Criar um pseudo formato de query"""
 

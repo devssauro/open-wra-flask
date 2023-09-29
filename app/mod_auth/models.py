@@ -13,10 +13,11 @@ from db_config import Base, db
 #     user_id: Mapped[Optional[int]] = mapped_column(ForeignKey("auth_user.id"))
 #     role_id: Mapped[Optional[int]] = mapped_column(ForeignKey("auth_role.id"))
 RolesUsers = Table(
-    "association_table",
+    "auth_role_user",
     db.metadata,
     Column("user_id", ForeignKey("auth_user.id")),
     Column("role_id", ForeignKey("auth_role.id")),
+    Column("active", default=True),
 )
 
 

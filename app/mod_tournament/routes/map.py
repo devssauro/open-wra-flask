@@ -1,15 +1,16 @@
 from flask import Blueprint, request
-from flask_security import roles_accepted
 
 from app.db_handler import DBHandler
 from app.exceptions import DraftIntegrityError, GlobalBanError, LineupIntegrityError
+from app.mod_download.utils import ROLES
 from app.mod_tournament.models import MatchupMap
+from app.mod_tournament.models.abstracts import SIDES
 
 bp = Blueprint("map", __name__, url_prefix="matchup/<int:matchup_id>/map")
 
 
 @bp.post("")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def post_map(matchup_id: int):
     matchup = DBHandler.get_matchup_by_id(matchup_id)
     if matchup is None:
@@ -20,6 +21,11 @@ def post_map(matchup_id: int):
         del data["team_first_death"]
 
     try:
+        for role in ROLES:
+            for side in SIDES:
+                data[f"{side}_{role}_dmg_taken"] = int(data[f"{side}_{role}_dmg_taken"]) * int(
+                    int(data[f"{side}_{role}_deaths"]) + 1
+                )
         _map: MatchupMap = MatchupMap.from_payload(
             **{**data, "tournament_id": matchup.tournament_id}
         )
@@ -46,7 +52,7 @@ def post_map(matchup_id: int):
 
 
 @bp.get("/<int:map_id>/edit")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def get_map_id(matchup_id: int, map_id: int):
     matchup = DBHandler.get_map_by_id(map_id)
 
@@ -62,14 +68,20 @@ def get_map_id(matchup_id: int, map_id: int):
 
 
 @bp.put("/<int:map_id>/edit")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def put_map_id(matchup_id: int, map_id: int):
     matchup = DBHandler.get_map_by_id(map_id)
 
     if not matchup:
         return {"msg": "Map not found"}, 404
 
-    MatchupMap.from_payload(matchup, **request.json)
+    data = request.json
+    for role in ROLES:
+        for side in SIDES:
+            data[f"{side}_{role}_dmg_taken"] = int(data[f"{side}_{role}_dmg_taken"]) * int(
+                data[f"{side}_{role}_deaths"] + 1
+            )
+    MatchupMap.from_payload(matchup, **data)
     matchup = DBHandler.create_update_map(matchup)
 
     _map = matchup.to_dict(

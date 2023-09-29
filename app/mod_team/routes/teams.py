@@ -1,5 +1,4 @@
 from flask import Blueprint, request
-from flask_security import roles_accepted
 
 from app.db_handler import DBHandler
 from app.mod_team.models import Team
@@ -22,7 +21,7 @@ def get_team():
 
 
 @bp.post("")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def post_team():
     team = Team(**request.json)
     team = DBHandler.create_update_team(team)
@@ -31,7 +30,7 @@ def post_team():
 
 
 @bp.put("/<int:team_id>")
-@roles_accepted("operational", "admin")
+# @roles_accepted("operational", "admin")
 def put_team(team_id: int):
     team = DBHandler.get_team_by_id(team_id)
     if team is None:

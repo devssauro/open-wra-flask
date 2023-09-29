@@ -2,7 +2,7 @@ import csv
 from io import StringIO
 
 from flask import Blueprint, make_response, request
-from flask_security import auth_required, roles_accepted
+from flask_security import auth_required
 
 from app.mod_download.utils import (
     get_full_map_fields,
@@ -132,7 +132,7 @@ def get_map_view():
 
 
 @bp.get("objective")
-@roles_accepted("analyst", "admin")
+# @roles_accepted("analyst", "admin")
 def get_objective_view():
     partial_query = get_objective_fields(request)
     query = (
