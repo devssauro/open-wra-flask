@@ -1,6 +1,24 @@
 # Open WRA Python
+About the project: the system was made to create a datavis tool to analize the metagaming
+on [Icons Global Championship 2022](https://liquipedia.net/wildrift/Icons_Global_Championship/2022) to help the
+3 brazilian teams to perform and reach the best position they can on the tournament.
+
+The initial deadline was 3 weeks, it started right after the [Wild Tour Brazil 2022 Season 1
+](https://liquipedia.net/wildrift/Wild_Tour/2022/Season_1) and the first version was made using Flask 2 recently launched, VueJS 2 and vuetify on frontend, PostgreSQL and SQLAlchemy 1.4.
+
+Because Riot Games decided to end the official tournaments on western side of the globe to focus on Asia (you can see more about it [here](https://esports-news.co.uk/2022/11/22/riot-ditches-wild-rift-esports-west/#:~:text=Wild%20Rift%20esports%20has%20effectively,Wild%20Rift%20esports%20leagues%20anymore.)), where the market is big, my decision was to turn the whole software open source to help the community and show a bit of my work.
+
+Now it's my sandbox to test some implementations like SQLAlchemy 2, test skills like the automated tests I wrote for it and other skills.
+
+I made 2 frontends for this project, one written in [VueJS 2](https://github.com/devssauro/open-wra-vue) and another using [Vue 3, but it's incomplete](https://github.com/devssauro/open-wra-vue3).
+
+I also made an implementation using [Streamlit](https://streamlit.io/) that works consuming an endpoint that brings some CSV files from the platform, [you can see the code here](https://github.com/devssauro/wildrift-analytics)
+
+As you can see, it's a sandbox, but feel free to evaluate my job.
 
 ## Installation instructions
+By running `docker compose up`, the whole project will be launched for use,
+After that run `flask db upgrade` to instantiate the database.
 
 ### Database
 
