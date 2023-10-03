@@ -10,7 +10,7 @@ Because Riot Games decided to end the official tournaments on western side of th
 
 Now it's my sandbox to test some implementations like SQLAlchemy 2, test skills like the automated tests I wrote for it and other skills.
 
-I made 2 frontends for this project, one written in [VueJS 2](https://github.com/devssauro/open-wra-vue) and another using [Vue 3, but it's incomplete](https://github.com/devssauro/open-wra-vue3).
+I made 2 frontends for this project, one written in [VueJS 2](https://github.com/devssauro/vue-wra) and another using [Vue 3, but it's incomplete](https://github.com/devssauro/open-wra-vue3).
 
 I also made an implementation using [Streamlit](https://streamlit.io/) that works consuming an endpoint that brings some CSV files from the platform, [you can see the code here](https://github.com/devssauro/wildrift-analytics)
 
