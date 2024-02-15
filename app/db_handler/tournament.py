@@ -23,7 +23,7 @@ class TournamentHandler:
 
     @staticmethod
     def create_update_tournament_team(team: TournamentTeam) -> TournamentTeam:
-        db.session.add(TournamentTeam)
+        db.session.add(team)
         db.session.commit()
         return team
 

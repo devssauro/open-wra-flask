@@ -180,6 +180,7 @@ def get_all_matches(player_id: int, champion_id: int):
             SingleView.query.with_entities(
                 Champion.id.label("champion_id"),  # type: ignore
                 Champion.name.label("champion_name"),  # type: ignore
+                Champion.avatar.label("champion_avatar"),  # type: ignore
                 Champion.avatar,
                 label("role", role),
                 label("team_played", "with"),
@@ -188,7 +189,7 @@ def get_all_matches(player_id: int, champion_id: int):
                     "qty_win"
                 ),
             )
-            .outerjoin((Champion, Champion.id == role_champion_pick[role]))
+            .outerjoin(Champion, Champion.id == role_champion_pick[role])
             .filter(
                 Champion.id != champion_id,
                 role_champion_pick[request.args["role"]] == champion_id,
@@ -200,6 +201,7 @@ def get_all_matches(player_id: int, champion_id: int):
             SingleView.query.with_entities(
                 Champion.id.label("champion_id"),  # type: ignore
                 Champion.name.label("champion_name"),  # type: ignore
+                Champion.avatar.label("champion_avatar"),  # type: ignore
                 Champion.avatar,
                 label("role", role),
                 label("team_played", "against"),
@@ -208,7 +210,7 @@ def get_all_matches(player_id: int, champion_id: int):
                     "qty_win"
                 ),
             )
-            .outerjoin((Champion, Champion.id == role_champion_pick[role]))
+            .outerjoin(Champion, Champion.id == role_champion_pick[role])
             .filter(
                 role_champion_pick[request.args["role"]] != champion_id,
                 SingleView.map_id.in_(maps),
@@ -224,6 +226,7 @@ def get_all_matches(player_id: int, champion_id: int):
             {
                 "champion_id": d.champion_id,
                 "champion_name": d.champion_name,
+                "champion_avatar": d.champion_avatar,
                 "role": d.role,
                 "team_played": d.team_played,
                 "qty_match": d.qty_match,
@@ -235,6 +238,7 @@ def get_all_matches(player_id: int, champion_id: int):
             {
                 "champion_id": d.champion_id,
                 "champion_name": d.champion_name,
+                "champion_avatar": d.champion_avatar,
                 "role": d.role,
                 "team_played": d.team_played,
                 "qty_match": d.qty_match,
@@ -533,6 +537,7 @@ def get_players_info(player_id: int):
         SingleView.query.with_entities(
             Champion.id.label("champion_id"),  # type: ignore
             Champion.name.label("name"),  # type: ignore
+            Champion.avatar.label("avatar"),  # type: ignore
             *role_pick[request.args["role"]]["columns"]
         )
         .outerjoin(
@@ -545,25 +550,32 @@ def get_players_info(player_id: int):
 
     return {
         "general": {
-            "avg_length": float(general.avg_length),
+            "avg_length": "-" if general.avg_length is None else float(general.avg_length),
             "qty_games": float(general.qty_games),
-            "qty_win": float(general.qty_win),
-            "avg_dmg_taken": float(general.avg_dmg_taken),
-            "avg_dmg_dealt": float(general.avg_dmg_dealt),
-            "avg_total_gold": float(general.avg_total_gold),
-            "ddpm": float(general.ddpm),
-            "dtpm": float(general.dtpm),
-            "gpm": float(general.gpm),
-            "ddpg": float(general.ddpg),
-            "dtpg": float(general.dtpg),
-            "avg_kills": float(general.avg_kills),
-            "avg_deaths": float(general.avg_deaths),
-            "avg_assists": float(general.avg_assists),
+            "qty_win": "-" if general.qty_win is None else float(general.qty_win),
+            "avg_dmg_taken": "-"
+            if general.avg_dmg_taken is None
+            else float(general.avg_dmg_taken),
+            "avg_dmg_dealt": "-"
+            if general.avg_dmg_dealt is None
+            else float(general.avg_dmg_dealt),
+            "avg_total_gold": "-"
+            if general.avg_total_gold is None
+            else float(general.avg_total_gold),
+            "ddpm": "-" if general.ddpm is None else float(general.ddpm),
+            "dtpm": "-" if general.dtpm is None else float(general.dtpm),
+            "gpm": "-" if general.gpm is None else float(general.gpm),
+            "ddpg": "-" if general.ddpg is None else float(general.ddpg),
+            "dtpg": "-" if general.dtpg is None else float(general.dtpg),
+            "avg_kills": "-" if general.avg_kills is None else float(general.avg_kills),
+            "avg_deaths": "-" if general.avg_deaths is None else float(general.avg_deaths),
+            "avg_assists": "-" if general.avg_assists is None else float(general.avg_assists),
         },
         "champions": [
             {
                 "champion_id": champion.champion_id,
                 "name": champion.name,
+                "avatar": champion.avatar,
                 "avg_length": float(champion.avg_length),
                 "qty_games": float(champion.qty_games),
                 "qty_win": float(champion.qty_win),

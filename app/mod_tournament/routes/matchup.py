@@ -20,7 +20,7 @@ def get_matchups():
             {
                 "id": matchup.id,
                 "phase": matchup.phase,
-                "datetime": matchup.datetime.isoformat(),
+                "datetime": matchup.datetime.strftime("%d/%m/%Y %H:%M"),
                 "team1": {
                     "id": matchup.team1.id,
                     "tag": matchup.team1.tag,

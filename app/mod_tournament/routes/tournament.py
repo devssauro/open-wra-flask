@@ -99,6 +99,7 @@ def put_tournament(tournament_id: int):
             teams[lineup["team_id"]].entry_phase = lineup["entry_phase"]
             DBHandler.create_update_tournament_team(teams[lineup["team_id"]])
         else:
+            lineup["players"] = DBHandler.get_players_by_ids(lineup["players"])
             DBHandler.create_update_tournament_team(
                 TournamentTeam(**{**lineup, "tournament_id": tournament.id})
             )

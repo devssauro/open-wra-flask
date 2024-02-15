@@ -2,7 +2,6 @@ import csv
 from io import StringIO
 
 from flask import Blueprint, make_response, request
-from flask_security import auth_required
 
 from app.mod_download.utils import (
     get_full_map_fields,
@@ -21,20 +20,20 @@ bp = Blueprint("files", __name__, url_prefix="")
 
 @bp.get("picks_bans")
 @bp.get("picks_bans.csv")
-@auth_required("token")
+# @auth_required("token")
 def get_prio_rotation():
     partial_query = get_picks_bans_view_fields(request)
-    query = (
-        PicksBansPrioView.query.with_entities(*partial_query["columns"])
-        .outerjoin(*partial_query["joins"])
-        .filter(*filter_pb_data(request))
-        .order_by(
-            PicksBansPrioView.matchup_id,
-            PicksBansPrioView.map_id,
-            PicksBansPrioView.map_number,
-            PicksBansPrioView.side,
-            PicksBansPrioView.position,
-        )
+    query = PicksBansPrioView.query.with_entities(*partial_query["columns"])
+
+    for join in partial_query["joins"]:
+        query = query.outerjoin(*join)
+
+    query = query.filter(*filter_pb_data(request)).order_by(
+        PicksBansPrioView.matchup_id,
+        PicksBansPrioView.map_id,
+        PicksBansPrioView.map_number,
+        PicksBansPrioView.side,
+        PicksBansPrioView.position,
     )
     si = StringIO()
     cw = csv.writer(si)
@@ -62,17 +61,18 @@ def get_prio_rotation():
 @bp.get("match_stats")
 def get_single_view():
     partial_query = get_single_view_fields(request)
-    query = (
-        SingleView.query.with_entities(*partial_query["columns"])
-        .filter(*filter_sv_data(request))
-        .outerjoin(*partial_query["joins"])
-        .order_by(
-            SingleView.tournament_id,
-            SingleView.matchup_id,
-            SingleView.map_id,
-            SingleView.map_number,
-            SingleView.side,
-        )
+
+    query = SingleView.query.with_entities(*partial_query["columns"])
+
+    for join in partial_query["joins"]:
+        query = query.outerjoin(*join)
+
+    query = query.filter(*filter_sv_data(request)).order_by(
+        SingleView.tournament_id,
+        SingleView.matchup_id,
+        SingleView.map_id,
+        SingleView.map_number,
+        SingleView.side,
     )
 
     si = StringIO()
@@ -100,12 +100,15 @@ def get_single_view():
 @bp.get("map")
 def get_map_view():
     partial_query = get_full_map_fields(request)
-    query = (
-        MatchupMap.query.with_entities(*partial_query["columns"])
-        .filter(*filter_map_data(request))
-        .outerjoin(*partial_query["joins"])
-        .order_by(MatchupMap.tournament_id, MatchupMap.id, MatchupMap.map_number)
+
+    query = MatchupMap.query.with_entities(*partial_query["columns"])
+    for join in partial_query["joins"]:
+        query = query.outerjoin(*join)
+
+    query = query.filter(*filter_map_data(request)).order_by(
+        MatchupMap.tournament_id, MatchupMap.id, MatchupMap.map_number
     )
+
     team_tag = ""
     if len(request.args.getlist("team")) == 1:
         team_tag = Team.query.get(int(request.args.getlist("team")[0])).tag

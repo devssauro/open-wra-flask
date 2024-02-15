@@ -15,7 +15,7 @@ def get_players():
         args.get("nickname"),
         args.get("region"),
         args.get("page", 1),
-        args.get("per_page", 10),
+        args.get("per_page", 1000),
     )
     return {
         "players": [player.to_dict() for player in result.players],

@@ -61,6 +61,9 @@ class Matchup(Base, SerializerMixin):
 
     phase: Mapped[Optional[str]]
     datetime: Mapped[Optional[datetime]]
+    maps: Mapped[list["MatchupMap"]] = relationship(
+        back_populates="matchup", order_by="MatchupMap.map_number"
+    )  # noqa: F821
     mvp_id: Mapped[Optional[int]] = mapped_column(ForeignKey("player.id"))
     tournament_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament.id"))
     team1_id: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))

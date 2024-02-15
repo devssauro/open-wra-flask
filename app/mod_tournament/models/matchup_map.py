@@ -139,7 +139,7 @@ class MatchupMap(
         super().__init__()
 
     matchup_id: Mapped[Optional[int]] = mapped_column(ForeignKey("matchup.id"))
-    matchup: Mapped["Matchup"] = relationship(backref="maps")  # noqa: F821
+    matchup: Mapped["Matchup"] = relationship(back_populates="maps")  # noqa: F821
     tournament_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament.id"))
     vod_link: Mapped[Optional[str]]
     map_number: Mapped[Optional[int]]

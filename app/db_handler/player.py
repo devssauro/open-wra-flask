@@ -71,3 +71,7 @@ class PlayerHandler:
         )
 
         return PaginatedPlayers(query.items, page, query.pages)
+
+    @staticmethod
+    def get_players_by_id(ids: list[int]) -> list[Player]:
+        return Player.query.filter(Player.id.in_(ids))

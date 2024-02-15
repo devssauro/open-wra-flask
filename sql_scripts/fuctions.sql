@@ -2,13 +2,15 @@ CREATE OR REPLACE FUNCTION to_seconds(t text)
   RETURNS integer AS
 $BODY$
 DECLARE
+	_temp TEXT;
     hs INTEGER;
     ms INTEGER;
     s INTEGER;
 BEGIN
-    SELECT (EXTRACT( HOUR FROM  t::time) * 60*60) INTO hs;
-    SELECT (EXTRACT (MINUTES FROM t::time) * 60) INTO ms;
-    SELECT (EXTRACT (SECONDS from t::time)) INTO s;
+	_temp := '00:' || t::TEXT;
+    SELECT (EXTRACT( HOUR FROM  _temp::time) * 60*60) INTO hs;
+    SELECT (EXTRACT (MINUTES FROM _temp::time) * 60) INTO ms;
+    SELECT (EXTRACT (SECONDS from _temp::time)) INTO s;
     SELECT (hs + ms + s) INTO s;
     RETURN s;
 END;

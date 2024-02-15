@@ -23,7 +23,9 @@ def get_team():
 @bp.post("")
 # @roles_accepted("operational", "admin")
 def post_team():
-    team = Team(**request.json)
+    data = {**request.json}
+    del data["id"]
+    team = Team(**data)
     team = DBHandler.create_update_team(team)
 
     return {"id": team.id}, 201

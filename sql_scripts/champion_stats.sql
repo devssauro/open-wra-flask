@@ -21,7 +21,6 @@ SELECT
 FROM picks_bans_prio_view AS ppv
 INNER JOIN champion AS c ON
 	c.id = ppv.pick_id
-WHERE ppv.tournament_id = 7
 GROUP BY c.name
 ORDER BY c.name
 
@@ -48,6 +47,5 @@ SELECT
 FROM picks_bans_prio_view AS ppv
 INNER JOIN player AS p ON
 	p.id = ppv.player
-WHERE ppv.tournament_id = 7
 GROUP BY p.nickname
 ORDER BY p.nickname

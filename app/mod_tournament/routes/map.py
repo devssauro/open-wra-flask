@@ -23,9 +23,9 @@ def post_map(matchup_id: int):
     try:
         for role in ROLES:
             for side in SIDES:
-                data[f"{side}_{role}_dmg_taken"] = int(data[f"{side}_{role}_dmg_taken"]) * int(
-                    int(data[f"{side}_{role}_deaths"]) + 1
-                )
+                data[f"{side}_{role}_dmg_taken"] = int(
+                    data.get(f"{side}_{role}_dmg_taken", 0)
+                ) * int(int(data[f"{side}_{role}_deaths"]) + 1)
         _map: MatchupMap = MatchupMap.from_payload(
             **{**data, "tournament_id": matchup.tournament_id}
         )
@@ -78,8 +78,8 @@ def put_map_id(matchup_id: int, map_id: int):
     data = request.json
     for role in ROLES:
         for side in SIDES:
-            data[f"{side}_{role}_dmg_taken"] = int(data[f"{side}_{role}_dmg_taken"]) * int(
-                data[f"{side}_{role}_deaths"] + 1
+            data[f"{side}_{role}_dmg_taken"] = int(data[f"{side}_{role}_dmg_taken"]) * (
+                int(data[f"{side}_{role}_deaths"]) + 1
             )
     MatchupMap.from_payload(matchup, **data)
     matchup = DBHandler.create_update_map(matchup)

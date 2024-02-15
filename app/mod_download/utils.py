@@ -22,10 +22,10 @@ def binary_types(column, return_type, iso_return_type, label: str | None = None)
 
 def set_file_name(
     request: Request,
-    ignore: str,
     tournament: str,
     patch: str,
     team: str,
+    ignore: str = "",
 ) -> str:
     file_name: str = ""
     if ignore != "t" and "t" in request.args:

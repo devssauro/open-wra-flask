@@ -64,7 +64,7 @@ services:
       - wranetwork
 
   pg:
-    image: postgres:14.7-alpine
+    image: postgres:16.1-alpine
     restart: always
     environment:
       POSTGRES_PASSWORD: postgres

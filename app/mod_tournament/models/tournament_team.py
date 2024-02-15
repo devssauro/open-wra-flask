@@ -21,10 +21,11 @@ class TournamentTeam(Base, SerializerMixin):
     __tablename__ = "tournament_team"
     serialize_only = ("id", "team_id", "entry_phase")
 
-    def __init__(self, tournament_id, team_id, entry_phase):
+    def __init__(self, tournament_id, team_id, entry_phase, players):
         self.tournament_id = tournament_id
         self.team_id = team_id
         self.entry_phase = entry_phase
+        self.players = players
 
     tournament_id: Mapped[Optional[int]] = mapped_column(ForeignKey("tournament.id"))
     team_id: Mapped[Optional[int]] = mapped_column(ForeignKey("team.id"))
